@@ -1,4 +1,0 @@
-testfile
-2
-3
-END OF TESTFILE
