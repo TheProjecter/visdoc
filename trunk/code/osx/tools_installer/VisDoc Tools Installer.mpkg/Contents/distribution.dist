@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-script minSpecVersion="1.000000" authoringTool="com.apple.PackageMaker" authoringToolVersion="3.0.4" authoringToolBuild="179">
+    <title>VisDoc Tools</title>
+    <options customize="never" allow-external-scripts="no" rootVolumeOnly="true"/>
+    <choices-outline>
+        <line choice="choice105"/>
+        <line choice="choice106"/>
+        <line choice="choice107"/>
+        <line choice="choice125"/>
+    </choices-outline>
+    <choice id="choice105" title="Perl XML::LibXML::Common">
+        <pkg-ref id="com.visiblearea.VisDoc_Installer.XML-LibXML-Common-0.13.pkg"/>
+    </choice>
+    <choice id="choice106" title="Perl XML::LibXML">
+        <pkg-ref id="com.visiblearea.VisDoc_Installer.XML-LibXML.1.69.pkg"/>
+    </choice>
+    <choice id="choice107" title="Perl XML::LibXSLT">
+        <pkg-ref id="com.visiblearea.VisDoc_Installer.XML-LibXSLT.1.68.pkg"/>
+    </choice>
+    <choice id="choice125" title="Pref installer">
+        <pkg-ref id="com.visiblearea.prefInstaller.tmp_VisDoc_installer_Version_Preference.pkg"/>
+    </choice>
+    <pkg-ref id="com.visiblearea.VisDoc_Installer.XML-LibXML-Common-0.13.pkg" installKBytes="16" version="1.0" auth="Root">file:./Contents/Packages/XML-LibXML-Common%20Installer.pkg</pkg-ref>
+    <pkg-ref id="com.visiblearea.VisDoc_Installer.XML-LibXML.1.69.pkg" installKBytes="308" version="1.0" auth="Root">file:./Contents/Packages/XML-LibXML%20Installer.pkg</pkg-ref>
+    <pkg-ref id="com.visiblearea.VisDoc_Installer.XML-LibXSLT.1.68.pkg" installKBytes="84" version="1.0" auth="Root">file:./Contents/Packages/XML-LibXSLT%20Installer.pkg</pkg-ref>
+    <pkg-ref id="com.visiblearea.prefInstaller.tmp_VisDoc_installer_Version_Preference.pkg" installKBytes="8" version="1.0.2" auth="Root">file:./Contents/Packages/Version%20Preference%20Installer.pkg</pkg-ref>
+</installer-script>

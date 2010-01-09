@@ -1,0 +1,1 @@
+This installer writes a preference setting in /Library/Preferences to that VisDoc knows which version of the VisDoc Tools have been installed.
