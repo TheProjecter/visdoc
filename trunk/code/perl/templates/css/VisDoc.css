@@ -516,7 +516,7 @@ margin-top:1em;
 }
 
 .VisDoc div.memberSection div.member:target,.VisDoc div.memberSection div.class:target,.VisDoc h2:target, div.member:hover {
-	background-color:#F0F5F9;
+	background-color:#d7e4f1;
 }
 
 .VisDoc div.memberSection div.member:target div.boxWithBorder,.VisDoc div.memberSection div.class:target div.boxWithBorder,.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem,.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem,.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem div.contentHolder,.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem div.contentHolder {
