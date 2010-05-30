@@ -237,8 +237,9 @@ sub _handleMethodMatches {
     if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
 
         #$data->{javadocStub} = $inMatches->[$i];
-        $data->{javadoc} =
+        my $javadoc =
           $this->{fileParser}->parseJavadoc( $inMatches->[$i] );
+        $data->setJavadoc( $javadoc );
     }
 
     # access
@@ -444,14 +445,16 @@ sub _handlePropertyMatches {
     $i = $inPatternMap->{javadoc} - 1;
     if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocStub = $inMatches->[$i];
-        $data->{javadoc} = $this->{fileParser}->parseJavadoc($javadocStub);
+        my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
+        $data->setJavadoc( $javadoc );
     }
 
     # javadoc side
     $i = $inPatternMap->{javadocSide} - 1;
     if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocStub = $inMatches->[$i];
-        $data->{javadoc} = $this->{fileParser}->parseJavadoc($javadocStub);
+        my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
+        $data->setJavadoc( $javadoc );
     }
 
     # access

@@ -553,7 +553,7 @@ sub _stubJavadocSideComments {
 
     my $merged = $_[0]->{data}->mergeData( 'javadocComments', $blocks );
     $_[0]->{data}->{javadocComments} = $merged;
-
+	
     return $newText;
 }
 

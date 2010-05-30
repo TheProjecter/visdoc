@@ -116,6 +116,16 @@ sub setNameId {
     $this->{nameId} = $inNameId;
 }
 
+sub setJavadoc {
+    my ( $this, $inJavadocData ) = @_;
+        
+    if ($this->{javadoc}) {
+		$this->{javadoc}->merge($inJavadocData);
+	} else {
+		$this->{javadoc} = $inJavadocData;
+	}
+}
+
 =pod
 
 StaticMethod typeString($typeNum) -> $typeString

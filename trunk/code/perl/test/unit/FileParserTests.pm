@@ -445,6 +445,29 @@ class A {}';
 
 =cut
 
+sub test_javadocCommentWithJavadocSideComment {
+    my ($this) = @_;
+
+	my $text = 'class A {
+	
+	/** AAA */
+	var a:Number; /**< BBB */
+}	';
+	
+	my $fileData = VisDoc::parseText($text, 'as2');
+
+	my $result = $fileData->{packages}->[0]->{classes}->[0]->{properties}->[0]->{javadoc}->getDescription();
+	
+	my $expected = 'AAA BBB';
+	print("RES=$result.\n")     if $debug;
+	print("EXP=$expected.\n") if $debug;
+	$this->assert( $result eq $expected );
+}
+
+=pod
+
+=cut
+
 sub test_stubCodeBlocks_direct {
     my ($this) = @_;
 

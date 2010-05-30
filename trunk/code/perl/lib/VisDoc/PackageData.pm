@@ -144,6 +144,16 @@ sub isPublic {
     return 1;
 }
 
+sub setJavadoc {
+    my ( $this, $inJavadocData ) = @_;
+    
+    if ($this->{javadoc}) {
+		$this->{javadoc}->merge($inJavadocData);
+	} else {
+		$this->{javadoc} = $inJavadocData;
+	}
+}
+
 1;
 
 # VisDoc - Code documentation generator, http://visdoc.org
