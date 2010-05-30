@@ -88,9 +88,6 @@ delete $preferences->{'datapath'};
 $preferences->{copyrightText} ||= $preferences->{footer};
 $preferences->{indexTitle} ||= $preferences->{'main-title'};
 
-$preferences->{generateIndex} = 1 if $preferences->{indexTitle};
-$preferences->{copyright}     = 1 if $preferences->{copyrightText};
-
 =pod
 eval "use Data::Dumper";
 if ($@) {
