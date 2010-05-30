@@ -148,13 +148,15 @@ static NSDictionary* sDefaultSettings;
 	while (key = [e nextObject]) {
 		id value = [[self settings] objectForKey:key];
 		NSString* stringValue = [NSString stringWithFormat:@"%@", value];
-		if ([stringValue rangeOfString:@" "].location != NSNotFound) {
-			// has spaces, use quotes
-			unichar uchar = 0x005C;
-			NSString* escapedChar = [NSString stringWithFormat:@"%u ", uchar];
-			stringValue = [stringValue stringByReplacingOccurrencesOfString:@" " withString:escapedChar];
+		if ( ![key isEqualToString:@"output"] ) {
+			if ([stringValue rangeOfString:@" "].location != NSNotFound) {
+				// has spaces, use quotes
+				unichar uchar = 0x005C;
+				NSString* escapedChar = [NSString stringWithFormat:@"%u ", uchar];
+				stringValue = [stringValue stringByReplacingOccurrencesOfString:@" " withString:escapedChar];
+			}
 		}
-		
+
 		if (![stringValue isEqualToString:@""]) {
 			[argumentList addObject:[NSString stringWithFormat:@"-%@", key]];
 			[argumentList addObject:stringValue];
