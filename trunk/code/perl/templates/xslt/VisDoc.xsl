@@ -288,8 +288,9 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <xsl:output omit-xml-declaration="yes" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" indent="yes" encoding="iso-8859-1" />
 -->
 <!-- back to transitional to validate when using frames -->
-<xsl:output omit-xml-declaration="yes" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" indent="yes" encoding="UTF-8" />
-
+<xsl:output omit-xml-declaration="yes" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" indent="yes" encoding="UTF-8" />
+   
+   
 <!-- ......................... Class documentation html page ......................... -->
 <xsl:template match="document">
     <html xmlns="http://www.w3.org/1999/xhtml">
