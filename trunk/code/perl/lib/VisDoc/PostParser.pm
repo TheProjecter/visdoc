@@ -567,8 +567,6 @@ sub _substituteInlineLinkStubs {
 
     my $package, my $class, my $member;
 
-    use Data::Dumper;
-
     foreach my $fileData ( @{$inCollectiveFileData} ) {
 
         foreach $package ( @{ $fileData->{packages} } ) {
