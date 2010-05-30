@@ -16,6 +16,7 @@
 - (void)_showWindow:(NSPanel*)window;
 - (void)_hideWindow:(NSPanel*)window;
 - (void)_delayedHideWindow:(NSTimer*)timer;
+- (void)_newDocumentWithUrl:(NSURL*)url;
 
 @end
 

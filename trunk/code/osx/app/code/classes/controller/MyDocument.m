@@ -20,7 +20,7 @@ static NSDictionary* sDefaultSettings;
 @synthesize listedPaths;
 
 - (id)init
-{
+{	
     self = [super init];
     if (self) {
 
@@ -101,24 +101,15 @@ static NSDictionary* sDefaultSettings;
 		return NO;
 	}
 	
-	if ([self fileURL]) {
-		[[NSUserDefaults standardUserDefaults] setObject:[[self fileURL] absoluteString] forKey:@"lastopened"];
-	}
 	return YES;
 }
 
 - (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
 	BOOL success = [super writeToURL:absoluteURL ofType:typeName error:outError];
-	if (success && [self fileURL]) {
-		[[NSUserDefaults standardUserDefaults] setObject:[[self fileURL] absoluteString] forKey:@"lastopened"];
-	}
 	return success;
 }
 
-/**
- 
-*/
 - (void)handleAppChanged
 {
 	[self updateChangeCount:NSChangeDone];

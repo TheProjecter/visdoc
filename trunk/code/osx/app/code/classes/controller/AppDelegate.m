@@ -3,27 +3,28 @@
 #import "AppDelegate.h"
 #import "NSPanel+Fade.h"
 #import "State.h"
+#import "MyDocument.h"
 
-static BOOL sOpenedLastOpenDocument = NO;
 static BOOL sNeedsInstallerFeedBack = NO;
 static float WINDOW_PRE_WAIT = 3.0;
 
 
 @implementation AppDelegate
 
-- (void)awakeFromNib
-{
-	if (sOpenedLastOpenDocument) return;
-	NSString* lastOpened = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastopened"];
-	NSArray* documents = [[NSApplication sharedApplication] orderedDocuments];
-	if (lastOpened && [documents count] > 0) {
-		NSDocument* document = [documents lastObject];
-		[document setFileURL:[NSURL URLWithString:lastOpened]];
-		NSError* outError;
-		[document readFromURL:[NSURL URLWithString:lastOpened] ofType:@"DocumentType" error:&outError];
-		sOpenedLastOpenDocument = YES;
-	}
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
+{	
+	// open documents that were open on last quit
+	NSData* openDocumentsAsData = [[NSUserDefaults standardUserDefaults] objectForKey:@"openDocumentUrls"];
+	if (!openDocumentsAsData) return;
 	
+	NSArray* documentsUrls = [NSKeyedUnarchiver	unarchiveObjectWithData:openDocumentsAsData];
+	if (!documentsUrls) return;
+		
+	NSEnumerator* e = [documentsUrls objectEnumerator];
+	NSURL* url = nil;
+	while (url = [e nextObject]) {
+		[self _newDocumentWithUrl:url];
+	}
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)aNotification
@@ -42,6 +43,27 @@ static float WINDOW_PRE_WAIT = 3.0;
 		}
 		sNeedsInstallerFeedBack = NO;
 	}
+}
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+	// store current open documents
+	NSArray* openDocuments = [NSApp orderedDocuments];
+	NSMutableArray* openDocumentUrls = [[[NSMutableArray alloc] initWithCapacity:[openDocuments count]] autorelease];
+	NSEnumerator* e = [openDocuments reverseObjectEnumerator];
+	NSDocument* d = nil;
+	while (d = [e nextObject]) {
+		NSURL* url = [d fileURL];
+		if (url) {
+			[openDocumentUrls addObject:url];
+		}
+	}
+	if ([openDocumentUrls count]) {
+		NSData *openDocumentsAsData = [NSKeyedArchiver archivedDataWithRootObject:openDocumentUrls];
+		[[NSUserDefaults standardUserDefaults] setObject:openDocumentsAsData forKey:@"openDocumentUrls"];
+	}
+
+	return NSTerminateNow;
 }
 
 - (void)dealloc
@@ -112,6 +134,24 @@ static float WINDOW_PRE_WAIT = 3.0;
 - (void)_hideWindow:(NSPanel*)window
 {
 	[window fadeOut];	
+}
+
+- (void)_newDocumentWithUrl:(NSURL*)url
+{
+	MyDocument* newDocument = [[[MyDocument alloc] initWithContentsOfURL:url ofType:@"DocumentType" error:nil] autorelease];
+	NSDocumentController *sharedDocController = [NSDocumentController sharedDocumentController];
+	
+	// set up the document
+	if (newDocument) {
+		// add the document
+		[sharedDocController addDocument:newDocument];
+		
+		// set up the document
+		if ([sharedDocController shouldCreateUI]) {
+			[newDocument makeWindowControllers];
+			[newDocument showWindows];
+		}
+	}
 }
 
 @end

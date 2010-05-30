@@ -34,13 +34,13 @@
 		8EB0773510A7487F00085D2E /* ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0771E10A7487E00085D2E /* ProgressView.m */; };
 		8EB0773610A7487F00085D2E /* ProgressViewContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0772010A7487F00085D2E /* ProgressViewContents.m */; };
 		8EB0773710A7487F00085D2E /* SelectableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0772210A7487F00085D2E /* SelectableTableView.m */; };
-		8EB0776B10A7645A00085D2E /* VisDoc Tools Installer.mpkg in Resources */ = {isa = PBXBuildFile; fileRef = 8EB0776A10A7645A00085D2E /* VisDoc Tools Installer.mpkg */; };
 		8EB0777110A7651300085D2E /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB0777010A7651300085D2E /* Carbon.framework */; };
 		8EB077B810A7679300085D2E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB077B610A7679300085D2E /* main.m */; };
 		8EB078C110A8059200085D2E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB078C010A8059200085D2E /* AppDelegate.m */; };
 		8EB079AA10A8853B00085D2E /* NSPanel+Fade.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB079A910A8853B00085D2E /* NSPanel+Fade.m */; };
 		8EB07A1510A8968D00085D2E /* VisDoc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8EB07A1310A8968D00085D2E /* VisDoc.png */; };
 		8EB07A8110A8BE1000085D2E /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB07A8010A8BE1000085D2E /* State.m */; };
+		8EB607FA11B12BBA00118909 /* VisDoc Tools Installer.mpkg in Resources */ = {isa = PBXBuildFile; fileRef = 8EB607F911B12BBA00118909 /* VisDoc Tools Installer.mpkg */; };
 		8EBA161010551A4900E51387 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8EBA161110551A4900E51387 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8EBA161210551A4900E51387 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* MyDocument.xib */; };
@@ -110,7 +110,6 @@
 		8EB0772110A7487F00085D2E /* SelectableTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectableTableView.h; sourceTree = "<group>"; };
 		8EB0772210A7487F00085D2E /* SelectableTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectableTableView.m; sourceTree = "<group>"; };
 		8EB0772410A7487F00085D2E /* interfacestrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interfacestrings.h; sourceTree = "<group>"; };
-		8EB0776A10A7645A00085D2E /* VisDoc Tools Installer.mpkg */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.installer-mpkg"; name = "VisDoc Tools Installer.mpkg"; path = "../tools installer/VisDoc Tools Installer.mpkg"; sourceTree = "<group>"; };
 		8EB0777010A7651300085D2E /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8EB077B610A7679300085D2E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8EB077B710A7679300085D2E /* VisDoc_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisDoc_Prefix.pch; sourceTree = "<group>"; };
@@ -121,6 +120,7 @@
 		8EB07A1310A8968D00085D2E /* VisDoc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VisDoc.png; sourceTree = "<group>"; };
 		8EB07A7F10A8BE1000085D2E /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
 		8EB07A8010A8BE1000085D2E /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
+		8EB607F911B12BBA00118909 /* VisDoc Tools Installer.mpkg */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.installer-mpkg"; name = "VisDoc Tools Installer.mpkg"; path = "../tools_installer/VisDoc Tools Installer.mpkg"; sourceTree = SOURCE_ROOT; };
 		8EBA161D10551A4900E51387 /* VisDoc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisDoc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBA161F10551A4900E51387 /* VisDoc-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisDoc-Info.plist"; sourceTree = "<group>"; };
 		8EC9027E1097C6000081A658 /* VisDoc 10.6-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisDoc 10.6-Info.plist"; sourceTree = "<group>"; };
@@ -188,7 +188,7 @@
 			children = (
 				8EA6156E10EC10CD00DCDDD5 /* perl */,
 				8E05A85510B1AD560035FCC1 /* updating */,
-				8EB0776A10A7645A00085D2E /* VisDoc Tools Installer.mpkg */,
+				8EB607F911B12BBA00118909 /* VisDoc Tools Installer.mpkg */,
 				8E11612110A0A77500B12764 /* img */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -380,12 +380,12 @@
 				8E11655910A4DC8D00B12764 /* cancel button.png in Resources */,
 				8E11655F10A4DD4F00B12764 /* cancel button pressed.png in Resources */,
 				8E11696910A6008400B12764 /* in_progress.png in Resources */,
-				8EB0776B10A7645A00085D2E /* VisDoc Tools Installer.mpkg in Resources */,
 				8EB07A1510A8968D00085D2E /* VisDoc.png in Resources */,
 				8E05A85910B1AD560035FCC1 /* dsa_pub.pem in Resources */,
 				8E05A8BB10B1DECE0035FCC1 /* _visdoc.icns in Resources */,
 				8E05A96C10B1F4F10035FCC1 /* _visdoc-document.icns in Resources */,
 				8EA616EB10EC10CE00DCDDD5 /* perl in Resources */,
+				8EB607FA11B12BBA00118909 /* VisDoc Tools Installer.mpkg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

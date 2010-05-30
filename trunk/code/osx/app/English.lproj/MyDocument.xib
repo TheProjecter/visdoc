@@ -3,18 +3,18 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10C540</string>
-		<string key="IBDocument.InterfaceBuilderVersion">740</string>
+		<string key="IBDocument.InterfaceBuilderVersion">762</string>
 		<string key="IBDocument.AppKitVersion">1038.25</string>
 		<string key="IBDocument.HIToolboxVersion">458.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">740</string>
+			<string key="NS.object.0">762</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="100649"/>
+			<integer value="100063"/>
 			<integer value="100578"/>
-			<integer value="100059"/>
+			<integer value="100649"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1409,6 +1409,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 					<string>self.isProcessButtonEnabled</string>
 					<string>settings.copyrightText</string>
 					<string>settings</string>
+					<string>settings.output</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
@@ -1451,7 +1452,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 					<object class="NSButton" id="385751430">
 						<reference key="NSNextResponder" ref="533294688"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{99, 276}, {18, 18}}</string>
+						<string key="NSFrame">{{466, 276}, {18, 18}}</string>
 						<reference key="NSSuperview" ref="533294688"/>
 						<int key="NSViewLayerContentsRedrawPolicy">2</int>
 						<bool key="NSViewCanDrawConcurrently">YES</bool>
@@ -1489,7 +1490,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 					<object class="NSTextField" id="85502568">
 						<reference key="NSNextResponder" ref="533294688"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{122, 278}, {141, 17}}</string>
+						<string key="NSFrame">{{91, 277}, {141, 17}}</string>
 						<reference key="NSSuperview" ref="533294688"/>
 						<int key="NSViewLayerContentsRedrawPolicy">2</int>
 						<bool key="NSEnabled">YES</bool>
@@ -2027,35 +2028,6 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.settings.out</string>
-						<reference key="source" ref="892684386"/>
-						<reference key="destination" ref="707047136"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="892684386"/>
-							<reference key="NSDestination" ref="707047136"/>
-							<string key="NSLabel">value: selection.settings.out</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.settings.out</string>
-							<object class="NSDictionary" key="NSOptions">
-								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSArray" key="dict.sortedKeys">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>NSContinuouslyUpdatesValue</string>
-									<string>NSValidatesImmediately</string>
-								</object>
-								<object class="NSMutableArray" key="dict.values">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<boolean value="YES"/>
-									<boolean value="YES"/>
-								</object>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">100527</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">enabled: selection.settings.generateIndex</string>
 						<reference key="source" ref="539919363"/>
 						<reference key="destination" ref="707047136"/>
@@ -2560,6 +2532,35 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 					</object>
 					<int key="connectionID">100942</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: selection.settings.output</string>
+						<reference key="source" ref="892684386"/>
+						<reference key="destination" ref="707047136"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="892684386"/>
+							<reference key="NSDestination" ref="707047136"/>
+							<string key="NSLabel">value: selection.settings.output</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">selection.settings.output</string>
+							<object class="NSDictionary" key="NSOptions">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSArray" key="dict.sortedKeys">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSContinuouslyUpdatesValue</string>
+									<string>NSValidatesImmediately</string>
+								</object>
+								<object class="NSMutableArray" key="dict.values">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<boolean value="YES"/>
+									<boolean value="YES"/>
+								</object>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100944</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2649,8 +2650,8 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="911046103"/>
-							<reference ref="85502568"/>
 							<reference ref="188546298"/>
+							<reference ref="85502568"/>
 							<reference ref="385751430"/>
 							<reference ref="470219318"/>
 						</object>
@@ -2676,15 +2677,6 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 						<reference key="parent" ref="533294688"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">100652</int>
-						<reference key="object" ref="470219318"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="1019474773"/>
-						</object>
-						<reference key="parent" ref="533294688"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">100653</int>
 						<reference key="object" ref="188546298"/>
 						<reference key="parent" ref="533294688"/>
@@ -2702,11 +2694,6 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 						<int key="objectID">100655</int>
 						<reference key="object" ref="757403958"/>
 						<reference key="parent" ref="911046103"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">100656</int>
-						<reference key="object" ref="1019474773"/>
-						<reference key="parent" ref="470219318"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100657</int>
@@ -3482,6 +3469,20 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 						<reference key="object" ref="74027725"/>
 						<reference key="parent" ref="1009223196"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100652</int>
+						<reference key="object" ref="470219318"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="1019474773"/>
+						</object>
+						<reference key="parent" ref="533294688"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100656</int>
+						<reference key="object" ref="1019474773"/>
+						<reference key="parent" ref="470219318"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -3932,7 +3933,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100942</int>
+			<int key="maxID">100944</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4777,6 +4778,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 			</object>
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
+		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
 			<integer value="1050" key="NS.object.0"/>
@@ -4788,5 +4790,24 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<string key="IBDocument.LastKnownRelativeProjectPath">../VisDoc.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
+		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
+			<bool key="EncodedWithXMLCoder">YES</bool>
+			<object class="NSArray" key="dict.sortedKeys">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<string>NSSwitch</string>
+				<string>cancel button</string>
+				<string>cancel button pressed</string>
+				<string>overlay</string>
+				<string>processing box</string>
+			</object>
+			<object class="NSMutableArray" key="dict.values">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<string>{15, 15}</string>
+				<string>{18, 18}</string>
+				<string>{18, 18}</string>
+				<string>{600, 800}</string>
+				<string>{420, 60}</string>
+			</object>
+		</object>
 	</data>
 </archive>
