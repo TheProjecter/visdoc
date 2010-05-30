@@ -1252,8 +1252,9 @@ sub _writeMembers_forMemberGroup_memberText_fields {
 
     # param fields
     my $paramFields = $inMember->{javadoc}->{params};
+    
     $this->_writeParamFields( $inWriter, 'param', $paramFields )
-      if $paramFields;
+      if $paramFields && scalar @{$paramFields};
 
     foreach my $key (@fieldKeys) {
         my $fields = $allFields->{$key};
