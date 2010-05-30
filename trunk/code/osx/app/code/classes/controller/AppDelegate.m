@@ -47,6 +47,9 @@ static float WINDOW_PRE_WAIT = 3.0;
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
+	// remove currently stored documents
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"openDocumentUrls"];
+	
 	// store current open documents
 	NSArray* openDocuments = [NSApp orderedDocuments];
 	NSMutableArray* openDocumentUrls = [[[NSMutableArray alloc] initWithCapacity:[openDocuments count]] autorelease];
