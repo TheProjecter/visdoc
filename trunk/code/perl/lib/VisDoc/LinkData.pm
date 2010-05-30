@@ -99,17 +99,18 @@ sub formatInlineLink {
         $link = "<a href=\"$url\"$classStr>$label</a>";
     }
     else {
-        #$label = "$this->{member} $label"  if $this->{member};
-        #$label = "$this->{package}.$label" if $this->{package};
+        $label = "$this->{member} $label"  if $this->{member};
+        $label = "$this->{package}.$label" if $this->{package};
 
-        #if ( $this->{member} || $this->{class} || $this->{package} ) {
-        #    $link = "<span class=\"doesNotExist\">$label</span>";
-        #}
-        #else {
+        if ( $this->{member} || $this->{class} || $this->{package} ) {
+            $link = "<span class=\"doesNotExist\">$label</span>";
+        }
+        else {
         $link = $label;
 
-        #}
+        }
     }
+    
     return $link;
 }
 

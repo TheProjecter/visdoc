@@ -45,6 +45,53 @@ END OF TESTFILE';
 
 =cut
 
+sub test_parseText_as2 {
+    my ($this) = @_;
+
+    my $text = 'class EventHandlersExample {
+
+	/**
+	@sends #onChanged onChanged (when the selection is changed by the program)
+	*/
+	public function method_A () : Void 
+	{
+		broadcastMessage("onChanged", changedTextField);
+	}
+}';
+	my @texts;
+	push @texts, $text;
+	my $fileData = VisDoc::parseTexts( \@texts );
+	my $classData = $fileData->[0]->{packages}->[0]->{classes}->[0];
+	
+	#use Data::Dumper;
+	#print("classData=" . Dumper($classData));
+	
+	{
+		# test class name
+		my $result = $classData->{name};
+		my $expected = 'EventHandlersExample';
+	
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	
+	{
+		# test sends entry
+		my $result = $classData->{methods}->[0]->{javadoc}->fieldsWithName('sends')->[0]->{label};
+		my $expected = 'onChanged (when the selection is changed by the program)';
+	
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+
+}
+
+=pod
+
+=cut
+
 sub test_parseText_as3 {
     my ($this) = @_;
 
@@ -151,10 +198,10 @@ function command(pet:Pet):void
 	pet.speak();
 }';
 	my $fileData = VisDoc::parseText( $text );
-	my $classData = $fileData->{packages}->[0];
+	my $packageData = $fileData->{packages}->[0];
 	
 	#use Data::Dumper;
-	#print(Dumper($classData));
+	#print(Dumper($packageData));
 	
 	{
 		# test package name
