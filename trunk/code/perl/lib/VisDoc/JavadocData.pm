@@ -133,6 +133,15 @@ sub getLinkDataFields {
 
 }
 
+sub getFields {
+    my ($this) = @_;
+
+	my $fields;
+    map { push( @{$fields}, $_ ) } @{ $this->{fields} };
+    map { push( @{$fields}, $_ ) } @{ $this->{params} };
+	return $fields;
+}
+
 =pod
 
 merge( $javadocData )

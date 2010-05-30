@@ -46,8 +46,8 @@ BEGIN {
         $VisDoc::StringUtils::STUB_CODE_BLOCK,
         $VisDoc::StringUtils::STUB_TAG_CODE,
         $VisDoc::StringUtils::STUB_TAG_LITERAL,
-        $VisDoc::StringUtils::STUB_INLINE_LINK
-      ) . ')';
+#       $VisDoc::StringUtils::STUB_INLINE_LINK ### done by PostParser
+      ) . ')'; 
 }
 
 =pod
@@ -191,6 +191,23 @@ sub _parseStubCode {
     my $formatted = $this->_formatCodeText($codeText);
     return $formatted;
 }
+
+sub substituteInlineLinkStub {
+    my ( $this, $inText ) = @_;
+    
+    return $inText if !$inText;
+    my $text = $inText;
+
+    my $macrosPattern = '('
+      . VisDoc::StringUtils::getStubKeyPatternForTagNames(
+        $VisDoc::StringUtils::STUB_INLINE_LINK
+      ) . ')';      
+     
+	while ( $text =~ s/$macrosPattern/$this->_expandMacro( $1, $2, $3 )/e ) { }
+	
+	return $text;
+}
+
 
 sub _parseStubInlineLink {
     my ( $this, $inTagString, $inTagName, $inNumber ) = @_;

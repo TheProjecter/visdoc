@@ -33,6 +33,7 @@ sub process {
     _createOverrideEntries($classes);
     _createLinkReferencesInMemberDefinitions( $collectiveFileData, $classes );
     _validateLinks( $collectiveFileData, $classes );
+    _substituteInlineLinkStubs( $collectiveFileData, $classes );
 
     #use Data::Dumper;
     #print("collectiveFileData=" . Dumper($collectiveFileData));
@@ -551,6 +552,69 @@ sub _validateLinkData {
             push( @labelComponents, $link->{class} )   if $link->{class};
             push( @labelComponents, $link->{member} )  if $link->{member};
             $link->{label} = join( '.', @labelComponents );
+        }
+    }
+}
+
+=pod
+
+Replaces all %VISDOC_STUB_INLINE_LINK_n% stubs with link texts.
+
+=cut
+
+sub _substituteInlineLinkStubs {
+    my ( $inCollectiveFileData, $inClasses ) = @_;
+
+    my $package, my $class, my $member;
+
+    use Data::Dumper;
+
+    foreach my $fileData ( @{$inCollectiveFileData} ) {
+
+        foreach $package ( @{ $fileData->{packages} } ) {
+
+            # package javadoc
+            if ( $package->{javadoc} ) {
+                my $packageFields = $package->{javadoc}->getFields();
+                if ( defined $packageFields ) {
+                    foreach my $field ( @{$packageFields} ) {
+                        $field->{value} =
+                          $fileData->substituteInlineLinkStub(
+                            $field->{value} );
+                    }
+                }
+            }
+
+            foreach $class ( @{ $package->{classes} } ) {
+
+                # class javadoc
+                if ( defined $class->{javadoc} ) {
+                    my $classFields = $class->{javadoc}->getFields();
+                    if ($classFields) {
+
+                        foreach my $field ( @{$classFields} ) {
+                            $field->{value} =
+                              $fileData->substituteInlineLinkStub(
+                                $field->{value} );
+                        }
+                    }
+                }
+
+                foreach $member ( @{ $class->getMembers() } ) {
+
+                    # member javadoc
+                    if ( $member->{javadoc} ) {
+                        my $memberFields = $member->{javadoc}->getFields();
+                        if ($memberFields) {
+                            foreach my $field ( @{$memberFields} ) {
+                                $field->{value} =
+                                  $fileData->substituteInlineLinkStub(
+                                    $field->{value} );
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

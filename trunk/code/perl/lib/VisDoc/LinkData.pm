@@ -20,17 +20,19 @@ sub createLinkData {
         $VisDoc::StringUtils::PATTERN_TAG_PACKAGE_CLASS_METHOD_LABEL);
 
     $inValue =~ m/$pattern/s;
-    my $package = $3 || undef;
-    my $class   = $4 || undef;
-    my $member  = $5 || undef;
-    my $params  = $6 || undef;
-    my $label   = $7 || undef;
+    my $packageName = $3 || undef;
+    my $className   = $4 || undef;
+    my $memberName  = $5 || undef;
+    my $params      = $6 || undef;
+    my $label       = $7 || undef;
 
     # remove quotes from label at start and end
     $label =~ s/^\"(.*?)\"$/$1/ if $label;
 
-    return VisDoc::LinkData->new( $inFieldName, $inStub, $package, $class,
-        $member, $params, $label );
+    return VisDoc::LinkData->new(
+        $inFieldName, $inStub, $packageName, $className,
+        $memberName,  $params, $label
+    );
 }
 
 =pod
@@ -38,23 +40,22 @@ sub createLinkData {
 =cut
 
 sub new {
-    my (
-        $class,   $inName,   $inStub,   $inPackage,
-        $inClass, $inMember, $inParams, $inLabel
-    ) = @_;
+    my ( $class, $inName, $inStub, $inPackageName, $inClassName, $inMemberName,
+        $inParams, $inLabel )
+      = @_;
 
     my VisDoc::LinkData $this = $class->SUPER::new($inName);
 
-    $this->{stub}    = $inStub;       # string
-    $this->{package} = $inPackage;    # string
-    $this->{class}   = $inClass;      # string
-    $this->{member}  = $inMember;     # string
-    $this->{params}  = $inParams;     # string
-    $this->{label}   = $inLabel;      # string
+    $this->{stub}    = $inStub;           # string
+    $this->{package} = $inPackageName;    # string
+    $this->{class}   = $inClassName;      # string
+    $this->{member}  = $inMemberName;     # string
+    $this->{params}  = $inParams;         # string
+    $this->{label}   = $inLabel;          # string
 
-    $this->{isValidRef} = undef;      # bool -- necessary to keep?
-    $this->{isPublic}   = 1;          # bool
-    $this->{uri}        = undef;      # string
+    $this->{isValidRef} = undef;          # bool -- necessary to keep?
+    $this->{isPublic}   = 1;              # bool
+    $this->{uri}        = undef;          # string
 
     # not used in this subclass:
     delete $this->{value};
@@ -98,14 +99,16 @@ sub formatInlineLink {
         $link = "<a href=\"$url\"$classStr>$label</a>";
     }
     else {
-        $label = "$this->{member} $label"  if $this->{member};
-        $label = "$this->{package}.$label" if $this->{package};
-        if ( $this->{member} || $this->{class} || $this->{package} ) {
-            $link = "<span class=\"doesNotExist\">$label</span>";
-        }
-        else {
-            $link = $label;
-        }
+        #$label = "$this->{member} $label"  if $this->{member};
+        #$label = "$this->{package}.$label" if $this->{package};
+
+        #if ( $this->{member} || $this->{class} || $this->{package} ) {
+        #    $link = "<span class=\"doesNotExist\">$label</span>";
+        #}
+        #else {
+        $link = $label;
+
+        #}
     }
     return $link;
 }
