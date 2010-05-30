@@ -96,9 +96,7 @@ html>body {
 	color:#95adc0;
 }
 
-.VisDoc .doesNotExist {
-	border-bottom:1px dashed #c8c8c8;
-}
+.VisDoc .doesNotExist {}
 
 .VisDoc .code {
 	white-space:pre;
@@ -143,7 +141,7 @@ html>body .VisDoc pre {
 
 .VisDoc .summary div.docNav {
 	margin:0 0 .5em 0;
-	border-bottom:1px solid #c4d2dd;
+	border-bottom:1px solid #e3e9ec;
 }
 
 .VisDoc div.docNav ul li {
@@ -219,12 +217,12 @@ font-size:100%;
 .VisDoc div.boxWithBorder {
 	margin-top:1em;
 	margin-bottom:1em;
-	border-top:1px solid #c4d2dd;
+	border-top:1px solid #e3e9ec;
 }
 
 .VisDoc div.boxWithBorder div.boxedElem div.contentHolder {
 	background-color:#F0F5F9;
-	border-color:#c4d2dd;
+	border-color:#e3e9ec;
 	border-style:none solid solid;
 	border-width:1px;
 	padding:.4em 10px .7em;
@@ -261,31 +259,32 @@ font-size:100%;
 }
 
 .VisDoc div.classProperties {
-	margin:2em 0 0 4em;
+	margin:2em 0 0 2em;
 }
 
 .VisDoc div.classProperties table {
-	background-color:#f7f9fd;
-	border-color:#c4d2dd;
-	border-style:solid;
-	border-width:0 1px 1px;
+	background-color:#fff;
+	border-color:#e3e9ec;
+	border-style:solid none;
+	border-width:1px;
 }
 
 .VisDoc div.classProperties th,.VisDoc div.classProperties td {
-	border-top:1px solid #c4d2dd;
+	border-top:1px solid #e3e9ec;
 }
 
 .VisDoc div.classProperties th {
-	padding:.4em 1.5em;
+	padding:.4em 1em;
 }
 
 .VisDoc div.classProperties td {
 	border-left:0;
-	padding:.4em 1.5em .4em 0;
+	padding:.4em 1em;
 }
 
-.VisDoc div.classProperties td.classDetails,.VisDoc div.classProperties th.classDetails {
-	background-color:#f0f5f9;
+.VisDoc div.classProperties td.classDetails,
+.VisDoc div.classProperties th.classDetails {
+	background-color:#F0F5F9;
 }
 
 .VisDoc div.classDescription h2 {
