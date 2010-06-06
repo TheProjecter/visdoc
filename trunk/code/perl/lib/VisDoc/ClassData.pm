@@ -316,19 +316,19 @@ sub getConstants {
 
 =pod
 
-getMemberWithName( $name ) -> $memberData
+getMemberWithQualifiedName( $name ) -> $memberData
 
 Returns MemberData object with name $name
 
 =cut
 
-sub getMemberWithName {
-    my ( $this, $inName ) = @_;
+sub getMemberWithQualifiedName {
+    my ( $this, $inQualifiedName ) = @_;
 
-    my @methods = grep { $_->{name} eq $inName } @{ $this->{methods} };
+    my @methods = grep { $_->getName() eq $inQualifiedName } @{ $this->{methods} };
     return $methods[0] if scalar @methods;
 
-    my @properties = grep { $_->{name} eq $inName } @{ $this->{properties} };
+    my @properties = grep { $_->getName() eq $inQualifiedName } @{ $this->{properties} };
     return $properties[0] if scalar @properties;
 
     return undef;
@@ -446,27 +446,45 @@ sub getSuperclassChain {
     my ($this) = @_;
 
     my @superclassChain = ();
-    $this->_chainSuperclasses( \@superclassChain, $this->{superclasses} );
+    $this->_chainSuperclassesOrInterfaces( \@superclassChain, $this->{superclasses} );
     return \@superclassChain;
 }
 
 =pod
 
-_chainSuperclasses( \@superclassChain, \@superclasses )
+getSuperInterfaceChain() -> \@superclasses
+
+Creates a chain of superclass Class objects.
+
+=cut
+
+sub getSuperInterfaceChain {
+    my ($this) = @_;
+
+    my @superInterfaceChain = ();
+    $this->_chainSuperclassesOrInterfaces( \@superInterfaceChain, $this->{interfaces} );
+    
+    return \@superInterfaceChain;
+}
+
+
+=pod
+
+_chainSuperclassesOrInterfaces( \@superclassChain, \@superclasses )
 
 Recursive function that adds superclass Class objects to array @superclassChain.
 
 =cut
 
-sub _chainSuperclasses {
-    my ( $this, $inChain, $inSuperClasses ) = @_;
+sub _chainSuperclassesOrInterfaces {
+    my ( $this, $inChain, $inSuper ) = @_;
 
-    foreach my $superclass ( @{$inSuperClasses} ) {
-        push( @{$inChain}, $superclass );
-        next if !$superclass->{classdata};
-        my $superSuperClasses = $superclass->{classdata}->{superclasses};
-        if ($superSuperClasses) {
-            $this->_chainSuperclasses( $inChain, $superSuperClasses );
+    foreach my $super ( @{$inSuper} ) {
+        push( @{$inChain}, $super );
+        next if !$super->{classdata};
+        my $superSuper = $super->{classdata}->{superclasses};
+        if ($superSuper) {
+            $this->_chainSuperclassesOrInterfaces( $inChain, $superSuper );
         }
     }
 }

@@ -11,6 +11,8 @@ use overload ( '""' => \&as_string );
 
 StaticMethod createLinkData ($fieldName, $value, $stub ) -> $linkData
 
+param $stub: optional
+
 =cut
 
 sub createLinkData {
@@ -50,7 +52,15 @@ sub new {
     $this->{package} = $inPackageName;    # string
     $this->{class}   = $inClassName;      # string
     $this->{member}  = $inMemberName;     # string
-    $this->{params}  = $inParams;         # string
+    
+    my $params = $inParams;
+    if ( $params ) {
+		$params =~ s/^\s*\((.*)$/$1/; # remove (
+		$params =~ s/^(.*)\)\s*$/$1/; # remove )
+		$params =~ s/ //go;
+	}
+    $this->{params}  = $params;         # string
+    $this->{qualifiedName}  = $params ? "$inMemberName($params)" : $inMemberName;     # string
     $this->{label}   = $inLabel;          # string
 
     $this->{isValidRef} = undef;          # bool -- necessary to keep?
@@ -94,12 +104,13 @@ sub formatInlineLink {
         my $type = $inDocumentType || 'html';
 
         # add document type before the anchor link
-        my $url = $this->{uri};
+        my $url = $this->{uri};        
         $url =~ s/(.*?)(#\w+|$)/$1.html$2/;
+                
         $link = "<a href=\"$url\"$classStr>$label</a>";
     }
     else {
-        $label = "$this->{member} $label"  if $this->{member};
+        $label = "$this->{qualifiedName} $label"  if $this->{qualifiedName};
         $label = "$this->{package}.$label" if $this->{package};
 
         if ( $this->{member} || $this->{class} || $this->{package} ) {

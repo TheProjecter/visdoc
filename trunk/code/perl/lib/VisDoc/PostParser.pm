@@ -32,6 +32,8 @@ sub process {
     _createListOfDispatchedBy($classes);
     _createOverrideEntries($classes);
     _createLinkReferencesInMemberDefinitions( $collectiveFileData, $classes );
+    _substituteInheritDocStubs( $collectiveFileData, $classes );
+    _createAutomaticInheritDocs( $collectiveFileData, $classes );
     _validateLinks( $collectiveFileData, $classes );
     _substituteInlineLinkStubs( $collectiveFileData, $classes );
 
@@ -299,7 +301,7 @@ sub _createMemberNameIds {
 
             my %seen = ();
             foreach my $member ( @{ $package->{functions} } ) {
-                my $name   = $member->{name};
+                my $name   = $member->getName();
                 my $nameId = $name;
                 $nameId .= $seen{$name} if $seen{$name};
                 $member->setNameId($nameId);
@@ -310,7 +312,7 @@ sub _createMemberNameIds {
 
                 my %seen = ();
                 foreach my $member ( @{ $class->getMembers() } ) {
-                    my $name   = $member->{name};
+                    my $name   = $member->getName();
                     my $nameId = $name;
                     $nameId .= $seen{$name} if $seen{$name};
                     $member->setNameId($nameId);
@@ -354,6 +356,7 @@ sub _copyMethodSendsFieldsToClass {
 sub _createListOfDispatchedBy {
     my ($inClasses) = @_;
 
+	my $seen = {};
     foreach my $class ( @{$inClasses} ) {
         if ( $class->{javadoc} ) {
             my $sendsFields = $class->{javadoc}->fieldsWithName('sends');
@@ -361,8 +364,9 @@ sub _createListOfDispatchedBy {
                 my $className = $fieldData->{class};
                 if ($className) {
                     my $classRef = _getClassWithName( $inClasses, $className );
-                    if ($classRef) {
+                    if ($classRef && !$seen->{$class}) {
                         push( @{ $classRef->{dispatchedBy} }, $class );
+                        $seen->{$class} = 1;
                     }
                 }
             }
@@ -390,7 +394,7 @@ sub _createOverrideEntries {
 
                     my $linkField =
                       VisDoc::LinkData::createLinkData( 'overrides',
-                        '#' . $member->{name} );
+                        '#' . $member->getName() );
                     $linkField->{class} = $superclass->{name};
 
                     push @{ $member->{javadoc}->{fields} }, $linkField;
@@ -444,6 +448,157 @@ sub _createLinkReferencesInMemberDefinitions {
     foreach my $fileData ( @{$inCollectiveFileData} ) {
         $fileData->createLinkReferencesInMemberDefinitions($inClasses);
     }
+}
+
+sub _substituteInheritDocStubs {
+    my ( $inCollectiveFileData, $inClasses ) = @_;
+    
+    my $package, my $class, my $member;
+
+    foreach my $fileData ( @{$inCollectiveFileData} ) {
+
+        foreach $package ( @{ $fileData->{packages} } ) {
+        
+			# no inheriting for packages
+
+            foreach $class ( @{ $package->{classes} } ) {
+
+				# no inheriting for classes
+
+                foreach $member ( @{ $class->getMembers() } ) {
+                    
+                    # explicit inheritance through {@inheritDoc}
+                    if ( $member->{javadoc} ) {
+                        my $memberFields = $member->{javadoc}->getFields();
+                        if ($memberFields) {
+                            foreach my $field ( @{$memberFields} ) {
+                            
+                            	#next if ($field->{name} !~ m/^(description|throws|param|return)$/);
+                            	
+                                $field->{value} =
+                                  $fileData->substituteInheritDocStub(
+                                    $field->{value}, $class, $member, $field );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+	_cleanupTempInheritDocStubs( $inCollectiveFileData, $inClasses );
+}
+
+=pod
+
+=cut
+
+sub _cleanupTempInheritDocStubs {
+    my ( $inCollectiveFileData, $inClasses ) = @_;
+
+    my $package, my $class, my $member;
+
+    my $p1 = $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK;
+    my $p2 = $VisDoc::StringUtils::STUB_INLINE_LINK;
+    
+    foreach my $fileData ( @{$inCollectiveFileData} ) {
+
+        foreach $package ( @{ $fileData->{packages} } ) {
+        
+            foreach $class ( @{ $package->{classes} } ) {
+
+                foreach $member ( @{ $class->getMembers() } ) {
+                    
+                    if ( $member->{javadoc} ) {
+                    
+                        my $memberFields = $member->{javadoc}->getFields();
+                        if ($memberFields) {
+                            foreach my $field ( @{$memberFields} ) {
+                            
+                            	#next if ($field->{name} !~ m/^(description|throws|param|return)$/);
+                            	
+                                $field->{value} =~ s/$p1/$p2/go;
+                                $field->{value} =~ s/%STARTINHERITDOC%/<div class="inheritDoc">/go;
+                                $field->{value} =~ s/%ENDINHERITDOC%/<\/div>/go;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+sub _createAutomaticInheritDocs {
+    my ( $inCollectiveFileData, $inClasses ) = @_;
+    
+    my $package, my $class, my $member;
+
+    foreach my $fileData ( @{$inCollectiveFileData} ) {
+
+        foreach $package ( @{ $fileData->{packages} } ) {
+        
+            foreach $class ( @{ $package->{classes} } ) {
+				
+				my $superInterfaceChain = $class->getSuperInterfaceChain();
+				_createAutomaticInheritDocsFromSuperClassOrInterface($fileData, $class, $superInterfaceChain);
+				
+				my $superclassChain = $class->getSuperclassChain();
+				_createAutomaticInheritDocsFromSuperClassOrInterface($fileData, $class, $superclassChain);
+                
+            }
+        }
+    }
+    _cleanupTempInheritDocStubs( $inCollectiveFileData, $inClasses );
+}
+
+=pod
+
+=cut
+
+sub _createAutomaticInheritDocsFromSuperClassOrInterface {
+	my ($inFileData, $inClass, $inSuperChain) = @_;
+	
+	foreach my $member ( @{ $inClass->getMembers() } ) {
+                    
+		my $memberName = $member->getName();
+		
+		# get the corresponding member up the superclass chain
+		foreach my $superclass ( @{$inSuperChain} ) {
+				
+			my $superclassData = $superclass->{classdata};
+			next if !$superclassData;
+
+			my $superMember = $superclassData->getMemberWithQualifiedName( $memberName);
+			next if !$superMember;
+
+			my $superJavadoc = $superMember->{javadoc};
+			next if !$superJavadoc;
+			
+			# copy fields
+			my $superFields = $superJavadoc->{fields};
+			my $superParams = $superJavadoc->{params};
+			
+			next if !$superFields && !$superParams;
+			
+			# has fields to copy, so create javadoc if none
+			$member->{javadoc} = VisDoc::JavadocData->new() if !$member->{javadoc};
+			
+			foreach my $superField (@{$superFields}) {
+				
+				if (!$member->{javadoc}->getSingleFieldWithName($superField->{name})) {
+				
+					my $fieldCopy = $superField->copy();
+					
+					# add link
+					my $linkStub = $inFileData->createInheritDocLinkData($superclassData->{name}, $superMember->getName(), '#');
+					
+					$fieldCopy->{value} = '%STARTINHERITDOC%' . $fieldCopy->{value} . ' ' . $linkStub . '%ENDINHERITDOC%';
+					
+					push( @{$member->{javadoc}->{fields}}, $fieldCopy );
+				}
+			}
+		}	
+	}
 }
 
 =pod
@@ -508,7 +663,7 @@ Finds class and member references for LinkData {class} and {member} properties:
 
 sub _validateLinkData {
     my ( $inClasses, $inFields, $inPackage, $inClass, $inMember ) = @_;
-
+	
     return if !$inFields;
 
     foreach my $link ( @{$inFields} ) {
@@ -516,8 +671,9 @@ sub _validateLinkData {
         my $className = $link->{class} || $inClass->{name};
 
         my $classRef = _getClassWithName( $inClasses, $className );
-        my $member = $classRef->getMemberWithName( $link->{member} )
-          if ( $classRef && $link->{member} );
+        
+        my $member = $classRef->getMemberWithQualifiedName( $link->{qualifiedName} )
+          if ( $classRef && $link->{qualifiedName} );
 
         # set URI
         my $memberName;
@@ -538,7 +694,7 @@ sub _validateLinkData {
             $link->{isPublic} = $classRef->isPublic();
         }
         $link->{isPublic} = $member->isPublic() if $member;
-
+		
         # set label
         if ( !$link->{label} ) {
 
@@ -550,7 +706,7 @@ sub _validateLinkData {
             my @labelComponents = ();
             push( @labelComponents, $link->{package} ) if $link->{package};
             push( @labelComponents, $link->{class} )   if $link->{class};
-            push( @labelComponents, $link->{member} )  if $link->{member};
+            push( @labelComponents, $link->{qualifiedName} )  if $link->{qualifiedName};
             $link->{label} = join( '.', @labelComponents );
         }
     }
@@ -568,7 +724,7 @@ sub _substituteInlineLinkStubs {
     my $package, my $class, my $member;
 
     foreach my $fileData ( @{$inCollectiveFileData} ) {
-
+		
         foreach $package ( @{ $fileData->{packages} } ) {
 
             # package javadoc

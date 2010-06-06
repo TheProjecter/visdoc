@@ -268,7 +268,7 @@ sub _stubAllTags {
     $text = $this->_stubLinkTags($text);
 
     # put {@inheritDoc ...} in hash and replace by stubs
-    $text = $this->_stubInheritDocTags($text);
+    #$text = $this->_stubInheritDocTags($text);
 
     # put /**...*/ and /**<..*/ in hash and replace by stubs
     $text = $this->_stubJavadocComments($text);
@@ -456,6 +456,7 @@ Returns the processed text.
 
 =cut
 
+=pod
 sub _stubInheritDocTags {
 
     #my $this = $_[0]
@@ -469,6 +470,7 @@ sub _stubInheritDocTags {
         VisDoc::FileData::getDataKey($VisDoc::StringUtils::STUB_TAG_INHERITDOC)
     );
 }
+=cut
 
 =pod
 

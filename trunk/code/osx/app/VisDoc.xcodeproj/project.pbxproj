@@ -257,10 +257,10 @@
 		8EB0770910A7487E00085D2E /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				8EB0770A10A7487E00085D2E /* MyDocument.h */,
-				8EB0770B10A7487E00085D2E /* MyDocument.m */,
 				8EB078BF10A8059200085D2E /* AppDelegate.h */,
 				8EB078C010A8059200085D2E /* AppDelegate.m */,
+				8EB0770A10A7487E00085D2E /* MyDocument.h */,
+				8EB0770B10A7487E00085D2E /* MyDocument.m */,
 				8E05A9A410B2B0F90035FCC1 /* LayoutSettingsController.h */,
 				8E05A9A510B2B0F90035FCC1 /* LayoutSettingsController.m */,
 				8E05ACB310B351E70035FCC1 /* LayoutSettingsDefaultsValueTransformer.h */,

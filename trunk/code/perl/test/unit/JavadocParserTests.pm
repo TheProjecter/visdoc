@@ -12,7 +12,7 @@ use VisDoc::ParserAS2;
 use VisDoc::ParserAS3;
 use VisDoc::ParserJava;
 
-my $debug = 0;
+my $debug = 1;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -24,7 +24,7 @@ sub new {
 
 =cut
 
-sub test_getFieldNameParts {
+sub _test_getFieldNameParts {
     my ($this) = @_;
 
 	my $text = '@author John Doe
@@ -64,7 +64,7 @@ sub test_getFieldNameParts {
 
 =cut
 
-sub test_getFieldNameParts_firstline {
+sub _test_getFieldNameParts_firstline {
     my ($this) = @_;
 
 	my $text = 'This is the introduction
@@ -89,7 +89,7 @@ sub test_getFieldNameParts_firstline {
 
 =cut
 
-sub test_getFieldNameParts_empty {
+sub _test_getFieldNameParts_empty {
     my ($this) = @_;
 
 	my $text = 'This is the introduction';
@@ -120,7 +120,7 @@ sub test_getFieldNameParts_empty {
 
 =cut
 
-sub test_getFieldNameParts_params {
+sub _test_getFieldNameParts_params {
     my ($this) = @_;
 
 	my $text = '@param inText: the text to be processed
@@ -165,7 +165,7 @@ sub test_getFieldNameParts_params {
 	}
 }
 
-sub test_description_anonymous {
+sub _test_description_anonymous {
     my ($this) = @_;
 
 	my $text = 'Description text.';
@@ -181,7 +181,7 @@ sub test_description_anonymous {
 	$this->assert( $result eq $expected );
 }
 
-sub test_description_with_anonymous {
+sub _test_description_with_anonymous {
     my ($this) = @_;
 
 	my $text = 'This is the first line. 
@@ -199,7 +199,7 @@ This also belongs to the description.
 	$this->assert( $result eq $expected );	
 }
 
-sub test_description_empty {
+sub _test_description_empty {
     my ($this) = @_;
 
 	my $text = '@author Jonathan';
@@ -216,7 +216,7 @@ sub test_description_empty {
 		
 }
 
-sub test_fieldsWithName {
+sub _test_fieldsWithName {
     my ($this) = @_;
 
 	my $text = '@author
@@ -274,7 +274,7 @@ sub test_fieldsWithName {
 
 =cut
 
-sub test_tag_see {
+sub _test_tag_see {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -328,7 +328,15 @@ class A {}
 	{
 		# test field see 2: params
 		my $result = $fields->[2]->{params};
-		my $expected = '(drawObject)';
+		my $expected = 'drawObject';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# test field see 2: qualifiedName
+		my $result = $fields->[2]->{qualifiedName};
+		my $expected = 'draw(drawObject)';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
@@ -380,7 +388,7 @@ class A {}
 
 =cut
 
-sub test_tag_throws {
+sub _test_tag_throws {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -417,7 +425,7 @@ sub test_tag_throws {
 
 =cut
 
-sub test_tag_exception {
+sub _test_tag_exception {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -451,7 +459,7 @@ sub test_tag_exception {
 }
 
 =pod
-sub test_tag_overload {
+sub _test_tag_overload {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -490,7 +498,7 @@ sub test_tag_overload {
 =cut
 
 =pod
-sub test_addField {
+sub _test_addField {
     my ($this) = @_;
 
 	my $text = '@author
@@ -521,7 +529,7 @@ sub test_addField {
 
 =cut
 
-sub test_tag_param {
+sub _test_tag_param {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -540,7 +548,7 @@ class A {}
 
 }
 
-sub test_tag_sends {
+sub _test_tag_sends {
 	my ($this) = @_;
 	
 	my $text = 'package {
@@ -608,7 +616,7 @@ sub test_tag_sends {
 
 =cut
 
-sub test_tag_in_middle_of_sentence {
+sub _test_tag_in_middle_of_sentence {
 	my ($this) = @_;
 
 	my $text = '
@@ -651,7 +659,7 @@ Testing a variety of @see values.';
 }
 
 =pod
-sub test_getDescriptionParts_5 {
+sub _test_getDescriptionParts_5 {
     my ($this) = @_;
 
 	my $text = '/**
@@ -698,7 +706,7 @@ class A {}
 }
 =cut
 
-sub test_tag_link {
+sub _test_tag_link {
 	my ($this) = @_;
 	
 	my $text = 'package {
@@ -707,10 +715,12 @@ This is a description.
 {@link test}
 {@link org.asaplibrary.data.array.Iterator#next Get next value}
 {@link #previous Get previous value}
+{@link #previous(input:int) Get previous value}
 Testing @see references, see {@link #aFunction a number of @see examples}.
 */
 class A {
 	function previous () {}
+	function previous (input:int) {}
 	function aFunction () {}
 }
 }
@@ -718,8 +728,8 @@ class A {
 	my $fileData = VisDoc::parseText($text, 'as3');
 	my $javadoc = $fileData->{packages}->[0]->{classes}->[0]->{javadoc};
 	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData) . "\n");
+use Data::Dumper;
+print("fileData=" . Dumper($fileData) . "\n");
 
 	# link 1
 	{
@@ -764,6 +774,14 @@ class A {
 		$this->assert( $result eq $expected );
 	}
 	{
+		# qualifiedName
+		my $result   = $javadoc->{linkTags}->[2]->{qualifiedName};
+		my $expected = 'previous';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
 		# label
 		my $result   = $javadoc->{linkTags}->[2]->{label};
 		my $expected = 'Get previous value';
@@ -775,7 +793,15 @@ class A {
 	{
 		# member
 		my $result   = $javadoc->{linkTags}->[3]->{member};
-		my $expected = 'aFunction';
+		my $expected = 'previous';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# qualifiedName
+		my $result   = $javadoc->{linkTags}->[3]->{qualifiedName};
+		my $expected = 'previous(input:int)';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
@@ -783,6 +809,23 @@ class A {
 	{
 		# label
 		my $result   = $javadoc->{linkTags}->[3]->{label};
+		my $expected = 'Get previous value';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	# link 4
+	{
+		# member
+		my $result   = $javadoc->{linkTags}->[4]->{member};
+		my $expected = 'aFunction';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# label
+		my $result   = $javadoc->{linkTags}->[4]->{label};
 		my $expected = 'a number of @see examples';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -790,7 +833,7 @@ class A {
 	}
 }
 
-sub test_tag_linkplain {
+sub _test_tag_linkplain {
 	my ($this) = @_;
 	
 	my $text = 'package {
@@ -865,7 +908,7 @@ class A {}
 
 =cut
 
-sub test_tag_literal {
+sub _test_tag_literal {
     my ($this) = @_;
 
 	my $text =
@@ -893,7 +936,7 @@ class A {}
 
 =cut
 
-sub test_tag_code {
+sub _test_tag_code {
     my ($this) = @_;
 
 	my $text =
@@ -921,7 +964,7 @@ class A {}
 
 =cut
 
-sub test_tag_img {
+sub _test_tag_img {
     my ($this) = @_;
 
 	my $text =
@@ -950,33 +993,111 @@ class A {}
 sub test_tag_inheritDoc {
     my ($this) = @_;
 
-	my $text =
-	  'package {
-/**
-This is a comment. {@inheritDoc}
-*/
-class A {}
+	my $text = 'package {
+	
+	public class Shape {
+	
+		/**
+		Description from class Shape.
+		@param myTag This is very much alike Objective-C.
+		*/
+		public function retainCount () : Number
+		{
+			//
+		}
+	}
+
+	public class Rectangle extends Shape {
+	
+		/**
+		Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted. {@inheritDoc} Just two random links for testing: {@link Circle} and {@link Circle#retainCount}
+		@return Custom Rectangle return comment. After this line the comment from class Shape should be inserted. {@inheritDoc}
+		@param myTag {@inheritDoc}
+		*/
+		public function retainCount () : Number
+		{
+			//
+		}
+	}
+	
+	public class Square extends Rectangle {
+	
+		/**
+		Some. {@inheritDoc}
+		*/
+		public function retainCount () : Number
+		{
+			//
+		}
+	}
+	
+	public class Circle extends Shape {
+	
+		public function retainCount () : Number
+		{
+			//
+		}
+	}
+
 }
 ';
 	my $fileData = VisDoc::parseText($text, 'as3');
-	my $javadoc = $fileData->{packages}->[0]->{classes}->[0]->{javadoc};
-
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData) . "\n");
-
-	my $result = $javadoc->getDescription();
-	my $expected = 'This is a comment. %VISDOC_STUB_TAG_INHERITDOC_1%';
-
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+	
+	{
+		# class 1 description
+		my $javadoc = $fileData->{packages}->[0]->{classes}->[1]->{methods}->[0]->{javadoc};
+	
+		my $result = $javadoc->getDescription();
+		my $expected = 'Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted. <div class="inheritDoc">Description from class Shape. <a href="Shape.html#retainCount">#</a></div> Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a>';
+	
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	
+	{
+		# class 1 param
+		my $javadoc = $fileData->{packages}->[0]->{classes}->[1]->{methods}->[0]->{javadoc};
+	
+		my $paramField = $javadoc->{params}->[0];
+		my $result = $paramField->{value};
+		my $expected = '<div class="inheritDoc">This is very much alike Objective-C. <a href="Shape.html#retainCount">#</a></div>';
+	
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	
+	{
+		# class 2 description
+		my $javadoc = $fileData->{packages}->[0]->{classes}->[2]->{methods}->[0]->{javadoc};
+	
+		my $result = $javadoc->getDescription();
+		my $expected = 'Some. <div class="inheritDoc">Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted.Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a> <a href="Rectangle.html#retainCount">#</a></div>';
+	
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	
+	{
+		# class 3 description (automatic)
+		my $javadoc = $fileData->{packages}->[0]->{classes}->[3]->{methods}->[0]->{javadoc};
+	
+		my $result = $javadoc->getDescription();
+		my $expected = 'Description from class Shape. <a href="Shape.html#retainCount">#</a>';
+	
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
 }
 
 =pod
 
 =cut
 
-sub test_params {
+sub _test_params {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -1052,7 +1173,7 @@ class A {}
 
 =cut
 
-sub test_return {
+sub _test_return {
     my ($this) = @_;
 
 	my $text = 'package {

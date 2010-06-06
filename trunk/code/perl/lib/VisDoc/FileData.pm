@@ -24,9 +24,9 @@ my $DATA_KEYS = {
 my %functionTags;
 my $macrosPattern;
 
-#our $stubCounter = 0;
 our $linkDataRefs
   ; # hash of references to LinkData objects, with key: STUB_INLINE_LINK and value: LinkData ref
+#our $linkStubCounter = 0;
 
 BEGIN {
 
@@ -46,7 +46,7 @@ BEGIN {
         $VisDoc::StringUtils::STUB_CODE_BLOCK,
         $VisDoc::StringUtils::STUB_TAG_CODE,
         $VisDoc::StringUtils::STUB_TAG_LITERAL,
-#       $VisDoc::StringUtils::STUB_INLINE_LINK ### done by PostParser
+#       $VisDoc::StringUtils::STUB_INLINE_LINK, ### done by PostParser
       ) . ')'; 
 }
 
@@ -80,6 +80,7 @@ sub new {
         stubCounter      => 0,
     };
     bless $this, $class;
+    
     return $this;
 }
 
@@ -89,10 +90,8 @@ sub new {
 
 sub getStubCounter {
     my ($this) = @_;
-
-    return $this->{stubCounter};
-
-    # return $stubCounter;
+	
+    return $this->{stubCounter}++;
 }
 
 =pod
@@ -152,44 +151,13 @@ sub getContents {
     return $inText if !$inText;
 
     my $text = $inText;
-    $this->handleContentsOfVerbatimTags($text);
+    $this->_handleContentsOfVerbatimTags($text);
 
     while ( $text =~ s/$macrosPattern/$this->_expandMacro( $1, $2, $3 )/e ) { }
 
     VisDoc::StringUtils::restoreCDATATags($text);
 
     return $text;
-}
-
-=pod
-
-Some stubs strings need further processing. For instance, a link will be formatted differently than code text.
-This function calls a dispatch function for each stub so that each can be processed in its own way.
-
-=cut
-
-sub _expandMacro {
-    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
-
-    if ( defined( $functionTags{$inTagName}->{fn} ) ) {
-        my $owner = $functionTags{$inTagName}->{owner} || $this;
-
-        my $result =
-          &{ $functionTags{$inTagName}->{fn} }( $owner, $inTagString,
-            $inTagName, $inNumber );
-        return $result;
-    }
-    else {
-        return "tag undefined";
-    }
-}
-
-sub _parseStubCode {
-    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
-
-    my $codeText = $this->getStubValue( $inTagString, $inTagName );
-    my $formatted = $this->_formatCodeText($codeText);
-    return $formatted;
 }
 
 sub substituteInlineLinkStub {
@@ -208,6 +176,48 @@ sub substituteInlineLinkStub {
 	return $text;
 }
 
+sub substituteInheritDocStub {
+    my ( $this, $text, $inClass, $inMember, $inField ) = @_;
+        
+    return $text if !$text;
+    
+	while ( $text =~ s/\{\@inheritDoc\}/$this->_parseStubInheritDoc( $inClass, $inMember, $inField )/e ) { }
+	
+	return $text;
+}
+
+=pod
+
+Some stub strings need further processing. For instance, a link will be formatted differently than code text.
+This function calls a dispatch function for each stub so that each can be processed in its own way.
+
+=cut
+
+sub _expandMacro {
+    #my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
+
+    if ( defined( $functionTags{$_[2]}->{fn} ) ) {
+        my $owner = $functionTags{$_[2]}->{owner} || $_[0];
+
+		my @params = @_;
+		shift @params;
+		
+        my $result =
+          &{ $functionTags{$_[2]}->{fn} }( $owner, @params );
+        return $result;
+    }
+    else {
+        return "tag undefined";
+    }
+}
+
+sub _parseStubCode {
+    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
+
+    my $codeText = $this->getStubValue( $inTagString, $inTagName );
+    my $formatted = $this->_formatCodeText($codeText);
+    return $formatted;
+}
 
 sub _parseStubInlineLink {
     my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
@@ -218,6 +228,80 @@ sub _parseStubInlineLink {
     return '' if !$ref;
     return $$ref->formatInlineLink();
 }
+
+sub _parseStubInheritDoc {
+    my ( $this, $inClass, $inMember, $inField ) = @_;
+	
+	my $inheritedComment = $this->_getInheritedComment($inClass, $inMember, $inField);
+	if ( $inheritedComment ) {
+		return "%STARTINHERITDOC%$inheritedComment%ENDINHERITDOC%";
+	} 
+	return '';
+}
+
+=pod
+
+_getInheritedComment( $class, $member ) -> $description
+
+=cut
+
+sub _getInheritedComment {
+	my ($this, $inClass, $inMember, $inField) = @_;
+		
+	my $inherited;
+	
+	my $interfaceChain = $inClass->getSuperInterfaceChain();
+	$inherited = $this->_getInheritedCommentForSuperclassOrInterface($inMember, $inField, $interfaceChain);
+	
+	if (!$inherited) {
+		my $superclassChain = $inClass->getSuperclassChain();
+		$inherited = $this->_getInheritedCommentForSuperclassOrInterface($inMember, $inField, $superclassChain);
+	}
+	
+	return $inherited;
+}
+
+=pod
+
+=cut
+
+sub _getInheritedCommentForSuperclassOrInterface {
+	my ( $this, $inMember, $inField, $inSuperChain ) = @_;
+	
+	return undef if !$inSuperChain || !scalar @{$inSuperChain};
+
+	my $memberName = $inMember->getName();
+
+	# go through the list of Class objects
+	foreach my $superclass ( @{$inSuperChain} ) {
+	
+		my $superclassData = $superclass->{classdata};
+		return undef if !$superclassData;
+		
+		my $superMember = $superclassData->getMemberWithQualifiedName( $memberName);
+		next if !$superMember;
+		
+		my $superJavaDoc = $superMember->{javadoc};
+		if ($superJavaDoc) {
+    
+			my $existingFieldValue = $superJavaDoc->getCombinedFieldValue( $inField->{name} );
+			
+			# remove existing inheritDoc stubs
+			$existingFieldValue =~ s/\s*%STARTINHERITDOC%(.*?)%ENDINHERITDOC%\s*//g;
+			
+			# remove existing inheritDoc link stubs
+			my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
+			
+			$existingFieldValue =~ s/\s*$pattern\s*//g;
+			
+			my $linkStub = $this->createInheritDocLinkData($superclassData->{name}, $superMember->getName(), '#');
+
+			return "$existingFieldValue $linkStub";
+		}
+	}
+	return undef;
+}
+
 
 sub _parseLiteralText {
     my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
@@ -231,11 +315,11 @@ sub _parseLiteralText {
 
 =pod
 
-handleContentsOfVerbatimTags( $text ) -> $text
+_handleContentsOfVerbatimTags( $text ) -> $text
 
 =cut
 
-sub handleContentsOfVerbatimTags {
+sub _handleContentsOfVerbatimTags {
 
     #my $this = $_[0]
     #my $text = $_[1]
@@ -260,7 +344,7 @@ sub handleContentsOfVerbatimTags {
           ;    # includes number, for instance: %STUB_1%
 
         # find original value
-        my $value = $_[0]->getValue( $1, $key );
+        my $value = $_[0]->_getValue( $1, $key );
 
         $_[1] =~ s/$key/$value/ if $value;
     }
@@ -270,7 +354,7 @@ sub handleContentsOfVerbatimTags {
 
 =cut
 
-sub getValue {
+sub _getValue {
     my ( $this, $inStubKey, $inKey ) = @_;
 
     return $this->{ getDataKey($inStubKey) }->{$inKey};
@@ -510,30 +594,47 @@ sub createLinkReferencesInMemberDefinitions {
 
     my $event =
       VisDoc::FindLinksEvent->new( $VisDoc::FindLinksEvent::NAME, $this,
-        $inClasses, \&createLinkDataForClass );
+        $inClasses, \&_createLinkData );
 
     $this->dispatchEvent($event);
 }
 
 =pod
 
-createLinkDataForClass ( $value ) -> $stub
-
+_createLinkData( $className, $memberName, $label ) -> $stubString
 
 =cut
 
-sub createLinkDataForClass {
-    my ( $this, $inClass ) = @_;
+sub _createLinkData {
+    my ( $this, $inClassName, $inMemberName, $inLabel ) = @_;
+        
+    my $stub = VisDoc::StringUtils::getStubKey( $VisDoc::StringUtils::STUB_INLINE_LINK, $this->getStubCounter() );
+	
+	my $linkText = $inMemberName ? "$inClassName#$inMemberName" : $inClassName;
+	$linkText .= " $inLabel" if $inLabel;
+    my $linkData = $this->createAndStoreInlineLinkData( $linkText, $stub );
 
-    my $counterRef = \$this->getStubCounter();
-    my $stub =
-      VisDoc::StringUtils::getStubKey( $VisDoc::StringUtils::STUB_INLINE_LINK,
-        $$counterRef );
-    $$counterRef++;
+    return $stub;
+}
 
-    my $linkData = $this->createAndStoreInlineLinkData( $inClass, $stub );
-    $linkData->{class} = $inClass;
+=pod
 
+createInheritDocLinkData( $className, $memberName, $label ) -> $stubString
+
+=cut
+
+sub createInheritDocLinkData {
+    my ( $this, $inClassName, $inMemberName, $inLabel ) = @_;
+	
+	my $stub = $this->_createLinkData( $inClassName, $inMemberName, $inLabel );
+	
+	# temporarily replace LINK stub by INHERIT_DOC stub
+	# so we can remove 'inherited' links
+	# to prevent the concatenation of links
+	my $p1 = $VisDoc::StringUtils::STUB_INLINE_LINK;
+	my $p2 = $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK;		
+	$stub =~ s/$p1/$p2/go;
+	
     return $stub;
 }
 
@@ -547,10 +648,10 @@ Stores ref to object in {linkDataRefs}.
 =cut
 
 sub createAndStoreInlineLinkData {
-    my ( $this, $inValue, $inStub ) = @_;
+    my ( $this, $inLink, $inStub ) = @_;
 
     my $linkData =
-      VisDoc::LinkData::createLinkData( 'link', $inValue, $inStub );
+      VisDoc::LinkData::createLinkData( 'link', $inLink, $inStub );
     $linkDataRefs->{$inStub} = \$linkData;
 
     return $linkData;

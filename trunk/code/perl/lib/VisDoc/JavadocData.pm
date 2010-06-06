@@ -33,12 +33,7 @@ In case multiple description fields are present, concatenates values with a spac
 sub getDescription {
     my ($this) = @_;
 
-    my $values;
-    my $fields = $this->fieldsWithName($FIELD_DESCRIPTION);
-
-    map { push( @{$values}, $_->{value} ); } @{$fields};
-    return '' if !$values || !scalar @{$values};
-    return join( ' ', @{$values} );
+    return $this->getCombinedFieldValue('description');
 }
 
 =pod
@@ -52,12 +47,13 @@ Finds FieldData objects with name $fieldName.
 sub fieldsWithName {
     my ( $this, $inFieldName ) = @_;
 
-    return undef if !defined $this->{fields};
-    return undef if !scalar @{ $this->{fields} };
+    return undef if !defined $this->{fields} && !defined $this->{params};
 
     my $matchingFields;
     map { push( @{$matchingFields}, $_ ) if ( $_->{name} eq $inFieldName ); }
       @{ $this->{fields} };
+    map { push( @{$matchingFields}, $_ ) if ( $_->{name} eq $inFieldName ); }
+      @{ $this->{params} };
 
     return $matchingFields;
 }
@@ -95,6 +91,23 @@ sub getMultipleFieldsWithName {
 
 =pod
 
+Returns the string of all fields with name $inFieldName.
+
+=cut
+
+sub getCombinedFieldValue {
+    my ($this, $inFieldName) = @_;
+
+	my $values;
+    my $fields = $this->fieldsWithName($inFieldName);
+
+    map { push( @{$values}, $_->{value} ); } @{$fields};
+    return '' if !$values || !scalar @{$values};
+    return join( ' ', @{$values} );
+}
+
+=pod
+
 getAllFieldsGroupedByName() -> \@fields
 
 Groups fields in a hash:
@@ -104,6 +117,8 @@ Groups fields in a hash:
 		b => [field, field, field],
 		c => [field, field, field],
 	}
+
+Does not list params.
 
 =cut
 

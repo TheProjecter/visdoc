@@ -148,15 +148,17 @@ static NSDictionary* sDefaultSettings;
 	while (key = [e nextObject]) {
 		id value = [[self settings] objectForKey:key];
 		NSString* stringValue = [NSString stringWithFormat:@"%@", value];
+		/*
 		if ( ![key isEqualToString:@"output"] ) {
 			if ([stringValue rangeOfString:@" "].location != NSNotFound) {
 				// has spaces, use quotes
 				unichar uchar = 0x005C;
 				NSString* escapedChar = [NSString stringWithFormat:@"%u ", uchar];
-				stringValue = [stringValue stringByReplacingOccurrencesOfString:@" " withString:escapedChar];
+				stringValue = [stringValue stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
 			}
 		}
-
+		*/
+		
 		if (![stringValue isEqualToString:@""]) {
 			[argumentList addObject:[NSString stringWithFormat:@"-%@", key]];
 			[argumentList addObject:stringValue];
@@ -168,12 +170,35 @@ static NSDictionary* sDefaultSettings;
 		[perl release];
 	}
 	perl = [[[SimplePerlBridge alloc] init] retain];
+	
+	// log this command
+	NSString* commandString = [NSString stringWithFormat:@"perl %@ %@", scriptPath, [self argumentListToString:argumentList]];
+	[oLogController writeString:[NSString stringWithFormat:@"Executing command:\n%@", commandString]];
+	
 	NSString* stringFromPerl = [perl runScript:scriptPath argumentList:argumentList readFromFile:YES];
 	NSDictionary* processResult = [SimplePerlBridge propertyListFromString:stringFromPerl];
 	
 	[self handleProcessResult:processResult];	
 	
 	[self hideProgress];
+}
+
+- (NSString*)argumentListToString:(NSArray*)argumentList
+{
+	NSMutableString* out = [[[NSMutableString alloc] init] autorelease];
+	NSEnumerator* e = [argumentList objectEnumerator];
+	NSString* argument = nil;
+	while (argument = [e nextObject]) {
+		unichar first = [argument characterAtIndex:0];
+		
+		if (first == '-') {
+			[out appendString:argument];
+		} else {
+			[out appendFormat:@"\"%@\"", argument];
+		}
+		[out appendString:@" "];
+	}
+	return out;
 }
 
 - (void)handleProcessResult:(NSDictionary*)processResult

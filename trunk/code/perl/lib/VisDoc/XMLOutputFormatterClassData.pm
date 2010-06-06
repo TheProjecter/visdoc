@@ -927,6 +927,10 @@ sub _getMembersForPart {
         $members = $publicMembers;
     }
 
+
+	#use Data::Dumper;
+	#print "members=" . Dumper($members);
+
     return $members;
 }
 
@@ -1050,6 +1054,7 @@ sub _writeMembers_forMemberGroup {
         @{$members} = sort { $a->{name} cmp $b->{name} } @{$members};
 
         foreach my $member ( @{$members} ) {
+        
             $this->_writeMembers_forMemberGroup_memberText( $inWriter,
                 $member );
         }

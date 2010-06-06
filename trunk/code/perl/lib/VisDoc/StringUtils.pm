@@ -144,8 +144,9 @@ our $PATTERN_TAG_INHERITDOC = '
    (.*?)			# i1: contents
    }				# close tag
    ';
-our $PATTERN_TAG_INHERITDOC_CONTENT_INDEX = 1;
+#our $PATTERN_TAG_INHERITDOC_CONTENT_INDEX = 1;
 our $STUB_TAG_INHERITDOC                  = 'VISDOC_STUB_TAG_INHERITDOC';
+our $STUB_TAG_INHERITDOC_LINK                  = 'VISDOC_STUB_TAG_INHERITDOC_LINK';
 
 our $PATTERN_CDATA = '
   (					# i1: start of CDATA

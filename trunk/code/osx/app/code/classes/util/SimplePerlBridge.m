@@ -45,6 +45,7 @@ Calls a perl script with an argument list and returns the output.
 	if (argumentList) {
 		[task setArguments:argumentList];
 	}
+	
     [task launch];
 	[task waitUntilExit]; // wait for the task to finish before continuing!
 	if (readFromFile) {

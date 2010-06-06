@@ -21,7 +21,6 @@ sub new {
     my $this = {
         name  => $inName,
         value => $inValue || '',    # value string
-             #inheritedComment => undef,   # NEEDED? inherited comment
              #overridden        => 0,       # NEEDED?
     };
     bless $this, $class;
@@ -36,6 +35,19 @@ sub getValue {
     my ($this) = @_;
 
     return $this->{value};
+}
+
+=pod
+
+Creates a copy.
+
+=cut
+
+sub copy {
+    my ($this) = @_;
+
+	my $newField = VisDoc::FieldData->new( $this->{name}, $this->{value} );
+	return $newField;
 }
 
 =pod

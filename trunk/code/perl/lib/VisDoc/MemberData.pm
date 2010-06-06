@@ -36,6 +36,7 @@ sub new {
           undef
         ,  # values of $TYPE (bitwise operator); undef if not a getter or setter
         name   => undef, # string
+        qualifiedName => undef, # string (NOT USED YET)
         nameId => undef, # string, unique identifier name, created after parsing
         access =>
           undef,  # ref of list of access strings (public, private, static, ...)
@@ -97,6 +98,12 @@ sub getId {
 
     my $id = $this->{nameId} || $this->{name};
     return $id;
+}
+
+sub getName {
+    my ($this) = @_;
+    
+    return $this->{qualifiedName} || $this->{name};
 }
 
 sub isExcluded {

@@ -31,12 +31,14 @@ my $defaults        = '';
 my $files           = '';
 my $ignorePathNames = '';
 my $help = 0;
+my $feedback = 0;
 &GetOptions(
     'datapath=s'   => \$dataPath,
     'extensions=s' => \$extensions,
     'files=s'      => \$files,
     'ignorepath:s' => \$ignorePathNames,
     'help'         => \$help,
+    'feedback'     => \$feedback,
 );
 usage() if $help;
 

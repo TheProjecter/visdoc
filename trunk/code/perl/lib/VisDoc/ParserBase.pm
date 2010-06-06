@@ -555,6 +555,7 @@ sub _swapPropertyGetSetters {
             $propertyData->{type}        = $method->{type};
             $propertyData->{memberOrder} = $method->{memberOrder};
             $propertyData->{name}        = $method->{name};
+            $propertyData->{qualifiedName} = $method->{qualifiedName};
             $propertyData->{access}      = $method->{access};
             $propertyData->{javadoc}     = $method->{javadoc};
             $propertyData->{metadata}    = $method->{metadata};

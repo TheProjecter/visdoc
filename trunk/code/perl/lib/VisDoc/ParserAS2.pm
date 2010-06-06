@@ -337,6 +337,7 @@ sub _isPublic {
     my %access = map { $_ => 1 } @{$inAccess};
     my $isPublic = 1;    # default
     $isPublic = 0 if ( $access{private} || $access{protected} );
+    
     return $isPublic;
 }
 
@@ -406,8 +407,11 @@ sub _handleMethodMatches {
     if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
         my $parametersStr = $inMatches->[$i];
         $data->{parameters} = $this->_parseMethodParameters($parametersStr);
+        
+        $data->{qualifiedName} = $data->{name} . '(' . $parametersStr . ')';
+		$data->{qualifiedName} =~ s/ //go;
     }
-
+	
     # return type
     $i = $inPatternMap->{returnType} - 1;
     if ( defined $inMatches->[$i] && $inMatches->[$i] ) {

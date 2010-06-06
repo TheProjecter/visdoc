@@ -38,6 +38,7 @@
 - (IBAction)startProcessing:(id)sender;
 - (void)prepareProcessing;
 - (void)processFiles;
+- (NSString*)argumentListToString:(NSArray*)argumentList;
 - (void)handleProcessResult:(NSDictionary*)processResult;
 - (IBAction)stopProcessing:(id)sender ;
 - (void)handleAppChanged;

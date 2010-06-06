@@ -170,18 +170,10 @@ html>body .VisDoc pre {
 font-size:100%;
 }
 
-.VisDoc .inheritDoc {
-	color:#6666b3;
-}
-
-.VisDoc a.followInheritDoc {
-	font-weight:700;
-	color:#6666b3;
-	padding-bottom:1px;
-	font-size:86%;
-	line-height:86%;
-	vertical-align:super;
-	margin:0 2px 0 1px;
+.VisDoc .inheritDoc,
+.VisDoc .inheritDoc a:link,
+.VisDoc .inheritDoc a:visited {
+	color:#777;
 }
 
 .VisDoc .floatholder {
@@ -328,10 +320,11 @@ font-size:100%;
 	margin-top:3em;
 }
 
-.VisDoc div.memberSection div.member,.VisDoc div.memberSection div.class {
+.VisDoc div.memberSection div.member,
+.VisDoc div.memberSection div.class {
 	height:1%;
-	margin:-1px -10px 0 -10px;
-	padding:1em 10px 13px;
+	margin:-1px -15px 0 -15px;
+	padding:1em 15px 13px;
 }
 
 .VisDoc div.memberSection h2 {
@@ -343,7 +336,8 @@ font-size:100%;
 	margin-top:1em;
 }
 
-.VisDoc div.memberSection div.fullMemberString strong,.VisDoc div.memberSection div.fullMemberString b {
+.VisDoc div.memberSection div.fullMemberString strong,
+.VisDoc div.memberSection div.fullMemberString b {
 	font-weight:400;
 	color:#a00;
 }
@@ -426,12 +420,12 @@ font-size:100%;
 }
 
 #overview .VisDoc div.listGroup {
-	border-bottom:1px solid #e1e9ee;
+	border-bottom:1px solid #dbdee1;
 	margin:2em 0 0;
 }
 
 #overview .VisDoc .listing div.listGroup ul li {
-	border-top:1px solid #e1e9ee;
+	border-top:1px solid #dbdee1;
 	padding:.2em 0;
 }
 
@@ -448,6 +442,7 @@ body#toc {
 	background-color:#f0f5f9;
 	margin:0;
 	padding:0;
+	height:100%;
 }
 
 #toc .VisDoc div.content {
@@ -511,16 +506,24 @@ margin-top:1em;
 	top:-9999px;
 }
 
-.VisDoc .private h3 {
-	color:#666;
+.VisDoc .private,
+.VisDoc .private h3,
+.VisDoc .private code,
+.VisDoc .private .colorizedCode {
+	color:#777;
 }
 
-.VisDoc div.memberSection div.member:target,.VisDoc div.memberSection div.class:target,.VisDoc h2:target, div.member:hover {
-	background-color:#d7e4f1;
+.VisDoc div.memberSection div.member:target,
+.VisDoc div.memberSection div.class:target,
+.VisDoc h2:target {
+	background-color:#e8eff6;
+}
+.VisDoc div.member:hover {
+	background-color:#f1f5f9;
 }
 
 .VisDoc div.memberSection div.member:target div.boxWithBorder,.VisDoc div.memberSection div.class:target div.boxWithBorder,.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem,.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem,.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem div.contentHolder,.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem div.contentHolder {
-	border-color:#e1e9ee;
+	border-color:#dbdee1;
 }
 
 .framed .VisDoc .activeWhenFramed {
@@ -530,7 +533,7 @@ margin-top:1em;
 .VisDoc textarea#source {
 	width:100%;
 	height:300px;
-	background-color:#f7f9fd;
+	background-color:#fafafa;
 	border:1px solid #a2a6a9;
 	padding:.25em;
 }
@@ -541,7 +544,9 @@ margin-top:1em;
 	padding:1px 4px;
 }
 
-.VisDoc code,.VisDoc tt,.VisDoc .colorizedCode,.VisDoc div.memberSection div.fullMemberString .methodName {
+.VisDoc code,.VisDoc tt,
+.VisDoc .colorizedCode,
+.VisDoc div.memberSection div.fullMemberString .methodName {
 	color:#a00;
 }
 
@@ -609,8 +614,4 @@ list-style-type:none;
 
 #toc .VisDoc div.list .package,#toc .VisDoc div.list .className {
 	font-weight:400;
-}
-
-.VisDoc li.private a:link,.VisDoc li.private a:visited,.VisDoc a:link.private,.VisDoc a:visited.private,.VisDoc .privateColor {
-	color:#6c7598;
 }

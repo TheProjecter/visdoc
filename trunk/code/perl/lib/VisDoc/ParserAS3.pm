@@ -290,6 +290,7 @@ sub _isPublic {
 
     my %access = map { $_ => 1 } ( @{$inAccess} );
     my $isPublic = 0;    # default
+    
     $isPublic = 1 if $access{public};
     return $isPublic;
 }

@@ -30,7 +30,6 @@ MemberFormatterTests
 cd <PATH_TO_VISDOC>/code/perl/test/unit
 perl ../bin/TestRunner.pl MemberFormatterTests.pm
 
-
 ParserTest
 cd <PATH_TO_VISDOC>/code/perl/test/unit
 perl ../bin/TestRunner.pl ParserTests.pm

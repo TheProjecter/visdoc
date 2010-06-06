@@ -108,6 +108,7 @@ sub _createLinkData {
         return VisDoc::FieldData->new( $inFieldName, $value );
     }
     else {
+    	print "JavadocParser _createLinkData\n";
         return VisDoc::LinkData::createLinkData( $inFieldName, $inValue );
     }
 }
