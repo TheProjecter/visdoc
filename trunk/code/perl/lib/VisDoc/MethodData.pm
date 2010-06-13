@@ -5,6 +5,8 @@ package VisDoc::MethodData;
 use base qw(VisDoc::MemberData VisDoc::Event::Listener);
 use strict;
 use warnings;
+use VisDoc::FindLinksEvent;
+use VisDoc::SubstituteLinkStubsEvent;
 
 =pod
 
@@ -20,6 +22,7 @@ sub new {
 
     $this->addEventListener( $VisDoc::FindLinksEvent::NAME, \&onFindLinks,
         $this );
+    $this->addEventListener( $VisDoc::SubstituteLinkStubsEvent::NAME, \&onSubstituteLinks, $this );
 
     bless $this, $class;
     return $this;
@@ -52,6 +55,13 @@ sub onFindLinks {
 
     my @linkFields = qw(returnType exceptionType);
     &VisDoc::MemberData::onFindLinks( $this, $inEvent, \@linkFields );
+}
+
+sub onSubstituteLinks {
+    my ( $this, $inEvent ) = @_;
+
+    my @linkFields = qw(returnType exceptionType);
+    &VisDoc::MemberData::onSubstituteLinks( $this, $inEvent, \@linkFields );
 }
 
 1;

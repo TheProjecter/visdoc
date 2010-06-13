@@ -24,10 +24,6 @@ my $DATA_KEYS = {
 my %functionTags;
 my $macrosPattern;
 
-our $linkDataRefs
-  ; # hash of references to LinkData objects, with key: STUB_INLINE_LINK and value: LinkData ref
-#our $linkStubCounter = 0;
-
 BEGIN {
 
     # Default handlers for different %TAGS%
@@ -78,6 +74,7 @@ sub new {
         objectProperties => undef,
         packages         => undef,    # ref of list of PackageData objects
         stubCounter      => 0,
+        linkDataRefs     => undef,    # hash of references to LinkData objects, with key: STUB_INLINE_LINK and value: LinkData ref
     };
     bless $this, $class;
     
@@ -88,10 +85,10 @@ sub new {
 
 =cut
 
-sub getStubCounter {
+sub getStubCounterRef {
     my ($this) = @_;
 	
-    return $this->{stubCounter}++;
+    return \$this->{stubCounter};
 }
 
 =pod
@@ -162,7 +159,7 @@ sub getContents {
 
 sub substituteInlineLinkStub {
     my ( $this, $inText ) = @_;
-    
+     
     return $inText if !$inText;
     my $text = $inText;
 
@@ -172,7 +169,7 @@ sub substituteInlineLinkStub {
       ) . ')';      
      
 	while ( $text =~ s/$macrosPattern/$this->_expandMacro( $1, $2, $3 )/e ) { }
-	
+		
 	return $text;
 }
 
@@ -223,7 +220,7 @@ sub _parseStubInlineLink {
     my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
 
     # check to see if a linkDataRefs exists
-    my $ref = $linkDataRefs->{$inTagString};
+    my $ref = $this->{linkDataRefs}->{$inTagString};
 
     return '' if !$ref;
     return $$ref->formatInlineLink();
@@ -342,10 +339,8 @@ sub _handleContentsOfVerbatimTags {
         next if !$1 || !$2;
         my $key = VisDoc::StringUtils::getStubKey( $1, $2 )
           ;    # includes number, for instance: %STUB_1%
-
         # find original value
         my $value = $_[0]->_getValue( $1, $key );
-
         $_[1] =~ s/$key/$value/ if $value;
     }
 }
@@ -587,6 +582,8 @@ sub getDescriptionParts {
 
 =pod
 
+Dispatches FindLinksEvent to all listeners (MethodData, ParameterData, PropertyData)
+
 =cut
 
 sub createLinkReferencesInMemberDefinitions {
@@ -599,6 +596,16 @@ sub createLinkReferencesInMemberDefinitions {
     $this->dispatchEvent($event);
 }
 
+sub substituteLinkReferencesInMemberDefinitions {
+    my ( $this, $inClasses ) = @_;
+
+    my $event =
+      VisDoc::SubstituteLinkStubsEvent->new( $VisDoc::SubstituteLinkStubsEvent::NAME, $this,
+        $inClasses, \&substituteInlineLinkStub );
+
+    $this->dispatchEvent($event);
+}
+
 =pod
 
 _createLinkData( $className, $memberName, $label ) -> $stubString
@@ -607,11 +614,14 @@ _createLinkData( $className, $memberName, $label ) -> $stubString
 
 sub _createLinkData {
     my ( $this, $inClassName, $inMemberName, $inLabel ) = @_;
-        
-    my $stub = VisDoc::StringUtils::getStubKey( $VisDoc::StringUtils::STUB_INLINE_LINK, $this->getStubCounter() );
-	
+    
+    my $counterRef = $this->getStubCounterRef();
+    my $stub = VisDoc::StringUtils::getStubKey( $VisDoc::StringUtils::STUB_INLINE_LINK, ${$counterRef} );
+    ${$counterRef}++;
+    
 	my $linkText = $inMemberName ? "$inClassName#$inMemberName" : $inClassName;
 	$linkText .= " $inLabel" if $inLabel;
+		
     my $linkData = $this->createAndStoreInlineLinkData( $linkText, $stub );
 
     return $stub;
@@ -652,7 +662,7 @@ sub createAndStoreInlineLinkData {
 
     my $linkData =
       VisDoc::LinkData::createLinkData( 'link', $inLink, $inStub );
-    $linkDataRefs->{$inStub} = \$linkData;
+    $this->{linkDataRefs}->{$inStub} = \$linkData;
 
     return $linkData;
 }

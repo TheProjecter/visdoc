@@ -60,10 +60,10 @@ sub new {
 		$params =~ s/ //go;
 	}
     $this->{params}  = $params;         # string
-    $this->{qualifiedName}  = $params ? "$inMemberName($params)" : $inMemberName;     # string
+    $this->{qualifiedName}  = $inMemberName; #$params ? "$inMemberName($params)" : $inMemberName;     # string
     $this->{label}   = $inLabel;          # string
 
-    $this->{isValidRef} = undef;          # bool -- necessary to keep?
+    $this->{isValidRef} = undef;          # bool
     $this->{isPublic}   = 1;              # bool
     $this->{uri}        = undef;          # string
 
@@ -94,31 +94,31 @@ Formats data to an inline link: <a href="...">...</a>
 
 sub formatInlineLink {
     my ( $this, $inDocumentType ) = @_;
-
+	
     my $label = $this->{label} || '';
 
     my $classStr = $this->{isPublic} ? '' : " class=\"private\"";
     my $link = '';
 
-    if ( $this->{uri} ) {
+	
+	if ( !$this->{isValidRef} ) {
+    	$link = $label;
+    } elsif ( $this->{uri} ) {
         my $type = $inDocumentType || 'html';
 
         # add document type before the anchor link
         my $url = $this->{uri};        
-        $url =~ s/(.*?)(#\w+|$)/$1.html$2/;
-                
+        $url =~ s/(.*?)(#\w+|$)/$1.html$2/;        
         $link = "<a href=\"$url\"$classStr>$label</a>";
     }
     else {
-        $label = "$this->{qualifiedName} $label"  if $this->{qualifiedName};
-        $label = "$this->{package}.$label" if $this->{package};
 
         if ( $this->{member} || $this->{class} || $this->{package} ) {
-            $link = "<span class=\"doesNotExist\">$label</span>";
-        }
-        else {
-        $link = $label;
-
+            $link = "<span class=\"doesNotExist\">$this->{qualifiedName}</span>";
+        } else {
+			$label = "$this->{qualifiedName} $label"  if $this->{qualifiedName};
+	        $label = "$this->{package}.$label" if $this->{package};
+        	$link = $label;
         }
     }
     
@@ -140,6 +140,7 @@ sub as_string {
 
     my $str = 'LinkData:';
     $str .= "\n\t name=$this->{name}"       if defined $this->{name};
+    $str .= "\n\t qualifiedName=$this->{qualifiedName}"       if defined $this->{qualifiedName};
     $str .= "\n\t uri=$this->{uri}"         if defined $this->{uri};
     $str .= "\n\t stub=$this->{stub}"       if defined $this->{stub};
     $str .= "\n\t package=$this->{package}" if defined $this->{package};

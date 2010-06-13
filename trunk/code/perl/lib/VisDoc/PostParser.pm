@@ -8,24 +8,25 @@ use VisDoc::JavadocData;
 
 =pod
 
-process ( \@collectiveFileData ) -> \@collectiveFileData
+process ( \@collectiveFileData, \%preferences ) -> \@collectiveFileData
 
 Processes FileData objects.
 
 =cut
 
 sub process {
-    my ($inCollectiveFileData) = @_;
+    my ($inCollectiveFileData, $inPreferences) = @_;
 
-    my $collectiveFileData = _mergePackages($inCollectiveFileData);
+    my $collectiveFileData = $inCollectiveFileData;
 
     # create list of classes
     my $classes = _createListOfClasses($collectiveFileData);
 
     _resolveClasspaths($classes);
+    _mapSuperclasses($classes);
     $classes = _removeDuplicates($classes);
     _createListOfImplementedBy($classes);
-    _mapSuperclasses($classes);
+    _mapSubClassesBasedOnSuperclasses($classes);
     _mapInnerclasses($classes);
     _createMemberNameIds($collectiveFileData);
     _copyMethodSendsFieldsToClass($classes);
@@ -34,8 +35,10 @@ sub process {
     _createLinkReferencesInMemberDefinitions( $collectiveFileData, $classes );
     _substituteInheritDocStubs( $collectiveFileData, $classes );
     _createAutomaticInheritDocs( $collectiveFileData, $classes );
-    _validateLinks( $collectiveFileData, $classes );
+    _validateLinks( $collectiveFileData, $classes, $inPreferences );
     _substituteInlineLinkStubs( $collectiveFileData, $classes );
+
+    $collectiveFileData = _mergePackages($collectiveFileData);
 
     #use Data::Dumper;
     #print("collectiveFileData=" . Dumper($collectiveFileData));
@@ -406,11 +409,32 @@ sub _createOverrideEntries {
 
 =pod
 
-For each class=>superclass, sets {subclasses} at each class.
+For each class=>superclass, find the link to the ClassData object
 
 =cut
 
 sub _mapSuperclasses {
+    my ($inClasses) = @_;
+    
+    my %nameToClassMap = map { $_->{classpath} => $_ } @{$inClasses};
+    
+    foreach my $class ( @{$inClasses} ) {
+        foreach my $superclass ( @{ $class->{superclasses} } ) {
+        	my $classdata = $nameToClassMap{$superclass->{classpath}};
+        	if ( $classdata ) {
+        		$superclass->{classdata} = $classdata;
+        	}
+        }
+	}
+}
+
+=pod
+
+For each class=>superclass, sets {subclasses} at each class.
+
+=cut
+
+sub _mapSubClassesBasedOnSuperclasses {
     my ($inClasses) = @_;
 
     foreach my $class ( @{$inClasses} ) {
@@ -516,9 +540,11 @@ sub _cleanupTempInheritDocStubs {
                             
                             	#next if ($field->{name} !~ m/^(description|throws|param|return)$/);
                             	
-                                $field->{value} =~ s/$p1/$p2/go;
-                                $field->{value} =~ s/%STARTINHERITDOC%/<div class="inheritDoc">/go;
-                                $field->{value} =~ s/%ENDINHERITDOC%/<\/div>/go;
+                            	if ($field->{value}) {
+									$field->{value} =~ s/$p1/$p2/go;
+									$field->{value} =~ s/%STARTINHERITDOC%/<div class="inheritDoc">/go;
+									$field->{value} =~ s/%ENDINHERITDOC%/<\/div>/go;
+								}
                             }
                         }
                     }
@@ -608,47 +634,62 @@ Checks for each LinkData object if the referencing class or method is valid or p
 =cut
 
 sub _validateLinks {
-    my ( $inCollectiveFileData, $inClasses ) = @_;
+    my ( $inCollectiveFileData, $inClasses, $inPreferences ) = @_;
 
     my $package, my $class, my $member;
-
+	my $validatedLinks;
+	
     foreach my $fileData ( @{$inCollectiveFileData} ) {
 
         foreach $package ( @{ $fileData->{packages} } ) {
 
             # package javadoc
-            _validateLinkData( $inClasses,
-                $package->{javadoc}->getLinkDataFields(),
-                $package, $class, $member )
-              if $package->{javadoc};
+            if ( $package->{javadoc} ) {
+				my $linkFields = $package->{javadoc}->getLinkDataFields();
+				foreach my $link ( @{$linkFields} ) {
+					_validateLinkData( $link, $inClasses, $package, $class, $member, $inPreferences );
+					$validatedLinks->{$link} = 1;
+				}
+			}
 
             foreach $class ( @{ $package->{classes} } ) {
 
                 # class javadoc
-                _validateLinkData( $inClasses,
-                    $class->{javadoc}->getLinkDataFields(),
-                    $package, $class, $member )
-                  if $class->{javadoc};
+                if ( $class->{javadoc} ) {
+                	my $linkFields = $class->{javadoc}->getLinkDataFields();
+                	foreach my $link ( @{$linkFields} ) {
+                		_validateLinkData( $link, $inClasses, $package, $class, $member, $inPreferences );
+                		$validatedLinks->{$link} = 1;
+					}
+				}    
 
                 foreach $member ( @{ $class->getMembers() } ) {
 
                     # member javadoc
-                    _validateLinkData( $inClasses,
-                        $member->{javadoc}->getLinkDataFields(),
-                        $package, $class, $member )
-                      if $member->{javadoc};
+                    if ( $member->{javadoc} ) {
+                    	my $linkFields = $member->{javadoc}->getLinkDataFields();
+                    	foreach my $link ( @{$linkFields} ) {
+							_validateLinkData( $link, $inClasses, $package, $class, $member, $inPreferences );
+							$validatedLinks->{$link} = 1;
+						}
+					}
                 }
             }
         }
 
         # parse inline links stored in FileData {linkDataRefs}
-        my $fields;
-        while ( my ( $key, $linkData ) =
-            each %{$VisDoc::FileData::linkDataRefs} )
+        # skip LinkData object that have been validated just before
+
+        while ( my ( $key, $linkDataRef ) =
+            each %{$fileData->{linkDataRefs}} )
         {
-            push @{$fields}, $$linkData;
+	        my $linkData = $$linkDataRef;
+            if ( !$validatedLinks->{$linkData} ) {
+            	_validateLinkData( $linkData, $inClasses, undef, undef, undef, $inPreferences );
+            }
         }
-        _validateLinkData( $inClasses, $fields ) if $fields;
+
+        
     }
 }
 
@@ -662,54 +703,61 @@ Finds class and member references for LinkData {class} and {member} properties:
 =cut
 
 sub _validateLinkData {
-    my ( $inClasses, $inFields, $inPackage, $inClass, $inMember ) = @_;
+    my ( $inLink, $inClasses, $inPackage, $inClass, $inMember, $inPreferences ) = @_;
 	
-    return if !$inFields;
+	my $className = $inLink->{class} || $inClass->{name};
 
-    foreach my $link ( @{$inFields} ) {
+	my $classRef = _getClassWithName( $inClasses, $className );
+	
+	my $member;
+=pod
+	$member = $classRef->getMemberWithQualifiedName( $inLink->{qualifiedName} )
+	  if ( $classRef && $inLink->{qualifiedName} );
+=cut
 
-        my $className = $link->{class} || $inClass->{name};
+	if (!$member && $classRef && $inLink->{qualifiedName}) {
+		$member = $classRef->getMemberWithName( $inLink->{qualifiedName} );
+	}
 
-        my $classRef = _getClassWithName( $inClasses, $className );
-        
-        my $member = $classRef->getMemberWithQualifiedName( $link->{qualifiedName} )
-          if ( $classRef && $link->{qualifiedName} );
+	# set URI
+	my $memberName;
+	$memberName = $member ? $member->{name} : '';
 
-        # set URI
-        my $memberName;
-        if ($member) {
-            $memberName = $member->{nameId};
-        }
-        my $uri = $classRef->getUri($memberName) if $classRef;
-        if ($uri) {
-            $link->setUri($uri);
-            $link->{isValidRef} = 1;
-        }
-        else {
-            $link->{isValidRef} = 0;
-        }
+	# set isPublic
+	if ( $classRef && !$inLink->{member} ) {
+		$inLink->{isPublic} = $classRef->isPublic();
+	}
+	$inLink->{isPublic} = $member->isPublic() if $member;
 
-        # set isPublic
-        if ( $classRef && !$link->{member} ) {
-            $link->{isPublic} = $classRef->isPublic();
-        }
-        $link->{isPublic} = $member->isPublic() if $member;
-		
-        # set label
-        if ( !$link->{label} ) {
+	my $uri = $classRef ? $classRef->getUri($memberName) : '';
+	if ($uri) {
+		$inLink->setUri($uri);
+		$inLink->{isValidRef} = 1;
+	}
+	my $showLink = 1;
+	
+	if (!$inLink->{isPublic}) {
+		$showLink = $inPreferences->{'listPrivate'} ? 1 : 0;
+	}
 
-            # if label not specified, create a new one
-            # 3 cases according to the specs:
-            # 	1: same class, same package: use member only
-            #	2: different class, same package: use class.member
-            # 	3: different class, different package: use package.class.member
-            my @labelComponents = ();
-            push( @labelComponents, $link->{package} ) if $link->{package};
-            push( @labelComponents, $link->{class} )   if $link->{class};
-            push( @labelComponents, $link->{qualifiedName} )  if $link->{qualifiedName};
-            $link->{label} = join( '.', @labelComponents );
-        }
-    }
+	if (!$uri || !$showLink) {
+		$inLink->{isValidRef} = 0;
+	}
+	
+	# set label
+	if ( !$inLink->{label} ) {
+
+		# if label not specified, create a new one
+		# 3 cases according to the specs:
+		# 	1: same class, same package: use member only
+		#	2: different class, same package: use class.member
+		# 	3: different class, different package: use package.class.member
+		my @labelComponents = ();
+		push( @labelComponents, $inLink->{package} ) if $inLink->{package};
+		push( @labelComponents, $inLink->{class} )   if $inLink->{class};
+		push( @labelComponents, $inLink->{qualifiedName} )  if $inLink->{qualifiedName};
+		$inLink->{label} = join( '.', @labelComponents );
+	}
 }
 
 =pod
@@ -724,7 +772,7 @@ sub _substituteInlineLinkStubs {
     my $package, my $class, my $member;
 
     foreach my $fileData ( @{$inCollectiveFileData} ) {
-		
+
         foreach $package ( @{ $fileData->{packages} } ) {
 
             # package javadoc
@@ -758,9 +806,9 @@ sub _substituteInlineLinkStubs {
 
                     # member javadoc
                     if ( $member->{javadoc} ) {
-                        my $memberFields = $member->{javadoc}->getFields();
-                        if ($memberFields) {
-                            foreach my $field ( @{$memberFields} ) {
+                        my $javadocFields = $member->{javadoc}->getFields();
+                        if ($javadocFields) {
+                            foreach my $field ( @{$javadocFields} ) {
                                 $field->{value} =
                                   $fileData->substituteInlineLinkStub(
                                     $field->{value} );
@@ -770,6 +818,10 @@ sub _substituteInlineLinkStubs {
                 }
             }
         }
+    }
+   
+    foreach my $fileData ( @{$inCollectiveFileData} ) {
+        $fileData->substituteLinkReferencesInMemberDefinitions($inClasses);
     }
 }
 

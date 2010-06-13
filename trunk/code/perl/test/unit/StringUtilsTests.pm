@@ -8,7 +8,7 @@ use base qw(Test::Unit::TestCase);
 use VisDoc::StringUtils;
 use VisDoc::ClassData; 
 
-my $debug = 0;
+my $debug = 1;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -281,7 +281,6 @@ AFTER';
     VisDoc::StringUtils::stripJavadocComments($text);
     my $result   = $text;
     my $expected = 'BEFORE
-
 AFTER';
     print("RES=$result.\n")     if $debug;
     print("EXP=$expected.\n") if $debug;
@@ -927,7 +926,7 @@ sub test_replacePatternMatchWithStub_3 {
 	{
 		# test text
 		my $result = $newText;
-		my $expected = '/* comment */ %VISDOC_STUB_JAVADOC_COMMENT_1% ;';
+		my $expected = '/* comment */%VISDOC_STUB_JAVADOC_COMMENT_1% ;';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );

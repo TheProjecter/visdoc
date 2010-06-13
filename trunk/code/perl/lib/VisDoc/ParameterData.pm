@@ -7,6 +7,7 @@ use strict;
 use warnings;
 
 use VisDoc::FindLinksEvent;
+use VisDoc::SubstituteLinkStubsEvent;
 
 =pod
 
@@ -23,6 +24,8 @@ sub new {
     $this->{value}    = $inDefaultValue;
 
     $this->addEventListener( $VisDoc::FindLinksEvent::NAME, \&onFindLinks,
+        $this );
+    $this->addEventListener( $VisDoc::SubstituteLinkStubsEvent::NAME, \&onSubstituteLinks,
         $this );
 
     bless $this, $class;
@@ -41,6 +44,13 @@ sub onFindLinks {
 
     my @linkFields = qw(dataType value);
     &VisDoc::MemberData::onFindLinks( $this, $inEvent, \@linkFields );
+}
+
+sub onSubstituteLinks {
+    my ( $this, $inEvent ) = @_;
+
+    my @linkFields = qw(dataType value);
+    &VisDoc::MemberData::onSubstituteLinks( $this, $inEvent, \@linkFields );
 }
 
 1;

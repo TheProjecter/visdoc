@@ -325,11 +325,27 @@ Returns MemberData object with name $name
 sub getMemberWithQualifiedName {
     my ( $this, $inQualifiedName ) = @_;
 
-    my @methods = grep { $_->getName() eq $inQualifiedName } @{ $this->{methods} };
-    return $methods[0] if scalar @methods;
+    my $methods;
+    @{$methods} = grep { $_->getName() eq $inQualifiedName } @{ $this->{methods} };
+    return $methods->[0] if scalar @{$methods};
 
-    my @properties = grep { $_->getName() eq $inQualifiedName } @{ $this->{properties} };
-    return $properties[0] if scalar @properties;
+    my $properties;
+    @{$properties} = grep { $_->getName() eq $inQualifiedName } @{ $this->{properties} };
+    return $properties->[0] if scalar @{$properties};
+
+    return undef;
+}
+
+sub getMemberWithName {
+    my ( $this, $inName ) = @_;
+
+    my $methods;
+    @{$methods} = grep { $_->{name} eq $inName } @{ $this->{methods} };
+    return $methods->[0] if scalar @{$methods};
+
+    my $properties;
+    @{$properties} = grep { $_->{name} eq $inName } @{ $this->{properties} };
+    return $properties->[0] if scalar @{$properties};
 
     return undef;
 }

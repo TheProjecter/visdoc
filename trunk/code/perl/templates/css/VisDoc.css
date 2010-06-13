@@ -23,7 +23,9 @@ html>body {
 	padding:2em 3em .5em 4em;
 }
 
-.VisDoc h1,.VisDoc h2,.VisDoc h3 {
+.VisDoc h1,
+.VisDoc h2,
+.VisDoc h3 {
 	line-height:100%;
 }
 
@@ -36,7 +38,7 @@ html>body {
 
 .VisDoc h2 {
 	color:#3a456d;
-	font-size:1.45em;
+	font-size:1.7em;
 	margin:0 -10px .25em;
 	padding:5px 10px;
 }
@@ -44,7 +46,8 @@ html>body {
 .VisDoc h3 {
 	display:inline;
 	color:#000;
-	font-size:1.3em;
+	font-size:1.5em;
+	font-weight:normal;
 	margin:1em 0 0;
 }
 
@@ -57,13 +60,21 @@ html>body {
 	padding:0;
 }
 
-.VisDoc a:link,.VisDoc a:visited,.VisDoc a:link .linkLabel,.VisDoc a:visited .linkLabel {
+.VisDoc a:link,
+.VisDoc a:visited,
+.VisDoc a:link .linkLabel,
+.VisDoc a:visited .linkLabel {
 	text-decoration:none;
-	color:#00c;
+	color:#36c;
 	background-color:transparent;
 }
 
-.VisDoc a:link:hover,.VisDoc a:visited:hover,.VisDoc a:link:hover .linkLabel,.VisDoc a:visited:hover .linkLabel,.VisDoc a:link:hover .icon,.VisDoc a:link:visited:hover .icon {
+.VisDoc a:link:hover,
+.VisDoc a:visited:hover,
+.VisDoc a:link:hover .linkLabel,
+.VisDoc a:visited:hover .linkLabel,
+.VisDoc a:link:hover .icon,
+.VisDoc a:link:visited:hover .icon {
 	text-decoration:underline;
 }
 
@@ -102,7 +113,11 @@ html>body {
 	white-space:pre;
 }
 
-.VisDoc code,.VisDoc pre,.VisDoc .code,.VisDoc tt,.VisDoc textarea {
+.VisDoc code,
+.VisDoc pre,
+.VisDoc .code,
+.VisDoc tt,
+.VisDoc textarea {
 	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
 	font-size:12px;
 }
@@ -110,24 +125,12 @@ html>body {
 .VisDoc pre {
 	margin-top:1em;
 	margin-bottom:1em;
-	color:#a00;
+	color:brown;
 	padding-bottom:1.5em;
 }
 
 html>body .VisDoc pre {
 	padding-bottom:.15em;
-}
-
-.VisDoc .codeString {
-	color:#c60;
-}
-
-.VisDoc .codeNumber {
-	color:#333;
-}
-
-.VisDoc .codeKeyword {
-	color:#DB476B;
 }
 
 .VisDoc #topNav {
@@ -156,7 +159,8 @@ html>body .VisDoc pre {
 	margin-right:.5em;
 }
 
-.VisDoc div.docNav a:link .accessKey,.VisDoc div.docNav a:visited .accessKey {
+.VisDoc div.docNav a:link .accessKey,
+.VisDoc div.docNav a:visited .accessKey {
 	border-bottom:1px solid #666;
 }
 
@@ -236,20 +240,21 @@ font-size:100%;
 	border:1px solid #dedede;
 	border-collapse:collapse;
 	background-color:#fff;
-	margin:2px 0;
+	margin:.4em 0;
+	width:auto;
 }
-
 .VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th {
 	text-align:left;
 	font-weight:400;
 	border-bottom:1px solid #dedede;
 }
-
 .VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td {
-	width:100%;
 	border-left:1px solid #dedede;
+	border-bottom:1px solid #dedede;
 }
-
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td p {
+	margin:0;
+}
 .VisDoc div.classProperties {
 	margin:2em 0 0 2em;
 }
@@ -261,15 +266,16 @@ font-size:100%;
 	border-width:1px;
 }
 
-.VisDoc div.classProperties th,.VisDoc div.classProperties td {
+.VisDoc div.classProperties th,
+.VisDoc div.classProperties td {
 	border-top:1px solid #e3e9ec;
 }
 
-.VisDoc div.classProperties th {
+.VisDoc th {
 	padding:.4em 1em;
 }
 
-.VisDoc div.classProperties td {
+.VisDoc td {
 	border-left:0;
 	padding:.4em 1em;
 }
@@ -356,7 +362,10 @@ font-size:100%;
 	margin:0 0 1em;
 }
 
-.VisDoc div.memberSection div.description .field,.VisDoc div.memberSection div.description .field a:link,.VisDoc div.memberSection div.description .field a:visited,.VisDoc div.memberSection div.description .field a:hover {
+.VisDoc div.memberSection div.description .field,
+.VisDoc div.memberSection div.description .field a:link,
+.VisDoc div.memberSection div.description .field a:visited,
+.VisDoc div.memberSection div.description .field a:hover {
 	text-decoration:underline;
 }
 
@@ -388,7 +397,8 @@ font-size:100%;
 	margin:0 0 .25em;
 }
 
-.VisDoc .twistyTrigger a:link,.VisDoc .twistyTrigger a:visited {
+.VisDoc .twistyTrigger a:link,
+.VisDoc .twistyTrigger a:visited {
 	text-decoration:none;
 }
 
@@ -402,7 +412,8 @@ font-size:100%;
 	padding-bottom:0;
 }
 
-.VisDoc div.list ul a:hover .attribute,.VisDoc div.list ul a:hover .packagePath {
+.VisDoc div.list ul a:hover .attribute,
+.VisDoc div.list ul a:hover .packagePath {
 	text-decoration:underline;
 }
 
@@ -506,23 +517,25 @@ margin-top:1em;
 	top:-9999px;
 }
 
-.VisDoc .private,
-.VisDoc .private h3,
-.VisDoc .private code,
-.VisDoc .private .colorizedCode {
-	color:#777;
+.VisDoc .private h3 {
+	color:#9399AF;
 }
 
 .VisDoc div.memberSection div.member:target,
 .VisDoc div.memberSection div.class:target,
 .VisDoc h2:target {
-	background-color:#e8eff6;
+	background-color:#f1f5f9;
 }
 .VisDoc div.member:hover {
 	background-color:#f1f5f9;
 }
 
-.VisDoc div.memberSection div.member:target div.boxWithBorder,.VisDoc div.memberSection div.class:target div.boxWithBorder,.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem,.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem,.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem div.contentHolder,.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem div.contentHolder {
+.VisDoc div.memberSection div.member:target div.boxWithBorder,
+.VisDoc div.memberSection div.class:target div.boxWithBorder,
+.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem,
+.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem,
+.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem div.contentHolder,
+.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem div.contentHolder {
 	border-color:#dbdee1;
 }
 
@@ -538,37 +551,78 @@ margin-top:1em;
 	padding:.25em;
 }
 
-.VisDoc th,.VisDoc td,.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th,.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td {
+.VisDoc th,
+.VisDoc td,
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th,
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td {
 	vertical-align:top;
-	margin:2px 0;
-	padding:1px 4px;
+	padding:.25em 1em;
 }
 
-.VisDoc code,.VisDoc tt,
-.VisDoc .colorizedCode,
-.VisDoc div.memberSection div.fullMemberString .methodName {
-	color:#a00;
-}
-
-.VisDoc .codeComment,.VisDoc div.docNav a:link,.VisDoc div.docNav a:visited,.VisDoc div.footer a:link,.VisDoc div.footer a:visited {
+.VisDoc div.docNav a:link,
+.VisDoc div.docNav a:visited,
+.VisDoc div.footer a:link,
+.VisDoc div.footer a:visited {
 	color:#9399af;
 }
 
-.VisDoc .codeProperty,.VisDoc .codeIdentifier {
-	color:#005699;
+.VisDoc code,
+.VisDoc tt,
+.VisDoc .colorizedCode,
+.VisDoc div.memberSection div.fullMemberString .methodName {
+	color:brown;
+}
+.VisDoc .codeComment {
+	color:gray;
+}
+.VisDoc .codeProperty {
+	color:#8A2BE2;
+}
+.VisDoc .codeIdentifier {
+	color:#069;
+}
+.VisDoc .codeString {
+	color:blue;
+}
+.VisDoc .codeNumber {
+	color:#333;
+}
+.VisDoc .codeKeyword {
+	color:red;
 }
 
-.VisDoc div.docNav ul,.VisDoc div.summary div.memberList div.memberSummaryPart ul,.VisDoc div.summary div.memberList div.memberSummaryPart ul li,.VisDoc div.footer ul,.VisDoc div.list ul,.VisDoc div.list ul li,#toc .VisDoc .tocNavigation ul {
+.VisDoc div.docNav ul,
+.VisDoc div.summary div.memberList div.memberSummaryPart ul,
+.VisDoc div.summary div.memberList div.memberSummaryPart ul li,
+.VisDoc div.footer ul,
+.VisDoc div.list ul,
+.VisDoc div.list ul li,#toc .VisDoc .tocNavigation ul {
 	list-style:none;
 	margin:0;
 	padding:0;
 }
 
-.VisDoc div.docNav a:hover,.VisDoc div.memberSection div.fullMemberString a:hover,.VisDoc div.memberSection div.fullMemberString a:visited:hover,.VisDoc div.footer a:hover,#toc .VisDoc a:hover,#toc .VisDoc div.list ul a:hover .repeatSign,.VisDoc li.private a:hover,.VisDoc a:hover.private {
+.VisDoc .summary .memberList li a:link,
+.VisDoc .summary .memberList li a:visited,
+.VisDoc .summary .memberList li .typeInfo {
+	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
+	font-size:12px;
+}
+
+.VisDoc div.docNav a:hover,
+.VisDoc div.memberSection div.fullMemberString a:hover,
+.VisDoc div.memberSection div.fullMemberString a:visited:hover,
+.VisDoc div.footer a:hover,#toc .VisDoc a:hover,#toc .VisDoc div.list ul a:hover .repeatSign,
+.VisDoc li.private a:hover,
+.VisDoc a:hover.private {
 	text-decoration:underline;
 }
 
-.VisDoc div.inheritDoc,.VisDoc div.classProperties ul li .title,.VisDoc div.classDescription .field .title,.VisDoc div.memberSection div.description .field .title,.VisDoc div.list .title,#toc .VisDoc div.list .repeatSign {
+.VisDoc div.inheritDoc,
+.VisDoc div.classProperties ul li .title,
+.VisDoc div.classDescription .field .title,
+.VisDoc div.memberSection div.description .field .title,
+.VisDoc div.list .title,#toc .VisDoc div.list .repeatSign {
 	display:inline;
 }
 
@@ -577,38 +631,61 @@ margin-top:1em;
 	padding:0;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item,.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul.summary li,.VisDoc div.summary div.memberList div.memberSummaryPart ul.summary li,.VisDoc div.list ul.summary li {
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item,
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul.summary li,
+.VisDoc div.summary div.memberList div.memberSummaryPart ul.summary li,
+.VisDoc div.list ul.summary li {
 	margin-left:2.5em;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul,.VisDoc div.classProperties ul,.VisDoc .sourceCodeView ul {
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul,
+.VisDoc div.classProperties ul,
+.VisDoc .sourceCodeView ul {
 list-style-type:none;
 	margin:0;
 	padding:0;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul li,.VisDoc div.classProperties ul li,.VisDoc .sourceCodeView ul li {
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul li,
+.VisDoc div.classProperties ul li,
+.VisDoc .sourceCodeView ul li {
 	margin:0;
 	padding:0;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td.uneven,.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th.uneven,.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td.even,.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th.even,#toc .VisDoc .current {
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td.uneven,
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th.uneven,
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td.even,
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th.even,#toc .VisDoc .current {
 	background-color:#fff;
 }
 
-.VisDoc div.classDescription,.VisDoc .sourceCodeView {
+.VisDoc div.classDescription,
+.VisDoc .sourceCodeView {
 	margin:2em 0 0;
 }
 
-.VisDoc div.classDescription .descriptionSummary,.VisDoc div.list .className,.VisDoc div.list li.package {
+.VisDoc div.classDescription .descriptionSummary,
+.VisDoc div.list .className,
+.VisDoc div.list li.package {
 	font-weight:700;
 }
 
-.VisDoc div.summary div.memberList div.memberSummaryPart div.boxWithBorder div.boxedElem div.contentHolder .item,.VisDoc div.memberSection div.boxWithBorder,.VisDoc div.memberSection div.description,.VisDoc div.memberSection div.fullMemberString {
+.VisDoc div.summary div.memberList div.memberSummaryPart div.boxWithBorder div.boxedElem div.contentHolder .item,
+.VisDoc div.memberSection div.boxWithBorder,
+.VisDoc div.memberSection div.description,
+.VisDoc div.memberSection div.fullMemberString {
 	margin-left:0;
 }
 
-.VisDoc div.list .repeatSign,#toc .VisDoc div.list a .path,#toc .VisDoc div.list .packagePath,.framed .VisDoc .activeWhenNotFramed,.VisDoc .activeWhenFramed,.twistyHidden,.twistyMakeVisible,.twikiMakeVisible,.twikiMakeVisibleInline,.twikiMakeVisibleBlock {
+.VisDoc div.list .repeatSign,#toc .VisDoc div.list a .path,#toc .VisDoc div.list .packagePath,
+.framed .VisDoc .activeWhenNotFramed,
+.VisDoc .activeWhenFramed,
+.twistyHidden,
+.twistyMakeVisible,
+.twikiMakeVisible,
+.twikiMakeVisibleInline,
+.twikiMakeVisibleBlock {
 	display:none;
 }
 

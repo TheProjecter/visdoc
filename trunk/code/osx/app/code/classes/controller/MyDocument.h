@@ -24,6 +24,7 @@
 	int validAndListedDirCount;
 	int addedFileCount;
 	int modifiedFileCount;
+		
 	IBOutlet SelectableTableView* oInputFilesTable;
     IBOutlet NSTextField* oFeedbackTextField;
 	IBOutlet NSButton* oProcessButton;
@@ -90,6 +91,7 @@
 - (void)registerForChangedKeys;
 - (void)unRegisterForChangedKeys;
 - (NSDictionary*)defaultSettings;
+- (void)mergeNewDefaultSettings:(NSMutableDictionary*)rawSettings;
 
 #pragma mark Table
 - (void)selectButtonClicked:(id)sender;

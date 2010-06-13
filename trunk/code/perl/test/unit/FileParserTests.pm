@@ -13,7 +13,7 @@ use VisDoc::ParserAS2;
 use VisDoc::ParserAS3;
 use VisDoc::ParserJava;
 
-my $debug = 0;
+my $debug = 1;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -254,8 +254,8 @@ package org.asaplibrary.data.array /*ehm*/{ // COMMENT
 	
 	public class TraverseArrayOptions { // COMMENT
 		// COMMENT
-		public static const NONE:uint = 0; %VISDOC_STUB_JAVADOC_SIDE_1%
-		public static const LOOP:uint = 1; %VISDOC_STUB_JAVADOC_SIDE_2%
+		public static const NONE:uint = 0; %VISDOC_STUB_JAVADOC_SIDE_3%
+		public static const LOOP:uint = 1; %VISDOC_STUB_JAVADOC_SIDE_4%
 		
 		public function doit () : void {
 			// COMMENT
@@ -305,7 +305,7 @@ End of comment.';
 	{
 		# test javadoc side comment 1
         my $parseData = $fileParser->{data};
-		my $key = VisDoc::StringUtils::getStubKey($VisDoc::StringUtils::STUB_JAVADOC_SIDE, 1);
+		my $key = VisDoc::StringUtils::getStubKey($VisDoc::StringUtils::STUB_JAVADOC_SIDE, 3);
 		my $result   = $$parseData{javadocComments}->{$key};
 		my $expected = 'The enumerator does nothing: 	<code>zxcvb</code>';
 	
@@ -316,7 +316,7 @@ End of comment.';
 	{
 		# test javadoc side comment 2
         my $parseData = $fileParser->{data};
-		my $key = VisDoc::StringUtils::getStubKey($VisDoc::StringUtils::STUB_JAVADOC_SIDE, 2);
+		my $key = VisDoc::StringUtils::getStubKey($VisDoc::StringUtils::STUB_JAVADOC_SIDE, 4);
 		my $result   = $$parseData{javadocComments}->{$key};
 		my $expected = 'The enumerator loops past the last item.';
 	

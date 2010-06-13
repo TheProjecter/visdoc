@@ -63,6 +63,8 @@ our $PATTERN_SINGLELINE_COMMENT      = '
    ';
 
 our $PATTERN_JAVADOC_COMMENT = '
+   (?:^|[^/])     # no other characters in front except spaces
+   (
    /\*\*		# /**
    [[:space:]]*		# any space
    (			# i1: contents
@@ -71,8 +73,9 @@ our $PATTERN_JAVADOC_COMMENT = '
    )			# /i1
    [[:space:]]*	# any space
    \*/			# */
+   )
    ';
-our $PATTERN_JAVADOC_COMMENT_CONTENT_INDEX = 1;
+our $PATTERN_JAVADOC_COMMENT_CONTENT_INDEX = 2;
 our $STUB_JAVADOC_COMMENT                  = 'VISDOC_STUB_JAVADOC_COMMENT';
 
 our $PATTERN_JAVADOC_STARS_AT_LEFT = '[[:space:]]*\*[[:space:]]*';
@@ -161,6 +164,7 @@ my $PLACEHOLDER_CDATA_START_TAG = 'PLACEHOLDER_CDATA_START_TAG';
 my $PLACEHOLDER_CDATA_END_TAG   = 'PLACEHOLDER_CDATA_END_TAG';
 
 our $VERBATIM_STUB_QUOTED_STRING   = 'VISDOC_STUB_QUOTED_STRING';
+our $STRINGUTILS_STUB_QUOTED_STRING   = 'VISDOC_STRINGUTILS_STUB_QUOTED_STRING';
 our $VERBATIM_STUB_PROPERTY_OBJECT = 'VISDOC_STUB_PROPERTY_OBJECT';
 our $VERBATIM_STUB_ARRAY           = 'VISDOC_STUB_ARRAY';
 
@@ -519,15 +523,16 @@ sub commaSeparatedListFromCommaSeparatedString {
 
     my ( $textWithPlaceholders, $store ) =
       replacePatternMatchWithStub( \$_[0], $quotedPattern, 1, 1,
-        $VERBATIM_STUB_QUOTED_STRING, \$counter );
+        $STRINGUTILS_STUB_QUOTED_STRING, \$counter );
 
     return ( $_[0] ) if !$textWithPlaceholders;
     my @list = split( /,\s*/, $textWithPlaceholders );
 
     # retrieve original store
-    my $pattern = getStubKeyPattern($VERBATIM_STUB_QUOTED_STRING);
+    my $pattern = getStubKeyPattern($STRINGUTILS_STUB_QUOTED_STRING);
+    
     foreach my $item (@list) {
-        if ( $item =~ m/($pattern)/ ) {
+    	while ( $item =~ m/($pattern)/gxs ) {
             my $key   = $1;
             my $value = $store->{$key};
             $item =~ s/$key/$value/ if $value;
@@ -732,7 +737,7 @@ replacePatternMatchWithStub(
 
 sub replacePatternMatchWithStub {
     my ( $inText, $inPattern, $inMatchIndex, $inReplaceMatchIndex, $inStub,
-        $inCounter )
+        $inCounterRef )
       = @_;
 
     my $text = $$inText;
@@ -745,7 +750,7 @@ sub replacePatternMatchWithStub {
             \$text,                   $-[$inMatchIndex],
             $+[$inMatchIndex],        $-[$inReplaceMatchIndex],
             $+[$inReplaceMatchIndex], \%storage,
-            $inStub,                  ++$$inCounter
+            $inStub,                  ++$$inCounterRef
         );
     }
 
@@ -763,11 +768,13 @@ Helper function; stores $text in hash reference $collection, with key $count.
 );
 
 $text: complete text to store a fragment of
-$startPos: start position of part to store
-$endPos: end position of part to store
+$startMatch: start position of part to store
+$endMatch: end position of part to store
+$startReplace:
+$endReplace:
 $collection: reference to hash to store original text fragment in
 $stubName: name of stub
-$count: stub counter to make stub key unique (combination of stubName + counter
+$count: stub counter to make stub key unique (combination of stubName + counter)
 
 Returns the numbered stub string.
 
@@ -798,7 +805,7 @@ sub storeStubReference {
 
 =pod
 
-Creates a stub key according to name template {name{number}}.
+Creates a stub key according to name template %name_number%.
 
 =cut
 

@@ -225,11 +225,13 @@ sub _colorizeLine {
     #my $this = $_[0]
     #my $text = $_[1]
 
+	my $match;
+	
     # comments
-    my $match =
-      $_[1] =~
-s/(\/\/.*)/$VisDoc::StringUtils::STUB_COLORIZE_CODE_COMMENT_START$1$VisDoc::StringUtils::STUB_COLORIZE_CODE_COMMENT_END/g;
-
+    if ($_[1] !~ m/.*?\:(\/\/.*)/ ) {
+		$match = $_[1] =~ s/(\/\/.*)/$VisDoc::StringUtils::STUB_COLORIZE_CODE_COMMENT_START$1$VisDoc::StringUtils::STUB_COLORIZE_CODE_COMMENT_END/g;
+	}
+	
     # if this is a comment, do not colorize any further
     return if $match;
 

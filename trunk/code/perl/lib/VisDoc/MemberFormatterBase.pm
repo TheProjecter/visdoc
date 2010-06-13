@@ -275,6 +275,7 @@ sub fullMemberStringLeft {
     }
 
     $outText =~ s/  / /go;
+    VisDoc::StringUtils::trimSpaces($outText);
     return $outText;
 }
 
@@ -300,6 +301,7 @@ sub fullMemberStringRight {
     }
 
     $outText =~ s/  / /go;
+    VisDoc::StringUtils::trimSpaces($outText);
     return $outText;
 }
 

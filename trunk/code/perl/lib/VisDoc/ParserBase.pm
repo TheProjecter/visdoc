@@ -192,6 +192,7 @@ sub _parseClasses {
 
 =pod
     use Data::Dumper;
+    print "_parseClasses\n";
     print( " classes=" . Dumper($classes) . "\n" );
     print( " class count=" . @$classes . "\n" );
     print(" text=$text\n");
@@ -437,7 +438,7 @@ sub _parseSuperclassNames {
 
 =pod
 
-_parseImportClassPathForName( $className, $text ) -> $text
+_getClasspathFromImports( $className, $text ) -> $text
 
 Returns the classpath for the class $className as written after 'import'.
 Happens to be the same for as2, as3 and java.
@@ -523,7 +524,6 @@ sub _parseMembers {
       $this->_parseProperties($text);    # objects of type PropertyData
 
     $this->_setMemberOrder( $text, $methods, $properties );
-    $this->_swapPropertyGetSetters( $methods, $properties );
 
     #use Data::Dumper;
     #print( " methods=" . Dumper($methods) . "\n" );
@@ -532,51 +532,6 @@ sub _parseMembers {
     #print(" text=$text\n");
 
     return ( $methods, $properties, $text );
-}
-
-=pod
-
-_swapPropertyGetSetters( \@methods, \@properties)
-
-Moves property getters and setters from the methods list to the property list.
-
-=cut
-
-sub _swapPropertyGetSetters {
-    my ( $this, $inMethods, $inProperties, $inCount ) = @_;
-
-    my $count = 0;
-    foreach my $method ( @{$inMethods} ) {
-
-        if ( $method->{type} ) {
-
-            # create new property
-            my $propertyData = VisDoc::PropertyData->new();
-            $propertyData->{type}        = $method->{type};
-            $propertyData->{memberOrder} = $method->{memberOrder};
-            $propertyData->{name}        = $method->{name};
-            $propertyData->{qualifiedName} = $method->{qualifiedName};
-            $propertyData->{access}      = $method->{access};
-            $propertyData->{javadoc}     = $method->{javadoc};
-            $propertyData->{metadata}    = $method->{metadata};
-
-            $propertyData->{dataType} = $method->{returnType}
-              if ( $method->{type} eq $VisDoc::MemberData::TYPE->{'READ'} );
-            $propertyData->{dataType} = $method->{parameters}->[0]->{type}
-              if ( $method->{type} eq $VisDoc::MemberData::TYPE->{'WRITE'} );
-
-            push @{$inProperties}, $propertyData;
-            my $deleted = splice( @{$inMethods}, $count, 1 );
-            $this->_swapPropertyGetSetters( $inMethods, $inProperties );
-        }
-        $count++;
-    }
-
-    # sort properties
-    if ( $inProperties && scalar @{$inProperties} ) {
-        @{$inProperties} =
-          sort { $a->{memberOrder} <=> $b->{memberOrder} } @{$inProperties};
-    }
 }
 
 =pod
@@ -814,21 +769,6 @@ sub _parseMethodReturnType {
     VisDoc::StringUtils::trimSpaces($text);
 
     return $text;
-}
-
-=pod
-
-_parseMetadataData($text) -> \@metadataList
-
-To be implemented by subclass
-
-=cut
-
-sub _parseMetadataData {
-
-    #    my ( $this, $inText ) = @_;
-
-    return \();
 }
 
 =pod
@@ -1077,7 +1017,7 @@ sub _stubObjectProperties {
     my ( $newText, $blocks ) = VisDoc::StringUtils::replacePatternMatchWithStub(
         \$inText, $pattern, 0, 1,
         $VisDoc::StringUtils::VERBATIM_STUB_PROPERTY_OBJECT,
-        \$VisDoc::FileData::stubCounter
+        $_[0]->{fileParser}->{data}->getStubCounterRef()
     );
 
     return "$inPre$inText$inPost" if !$newText;

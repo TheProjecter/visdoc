@@ -12,7 +12,7 @@ use VisDoc::ParserAS2;
 use VisDoc::ParserAS3;
 use VisDoc::ParserJava;
 
-my $debug = 1;
+my $debug = 0;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -24,7 +24,7 @@ sub new {
 
 =cut
 
-sub _test_getFieldNameParts {
+sub test_getFieldNameParts {
     my ($this) = @_;
 
 	my $text = '@author John Doe
@@ -64,7 +64,7 @@ sub _test_getFieldNameParts {
 
 =cut
 
-sub _test_getFieldNameParts_firstline {
+sub test_getFieldNameParts_firstline {
     my ($this) = @_;
 
 	my $text = 'This is the introduction
@@ -89,7 +89,7 @@ sub _test_getFieldNameParts_firstline {
 
 =cut
 
-sub _test_getFieldNameParts_empty {
+sub test_getFieldNameParts_empty {
     my ($this) = @_;
 
 	my $text = 'This is the introduction';
@@ -120,7 +120,7 @@ sub _test_getFieldNameParts_empty {
 
 =cut
 
-sub _test_getFieldNameParts_params {
+sub test_getFieldNameParts_params {
     my ($this) = @_;
 
 	my $text = '@param inText: the text to be processed
@@ -165,7 +165,7 @@ sub _test_getFieldNameParts_params {
 	}
 }
 
-sub _test_description_anonymous {
+sub test_description_anonymous {
     my ($this) = @_;
 
 	my $text = 'Description text.';
@@ -181,7 +181,7 @@ sub _test_description_anonymous {
 	$this->assert( $result eq $expected );
 }
 
-sub _test_description_with_anonymous {
+sub test_description_with_anonymous {
     my ($this) = @_;
 
 	my $text = 'This is the first line. 
@@ -199,7 +199,7 @@ This also belongs to the description.
 	$this->assert( $result eq $expected );	
 }
 
-sub _test_description_empty {
+sub test_description_empty {
     my ($this) = @_;
 
 	my $text = '@author Jonathan';
@@ -216,7 +216,7 @@ sub _test_description_empty {
 		
 }
 
-sub _test_fieldsWithName {
+sub test_fieldsWithName {
     my ($this) = @_;
 
 	my $text = '@author
@@ -274,7 +274,7 @@ sub _test_fieldsWithName {
 
 =cut
 
-sub _test_tag_see {
+sub test_tag_see {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -333,6 +333,7 @@ class A {}
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
+=pod
 	{
 		# test field see 2: qualifiedName
 		my $result = $fields->[2]->{qualifiedName};
@@ -341,6 +342,7 @@ class A {}
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
+=cut
 	{
 		# test field see 3: class
 		my $result = $fields->[3]->{class};
@@ -388,7 +390,7 @@ class A {}
 
 =cut
 
-sub _test_tag_throws {
+sub test_tag_throws {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -425,7 +427,7 @@ sub _test_tag_throws {
 
 =cut
 
-sub _test_tag_exception {
+sub test_tag_exception {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -459,7 +461,7 @@ sub _test_tag_exception {
 }
 
 =pod
-sub _test_tag_overload {
+sub test_tag_overload {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -498,7 +500,7 @@ sub _test_tag_overload {
 =cut
 
 =pod
-sub _test_addField {
+sub test_addField {
     my ($this) = @_;
 
 	my $text = '@author
@@ -529,7 +531,7 @@ sub _test_addField {
 
 =cut
 
-sub _test_tag_param {
+sub test_tag_param {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -548,7 +550,7 @@ class A {}
 
 }
 
-sub _test_tag_sends {
+sub test_tag_sends {
 	my ($this) = @_;
 	
 	my $text = 'package {
@@ -581,7 +583,7 @@ sub _test_tag_sends {
 	{
 		# sends field 0: params
 		my $result = $fields->[0]->{params};
-		my $expected = '(name:String, total:Number, loaded:Number, this:Loader)';
+		my $expected = 'name:String,total:Number,loaded:Number,this:Loader';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
@@ -616,7 +618,7 @@ sub _test_tag_sends {
 
 =cut
 
-sub _test_tag_in_middle_of_sentence {
+sub test_tag_in_middle_of_sentence {
 	my ($this) = @_;
 
 	my $text = '
@@ -659,7 +661,7 @@ Testing a variety of @see values.';
 }
 
 =pod
-sub _test_getDescriptionParts_5 {
+sub test_getDescriptionParts_5 {
     my ($this) = @_;
 
 	my $text = '/**
@@ -706,7 +708,7 @@ class A {}
 }
 =cut
 
-sub _test_tag_link {
+sub test_tag_link {
 	my ($this) = @_;
 	
 	my $text = 'package {
@@ -728,8 +730,8 @@ class A {
 	my $fileData = VisDoc::parseText($text, 'as3');
 	my $javadoc = $fileData->{packages}->[0]->{classes}->[0]->{javadoc};
 	
-use Data::Dumper;
-print("fileData=" . Dumper($fileData) . "\n");
+#use Data::Dumper;
+#print("fileData=" . Dumper($fileData) . "\n");
 
 	# link 1
 	{
@@ -798,6 +800,7 @@ print("fileData=" . Dumper($fileData) . "\n");
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
+=pod
 	{
 		# qualifiedName
 		my $result   = $javadoc->{linkTags}->[3]->{qualifiedName};
@@ -806,6 +809,7 @@ print("fileData=" . Dumper($fileData) . "\n");
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
+=cut
 	{
 		# label
 		my $result   = $javadoc->{linkTags}->[3]->{label};
@@ -833,7 +837,7 @@ print("fileData=" . Dumper($fileData) . "\n");
 	}
 }
 
-sub _test_tag_linkplain {
+sub test_tag_linkplain {
 	my ($this) = @_;
 	
 	my $text = 'package {
@@ -908,7 +912,7 @@ class A {}
 
 =cut
 
-sub _test_tag_literal {
+sub test_tag_literal {
     my ($this) = @_;
 
 	my $text =
@@ -925,7 +929,7 @@ class A {}
 
 	my $result = $javadoc->getDescription();
 	my $expected =
-	  '1111%VISDOC_STUB_TAG_LITERAL_1%3333';
+	  '1111%VISDOC_STUB_TAG_LITERAL_2%3333';
 
 	print("RES=$result.\n")     if $debug;
 	print("EXP=$expected.\n") if $debug;
@@ -936,7 +940,7 @@ class A {}
 
 =cut
 
-sub _test_tag_code {
+sub test_tag_code {
     my ($this) = @_;
 
 	my $text =
@@ -964,7 +968,7 @@ class A {}
 
 =cut
 
-sub _test_tag_img {
+sub test_tag_img {
     my ($this) = @_;
 
 	my $text =
@@ -1085,7 +1089,7 @@ sub test_tag_inheritDoc {
 		my $javadoc = $fileData->{packages}->[0]->{classes}->[3]->{methods}->[0]->{javadoc};
 	
 		my $result = $javadoc->getDescription();
-		my $expected = 'Description from class Shape. <a href="Shape.html#retainCount">#</a>';
+		my $expected = '<div class="inheritDoc">Description from class Shape. <a href="Shape.html#retainCount">#</a></div>';
 	
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1097,7 +1101,7 @@ sub test_tag_inheritDoc {
 
 =cut
 
-sub _test_params {
+sub test_params {
     my ($this) = @_;
 
 	my $text = 'package {
@@ -1173,7 +1177,7 @@ class A {}
 
 =cut
 
-sub _test_return {
+sub test_return {
     my ($this) = @_;
 
 	my $text = 'package {

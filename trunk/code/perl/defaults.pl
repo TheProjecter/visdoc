@@ -4,6 +4,7 @@
 
 use strict;
 use warnings;
+no warnings "once";
 use Cwd 'getcwd';
 use Getopt::Long;
 use Pod::Usage;

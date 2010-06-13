@@ -117,7 +117,7 @@ parseFiles( \@files, $language ) -> \@fileData
 =cut
 
 sub parseFiles {
-    my ( $inFiles, $inLanguage ) = @_;
+    my ( $inFiles, $inLanguage, $inPreferences ) = @_;
 
     my $collectiveFileData;
     foreach my $file ( @{$inFiles} ) {
@@ -131,7 +131,7 @@ sub parseFiles {
             VisDoc::Logger::logParsedFile($file);
         }
     }
-    return VisDoc::PostParser::process($collectiveFileData);
+    return VisDoc::PostParser::process($collectiveFileData, $inPreferences);
 }
 
 =pod

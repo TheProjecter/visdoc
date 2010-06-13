@@ -77,7 +77,9 @@ sub _getFileInfo {
 
 sub new {
     my ($class) = @_;
-    my $this = { data => VisDoc::FileData->new(), };
+    my $this = {
+    	data => VisDoc::FileData->new()
+    };
     bless $this, $class;
     return $this;
 }
@@ -99,11 +101,11 @@ sub getFileData {
     my $text               = _cleanText($fileText);
 
     my $languageId = $inLanguageId || getLanguageId( $inPath, $text );
-    my $fileData = VisDoc::FileData->new();
+    my $fileData = $this->{data};
     $fileData->{language}         = $languageId;
     $fileData->{path}             = $inPath;
     $fileData->{modificationDate} = $modificationDate;
-
+	
     return ( $fileData, $fileText );
 }
 
@@ -296,7 +298,7 @@ sub _stubTags {
 
     my ( $newText, $blocks ) =
       VisDoc::StringUtils::replacePatternMatchWithStub( $_[1], $_[2], 0, $_[3],
-        $_[4], \$_[0]->{data}->getStubCounter() );
+        $_[4], $_[0]->{data}->getStubCounterRef() );
 
     my $merged = $_[0]->{data}->mergeData( $_[5], $blocks );
     $_[0]->{data}->{ $_[5] } = $merged;
@@ -488,7 +490,7 @@ sub stubArrays {
     my ( $newText, $blocks ) = VisDoc::StringUtils::replacePatternMatchWithStub(
         \$_[1], $inPattern, $inMatchIndex, $inMatchIndex,
         $VisDoc::StringUtils::VERBATIM_STUB_ARRAY,
-        \$_[0]->{data}->getStubCounter()
+        $_[0]->{data}->getStubCounterRef()
     );
 
     my $merged =
@@ -628,10 +630,10 @@ sub _replaceJavadocCommentsByStubs {
     return VisDoc::StringUtils::replacePatternMatchWithStub(
         \$inText,
         $VisDoc::StringUtils::PATTERN_JAVADOC_COMMENT,
-        0,
+        1,
         $VisDoc::StringUtils::PATTERN_JAVADOC_COMMENT_CONTENT_INDEX,
         $VisDoc::StringUtils::STUB_JAVADOC_COMMENT,
-        \$this->{data}->getStubCounter()
+        $this->{data}->getStubCounterRef()
     );
 }
 
@@ -659,7 +661,7 @@ sub _replaceJavadocSideCommentsByStubs {
         0,
         $VisDoc::StringUtils::PATTERN_JAVADOC_SIDE_CONTENT_INDEX,
         $VisDoc::StringUtils::STUB_JAVADOC_SIDE,
-        \$this->{data}->getStubCounter()
+        $this->{data}->getStubCounterRef()
     );
 }
 
@@ -678,9 +680,12 @@ sub _replaceQuotedStringsByStubs {
     my $quotedPattern = RE_quoted( -keep );
 
     return VisDoc::StringUtils::replacePatternMatchWithStub(
-        \$inText, $quotedPattern, 1, 1,
+        \$inText,
+        $quotedPattern,
+        1,
+        1,
         $VisDoc::StringUtils::VERBATIM_STUB_QUOTED_STRING,
-        \$this->{data}->getStubCounter()
+        $this->{data}->getStubCounterRef()
     );
 }
 

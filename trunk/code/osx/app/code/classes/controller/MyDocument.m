@@ -12,7 +12,7 @@
 #import "LayoutSettingsController.h"
 
 static NSString* sValidExtensions = @"as,java";
-static NSDictionary* sDefaultSettings;
+static NSMutableDictionary* sDefaultSettings;
 
 @implementation MyDocument
 
@@ -83,7 +83,10 @@ static NSDictionary* sDefaultSettings;
 		NSMutableDictionary* allData = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 		if (allData) {
 			[self unRegisterForChangedKeys];
-			[self setSettings:[allData objectForKey:@"settings"]];
+			NSMutableDictionary* projectSettings = [allData objectForKey:@"settings"];
+			// new default settings may not be in the project file, so merge
+			[self mergeNewDefaultSettings:projectSettings];
+			[self setSettings:projectSettings];
 			[self setListedPaths:[allData objectForKey:@"listedPaths"]];
 			[oLayoutSettingsController updateUsesDefaults];
 			[self updateCount];
@@ -206,38 +209,6 @@ static NSDictionary* sDefaultSettings;
 	if (!processResult) {
 		[oLogController writeString:@"No results, but no errors passed either."];
 		return;
-	}
-	
-	NSString* htmlDir = nil;
-	NSString* index = nil;
-	NSString* fileToOpenInBrowser = nil;
-	NSString* param = nil;
-	NSArray *docFiles = nil;
-	if ([processResult objectForKey:@"classes"]) {
-		docFiles = [[processResult objectForKey:@"classes"] allKeys];
-	}
-	if ([docFiles count]) {
-		if ([processResult objectForKey:@"htmlDir"]) {
-			htmlDir = [processResult objectForKey:@"htmlDir"];
-		}
-		if ([processResult objectForKey:@"index"]) {
-			index = [processResult objectForKey:@"index"];
-		}
-		if ([index isValidString]) {
-			NSString *indexFilePath = [NSString stringWithFormat:@"%@/%@.html", htmlDir, index];
-			NSFileManager* manager = [NSFileManager defaultManager];
-			BOOL isDir;
-			if ((BOOL)[manager fileExistsAtPath:indexFilePath isDirectory:&isDir]) {
-				fileToOpenInBrowser = indexFilePath;
-			}
-			if ([docFiles count] > 0) {
-				param = [docFiles objectAtIndex:0];
-			}
-		} else {
-			// open first class file
-			fileToOpenInBrowser = [NSString stringWithFormat:@"%@/%@.html", htmlDir, [docFiles objectAtIndex:0]];
-		}
-		[self _openURL:fileToOpenInBrowser withParam:param];
 	}
 	[oLogController processErrorResults:[processResult objectForKey:@"error"]];
 	if (![processResult objectForKey:@"error"]) {
@@ -405,19 +376,34 @@ static NSDictionary* sDefaultSettings;
 
 - (void)initializeProjectData
 {
-	if ([[[self settings] allKeys] count] != 0) {
+	/*
+	 if ([[[self settings] allKeys] count] != 0) {
 		return;	
 	}
+	 */
+
 	if (!sDefaultSettings) {
-		NSString* scriptPath = [[NSBundle mainBundle] pathForResource:@"defaults" ofType:@"pl" inDirectory:@"perl"];	
-		if (!scriptPath) return;
-		
-		NSArray* argumentList = nil;
-		SimplePerlBridge* p = [[[SimplePerlBridge alloc] init] autorelease];
-		NSString* stringFromPerl = [p runScript:scriptPath argumentList:argumentList readFromFile:NO];
-		sDefaultSettings = [[SimplePerlBridge propertyListFromString:stringFromPerl] retain];
+		sDefaultSettings = [[NSMutableDictionary alloc] init];
 	}
+	NSDictionary* defaultSettings;
+
+	NSString* scriptPath = [[NSBundle mainBundle] pathForResource:@"defaults" ofType:@"pl" inDirectory:@"perl"];	
+	if (!scriptPath) return;
 	
+	// check for new default settings
+	// these may not be stored in the project file yet
+	NSArray* argumentList = nil;
+	SimplePerlBridge* p = [[[SimplePerlBridge alloc] init] autorelease];
+	NSString* stringFromPerl = [p runScript:scriptPath argumentList:argumentList readFromFile:NO];
+	defaultSettings = [[SimplePerlBridge propertyListFromString:stringFromPerl] retain];
+	
+	NSEnumerator* e = [defaultSettings keyEnumerator];
+	NSString* key = nil;
+	while (key = [e nextObject]) {
+		if ([sDefaultSettings objectForKey:key] == nil) {
+			[sDefaultSettings setObject:[defaultSettings objectForKey:key] forKey:key];
+		}
+	}
 	if (!settings) {
 		settings = [[NSMutableDictionary alloc] init];
 	}
@@ -466,6 +452,17 @@ static NSDictionary* sDefaultSettings;
 - (NSDictionary*)defaultSettings
 {
 	return sDefaultSettings;
+}
+
+- (void)mergeNewDefaultSettings:(NSMutableDictionary*)rawSettings
+{
+	NSEnumerator* e = [sDefaultSettings keyEnumerator];
+	NSString* key = nil;
+	while (key = [e nextObject]) {
+		if ([rawSettings objectForKey:key] == nil) {
+			[rawSettings setObject:[sDefaultSettings objectForKey:key] forKey:key];
+		}
+	}
 }
 
 #pragma mark Paths

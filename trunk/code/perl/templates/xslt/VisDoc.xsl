@@ -824,26 +824,28 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 				<xsl:otherwise>
 					<!-- ......................... field ......................... -->
 					<div class="item">
-						<ul>
-							<xsl:for-each select="description/item">
-								<li>
-									<xsl:if test="value!=''">
-										<xsl:call-template name="substituteLinefeeds">
-											<xsl:with-param name="string" select="value" />
-										</xsl:call-template>
-									</xsl:if>
-									<xsl:if test="summary!=''">
-										<ul class="summary inheritDoc">
-											<li>
-												<xsl:call-template name="substituteLinefeeds">
-													<xsl:with-param name="string" select="summary" />
-												</xsl:call-template>
-											</li>
-										</ul>
-									</xsl:if>
-								</li>
-							</xsl:for-each>
-						</ul>
+						<xsl:if test="description/item!=''">
+							<ul>
+								<xsl:for-each select="description/item">
+									<li>
+										<xsl:if test="value!=''">
+											<xsl:call-template name="substituteLinefeeds">
+												<xsl:with-param name="string" select="value" />
+											</xsl:call-template>
+										</xsl:if>
+										<xsl:if test="summary!=''">
+											<ul class="summary inheritDoc">
+												<li>
+													<xsl:call-template name="substituteLinefeeds">
+														<xsl:with-param name="string" select="summary" />
+													</xsl:call-template>
+												</li>
+											</ul>
+										</xsl:if>
+									</li>
+								</xsl:for-each>
+							</ul>
+							</xsl:if>
 						<!-- ......................... metadatatags ......................... -->
 						<xsl:apply-templates select="metadatatags" />
 					</div>
@@ -856,9 +858,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 
 <!-- ......................... metadatatags ......................... -->
 <xsl:template match="metadatatags">
-	<xsl:if test="tag!=''">
-		<xsl:text disable-output-escaping="yes"><![CDATA[<table cellspacing="0">]]></xsl:text>
-	</xsl:if>
+	<table>
 	<xsl:for-each select="tag">
 		<tr>
 		<th align="left">
@@ -881,9 +881,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 		</td>
 		</tr>
 	</xsl:for-each>
-	<xsl:if test="tag!=''">
-		<xsl:text disable-output-escaping="yes"><![CDATA[</table>]]></xsl:text>
-	</xsl:if>
+	</table>
 </xsl:template>
 
 
@@ -912,9 +910,11 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 
 <!-- ......................... metadatatagattribute ......................... -->
 <xsl:template match="metadatatagattribute">
+	<p>
 	<xsl:call-template name="keyvalue">
 		<xsl:with-param name="string" select="value" />
 	</xsl:call-template>
+	</p>
 </xsl:template>
 
 

@@ -14,7 +14,7 @@ use VisDoc::ParserJava;
 use VisDoc::MethodData;
 use VisDoc::PropertyData;
 
-my $debug = 0;
+my $debug = 1;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -620,6 +620,18 @@ sub test_parseMethods_as2 {
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
+	
+	# method 2
+	{
+		# test access
+		my $access = $methods->[2]->{access};
+		my $result = join(",", @{$access});
+		my $expected = 'public';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	
 	# method 3
 	{
 		# test access
@@ -659,17 +671,6 @@ sub test_parseMethods_as2 {
 		# test return
 		my $result = $methods->[1]->{returnType};
 		my $expected = 'Boolean';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 2
-	{
-		# test access
-		my $access = $methods->[2]->{access};
-		my $result = join(",", @{$access});
-		my $expected = 'public';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
@@ -853,12 +854,12 @@ sub test_parseProperties_as2 {
 	/**
 	Count property
 	*/
-	/*0*/ public function get count () : Number {}
+	public function get count () : Number {}
 
 	/**
 	Count property
 	*/
-	/*1*/ public function set count (inCount:Number) : void {}
+	public function set count (inCount:Number) : void {}
 	
 	["Event"("resizeVideo")]
 [Collection(name="name", variable="varname", collectionClass="config/OpenSpace.xml", collectionItem="coll-item-classname", identifier="string")]
@@ -868,51 +869,51 @@ sub test_parseProperties_as2 {
 	/**
 	counter
 	*/
-	/*3*/ public var count:Number
+	public var counter:Number
 	
 	/**
 	tmp
 	*/
-	/*4*/ private var __some__
+	private var __some__
 	
-	/*5*/ var customItem:CustomClass = new CustomClass()
+	var customItem:CustomClass = new CustomClass()
 	
-	/*6*/ var someInt:Number = 0
+	var someInt:Number = 0
 
-	/*7*/ var numArray:Array = ["zero", "one", "two"]
+	var numArray:Array = ["zero", "one", "two"]
 	
-	/*8*/ var i:Number
+	var i:Number
 	i = 20
 
 	/**
 	Num vars.
 	*/
-	/*9,10,11*/ private var chimpansee:Number = 10, elephant:Number = 20, tiger:Number = 30
+	private var chimpansee:Number = 10, elephant:Number = 20, tiger:Number = 30
 	
-	/*12,13,14*/ var a1:Number, b1:Number, c1:Number; /**< more num vars */
+	var a1:Number, b1:Number, c1:Number; /**< more num vars */
 
-	/*15*/ var nocolon:String = \'hi\'
+	var nocolon:String = \'hi\'
 
-	/*16*/ var bgcolour:Number = 0xCCCC99
+	var bgcolour:Number = 0xCCCC99
 
-	/*17*/ public static var DEBUG_LEVEL:Object = {
+	public static var DEBUG_LEVEL:Object = {
 		level:0,
 		string:"Debug",
 		color:"#0000CC"
 	}	/**< Typecode for debugging messages.		*/
 	
-	/*18*/ public static var INFO_LEVEL:Object = {
+	public static var INFO_LEVEL:Object = {
 		level:1,
 		string:"Info",
 		color:"#550088"
 	}
 	
-	/*19*/ public static var NONE:Number = (1<<0); /**< The enumerator does nothing. */
+	public static var NONE:Number = (1<<0); /**< The enumerator does nothing. */
 	
 	[Event("resizeVideo")]
 	[Collection(name="name", variable="varname", collectionClass="config/OpenSpace.xml", collectionItem="coll-item-classname", identifier="string")]
 	[InspectableList("fps", "initCuePointNames", "aspectRatio")]
-	/*20*/ function get selectedIndex(... rest:Array):Number
+	function get selectedIndex(... rest:Array):Number
 	{
 		return getSelectedIndex();
 	}
@@ -926,27 +927,27 @@ sub test_parseProperties_as2 {
 
 	#use Data::Dumper;
 	#print("properties=" . Dumper($properties));
-
-    # property 2
+	
+    # property 1
 	{
 		# test name
-		my $result = $properties->[2]->{name};
+		my $result = $properties->[1]->{name};
 		my $expected = 'CLICK';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
 	{
-		# test access 2
-		my $result = $properties->[2]->{access}->[0];
+		# test access 1
+		my $result = $properties->[1]->{access}->[0];
 		my $expected = 'public';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
 	{
-		# test access 1
-		my $result = $properties->[2]->{access}->[1];
+		# test access 2
+		my $result = $properties->[1]->{access}->[1];
 		my $expected = 'static';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -954,7 +955,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test dataType
-		my $result = $properties->[2]->{dataType};
+		my $result = $properties->[1]->{dataType};
 		my $expected = 'String';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -962,7 +963,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test value
-		my $result = $properties->[2]->{value};
+		my $result = $properties->[1]->{value};
 		my $expected = '"click"';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -970,7 +971,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test metadata name
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $result = $metadataItem0->{name};
@@ -981,7 +982,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test metadata: item 0: value
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $listOfHashes = $metadataItem0->{items};
@@ -994,7 +995,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test access 'private'
-		my $result = $properties->[4]->{access}->[0];
+		my $result = $properties->[3]->{access}->[0];
 		my $expected = 'private';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1002,7 +1003,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test multiple vars on one line: name
-		my $result = $properties->[10]->{name};
+		my $result = $properties->[9]->{name};
 		my $expected = 'elephant';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1010,7 +1011,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test multiple vars on one line: javadoc
-		my $result = $properties->[10]->{javadoc}->getDescription();
+		my $result = $properties->[9]->{javadoc}->getDescription();
 		my $expected = 'Num vars.';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1018,7 +1019,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test multiple vars on one line: name (2)
-		my $result = $properties->[14]->{name};
+		my $result = $properties->[13]->{name};
 		my $expected = 'c1';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1026,7 +1027,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test multiple vars on one line: javadoc side
-		my $result = $properties->[14]->{javadoc}->getDescription();
+		my $result = $properties->[13]->{javadoc}->getDescription();
 		my $expected = 'more num vars';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1035,7 +1036,7 @@ sub test_parseProperties_as2 {
 	
 	{
 		# test side javadoc
-		my $result = $properties->[17]->{javadoc}->getDescription();
+		my $result = $properties->[16]->{javadoc}->getDescription();
 		my $expected = 'Typecode for debugging messages.';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1045,7 +1046,7 @@ sub test_parseProperties_as2 {
 	
 		{
 		# test metadata: item 2: name
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $result = $metadataItem0->{name};
@@ -1056,7 +1057,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test metadata: item 2: value
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $listOfHashes = $metadataItem0->{items};
@@ -1069,7 +1070,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test metadata: item 2: value
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem1 = $metadataList->[1];
 		my $listOfHashes = $metadataItem1->{items};
@@ -1093,7 +1094,7 @@ sub test_parseProperties_as2 {
 	}
 	{
 		# test getter/setter method
-		my $result = $properties->[20]->{name};
+		my $result = $properties->[19]->{name};
 		my $expected = 'selectedIndex';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1188,7 +1189,7 @@ sub test_parseProperties_as3 {
     # property 2
 	{
 		# test name
-		my $result = $properties->[2]->{name};
+		my $result = $properties->[1]->{name};
 		my $expected = 'CLICK';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1196,7 +1197,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test access 2->0
-		my $result = $properties->[2]->{access}->[0];
+		my $result = $properties->[1]->{access}->[0];
 		my $expected = 'public';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1204,7 +1205,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test access 2->1
-		my $result = $properties->[2]->{access}->[1];
+		my $result = $properties->[1]->{access}->[1];
 		my $expected = 'static';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1212,7 +1213,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test type
-		my $result = VisDoc::PropertyData::typeString( $properties->[2]->{type} );
+		my $result = VisDoc::PropertyData::typeString( $properties->[1]->{type} );
 		my $expected = 'CONST';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1220,7 +1221,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test dataType
-		my $result = $properties->[2]->{dataType};
+		my $result = $properties->[1]->{dataType};
 		my $expected = 'String';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1228,7 +1229,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test value
-		my $result = $properties->[2]->{value};
+		my $result = $properties->[1]->{value};
 		my $expected = '"click"';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1236,7 +1237,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test metadata name
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $result = $metadataItem0->{name};
@@ -1247,7 +1248,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test metadata: item 0: value
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $listOfHashes = $metadataItem0->{items};
@@ -1260,7 +1261,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test access 'protected'
-		my $result = $properties->[4]->{access}->[0];
+		my $result = $properties->[3]->{access}->[0];
 		my $expected = 'protected';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1268,7 +1269,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test multiple vars on one line: name
-		my $result = $properties->[10]->{name};
+		my $result = $properties->[9]->{name};
 		my $expected = 'camel';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1276,7 +1277,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test multiple vars on one line: javadoc
-		my $result = $properties->[10]->{javadoc}->getDescription();
+		my $result = $properties->[9]->{javadoc}->getDescription();
 		my $expected = 'Num vars.';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1284,7 +1285,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test multiple vars on one line: name (2)
-		my $result = $properties->[14]->{name};
+		my $result = $properties->[13]->{name};
 		my $expected = 'c1';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1292,7 +1293,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test multiple vars on one line: javadoc side
-		my $result = $properties->[14]->{javadoc}->getDescription();
+		my $result = $properties->[13]->{javadoc}->getDescription();
 		my $expected = 'more num vars';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1301,7 +1302,7 @@ sub test_parseProperties_as3 {
 	
 	{
 		# test side javadoc
-		my $result = $properties->[17]->{javadoc}->getDescription();
+		my $result = $properties->[16]->{javadoc}->getDescription();
 		my $expected = 'Typecode for debugging messages.';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1311,7 +1312,7 @@ sub test_parseProperties_as3 {
 	
 		{
 		# test metadata: item 2: name
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $result = $metadataItem0->{name};
@@ -1322,7 +1323,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test metadata: item 2: value
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem0 = $metadataList->[0];
 		my $listOfHashes = $metadataItem0->{items};
@@ -1335,7 +1336,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test metadata: item 2: value
-		my $metadataList = $properties->[2]->{metadata};
+		my $metadataList = $properties->[1]->{metadata};
 		# item 0
 		my $metadataItem1 = $metadataList->[1];
 		my $listOfHashes = $metadataItem1->{items};
@@ -1361,7 +1362,7 @@ sub test_parseProperties_as3 {
 	}
 	{
 		# test getter/setter method
-		my $result = $properties->[20]->{name};
+		my $result = $properties->[19]->{name};
 		my $expected = 'selectedIndex';
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;

@@ -61,15 +61,27 @@ Go through strings to find any references to classes, replace them with link stu
 sub onFindLinks {
     my ( $this, $inEvent, $inLinkFields ) = @_;
 
+	my $callback = $inEvent->{callback};
     foreach my $field ( @{$inLinkFields} ) {
         if ( $this->{$field} ) {
             foreach my $class ( @{ $inEvent->{classes} } ) {
-                my $callback = $inEvent->{callback};
-
                 # replace
                 $this->{$field} =~
                   s/(\b$class->{name}\b)/$inEvent->{source}->$callback($1)/e;
             }
+        }
+    }
+}
+
+sub onSubstituteLinks {
+    my ( $this, $inEvent, $inLinkFields ) = @_;
+
+	my $callback = $inEvent->{callback};
+    foreach my $field ( @{$inLinkFields} ) {
+        if ( $this->{$field} ) {
+            #foreach my $class ( @{ $inEvent->{classes} } ) {
+                $this->{$field} = $inEvent->{source}->$callback( $this->{$field} );
+            #}
         }
     }
 }
@@ -103,7 +115,7 @@ sub getId {
 sub getName {
     my ($this) = @_;
     
-    return $this->{qualifiedName} || $this->{name};
+    return $this->{name}; #$this->{qualifiedName} || $this->{name};
 }
 
 sub isExcluded {

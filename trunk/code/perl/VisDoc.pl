@@ -72,6 +72,7 @@ $preferences->{'doc-sources'} = \$process;
     'xslTemplateDirectory:s',              'xslTemplateForClasses:s',
     'xslTemplateForIndexFrameset:s',       'xslTemplateForPackagesFrameset:s',
     'xslTemplateForPackagesTocFrameset:s', 'feedback:i',
+    'openInBrowser:i',
     'help'
 );
 
@@ -120,7 +121,7 @@ my @fileList = split( /\s*,\s*/, $process );
 my $files = VisDoc::FileUtils::getFiles( \@fileList, $validExtensions );
 $error .= "No files to process\n" unless $files;
 
-eval '$collectiveFileData = VisDoc::parseFiles($files)';
+eval '$collectiveFileData = VisDoc::parseFiles($files, undef, $preferences)';
 
 $error .= "No files processed\n" unless $collectiveFileData;
 if ($@) {
@@ -173,6 +174,14 @@ if ($collectiveFileData) {
             $result .= "supporting=$htmlSupportingFileNamesString;\n";
         }
     }
+    if ($preferences->{'openInBrowser'}) {
+    	if ($indexHtml) {
+	    	system(qq(open "$htmlDir/$indexHtml.html"));
+	    } else {
+	    	my $doc = $htmlDocFileNames->[0];
+	    	system(qq(open "$htmlDir/$doc.html"));
+	    }
+	}
 }
 
 if ($error) {
@@ -308,7 +317,14 @@ Default: 0
 =item B<-ignoreClasses>
 
 Not implemented.
-    
+
+=item B<-openInBrowser>
+
+Whether to open generated documentation in a browser.
+
+Values: 1 or 0
+Default: 0
+
 =cut
 
 
