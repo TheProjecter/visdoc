@@ -700,9 +700,9 @@ list-style-type:none;
 .VisDoc .activeWhenFramed,
 .twistyHidden,
 .twistyMakeVisible,
-.twikiMakeVisible,
-.twikiMakeVisibleInline,
-.twikiMakeVisibleBlock {
+.visdocMakeVisible,
+.visdocMakeVisibleInline,
+.visdocMakeVisibleBlock {
 	display:none;
 }
 

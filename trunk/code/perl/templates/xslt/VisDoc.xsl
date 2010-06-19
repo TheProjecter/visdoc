@@ -420,14 +420,12 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 	<xsl:if test="./footer/showTOC">
 		<ul>
 			<li>
-				<div id="twistyTOC_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenNotFramed">
+				<div id="twistyTOC_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenNotFramed">
 				  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showTOC" /></a>
 				</div>
-				<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_show");</script>
-				<div id="twistyTOC_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited activeWhenFramed">
+				<div id="twistyTOC_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenFramed">
 				  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hideTOC" /></a>
 				</div><span id="twistyTOC_toggle" class="twistyContent"><xsl:comment/></span>
-				<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyTOC_hide");</script>
 			</li>
 		</ul>
 	</xsl:if>
@@ -439,14 +437,12 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 	<xsl:if test="./footer/showPrivate">
 		<ul>
 			<li>
-				<div id="twistyPrivate_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+				<div id="twistyPrivate_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 				  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hidePrivate" /></a>
 				</div>
-				<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("togglePrivate_on");</script>
-				<div id="twistyPrivate_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+				<div id="twistyPrivate_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 				  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showPrivate" /></a>
 				</div><span id="twistyPrivate_toggle" class="twistyContent"><xsl:comment/></span>
-				<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("togglePrivate_off");</script>
 			</li>
 		</ul>
 	</xsl:if>
@@ -456,14 +452,12 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <!-- ......................... showHideTypeInfo ......................... -->
 <xsl:template match="showHideTypeInfo">
 	<li>
-		<div id="twistyTypeInfo_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+		<div id="twistyTypeInfo_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 		  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="hideTypeInfo" /></a>
 		</div>
-		<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_on");</script>
-		<div id="twistyTypeInfo_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+		<div id="twistyTypeInfo_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 		  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="showTypeInfo" /></a>
 		</div><span id="twistyTypeInfo_toggle" class="twistyContent"><xsl:comment/></span>
-		<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleTypeInfo_off");</script>
 	</li>
 </xsl:template>
 
@@ -471,14 +465,12 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <!-- ......................... showHideSummaries ......................... -->
 <xsl:template match="showHideSummaries">
 	<li>
-		<div id="twistySummaries_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+		<div id="twistySummaries_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 		  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="hideSummaries" /></a>
 		</div>
-		<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_on");</script>
-		<div id="twistySummaries_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+		<div id="twistySummaries_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 		  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="showSummaries" /></a>
 		</div><span id="twistySummaries_toggle" class="twistyContent"><xsl:comment/></span>
-		<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSummaries_off");</script>
 	</li>
 </xsl:template>
 
@@ -486,14 +478,12 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <!-- ......................... sortSummaries ......................... -->
 <xsl:template match="sortSummaries">
 	<li>
-		<div id="twistySort_show" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+		<div id="twistySort_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 		  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="sortSourceOrder" /></a>
 		</div>
-		<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_on");</script>
-		<div id="twistySort_hide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting">
+		<div id="twistySort_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
 		  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="sortAlphabetically" /></a>
 		</div><span id="twistySort_toggle" class="twistyContent"><xsl:comment/></span>
-		<script type="text/javascript">twiki.JQueryTwistyPlugin.initId("toggleSort_off");</script>
 	</li>
 </xsl:template>
 
@@ -767,9 +757,9 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 	<xsl:if test="node()">
 		<div id="sourceCodeTop" class="sourceCodeView">
 			<xsl:if test="viewSourceButton!=''">
-				<div id="twistyViewSourceshow" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">&#9658;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="viewSourceButton" /></span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourceshow");</script><div id="twistyViewSourcehide" class="twistyTrigger twikiUnvisited twikiMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">&#9660;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="hideSourceButton" /></span></a></div><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcehide");</script>
+				<div id="twistyViewSourceshow" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">&#9658;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="viewSourceButton" /></span></a></div><div id="twistyViewSourcehide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">&#9660;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="hideSourceButton" /></span></a></div>
 			</xsl:if>
-			<div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting"><script type="text/javascript">twiki.JQueryTwistyPlugin.initId("twistyViewSourcetoggle");</script>
+			<div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting">
 			<div class="sourceCode"><textarea rows="10" cols="10" id="source"><xsl:attribute name="readonly">readonly</xsl:attribute><xsl:value-of select="sourceCodeText" /></textarea></div><!-- /sourceCode-->
 			</div><!--/#twistyViewSourcetoggle-->
 		</div><!-- /#sourceCodeTop-->

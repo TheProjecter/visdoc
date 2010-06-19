@@ -768,12 +768,8 @@ sub _createMainHtmlPageXmlData {
 
         $pattern = 'toggleTrigger toggleMakeVisible';
         $replacement =
-          'twistyTrigger twikiUnvisited twikiMakeVisible twistyInited';
+          'twistyTrigger visdocUnvisited visdocMakeVisible twistyInited';
         $fileText =~ s/$pattern/$replacement/go;
-
-        $pattern     = 'twiki.ui.Toggle.getInstance\(\).init';
-        $replacement = 'twiki.JQueryTwistyPlugin.initId';
-        $fileText =~ s/$pattern/$replacement/gos;
 
         _writeHtmlFile( $inHtmlDirectory, 'main.html', \$fileText );
         return;

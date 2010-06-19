@@ -1,11 +1,11 @@
 
 
 /*
-TWiki Javascripts: copyright TWiki, Arthur Clemens
+TWiki/Foswiki Javascripts: copyright TWiki, Foswiki, Arthur Clemens
 */
 
-var twiki;
-if (!twiki) twiki = {};
+var visdoc;
+if (!visdoc) visdoc = {};
 
 /*
 Contains:
@@ -13,16 +13,16 @@ Cookie Functions -- "Night of the Living Cookie" Version (25-Jul-96)
 Written by:  Bill Dortch, hIdaho Design <bdortch@hidaho.com>
 The following functions are released to the public domain.
 
-Refactored for TWiki by Arthur Clemens 2006.
+Refactored for TWiki, Foswiki by Arthur Clemens 2006.
 */
 
 /**
 The preferred way for reading and writing cookies is using getPref and setPref, otherwise the limit of 20 cookies per domain is reached soon. See http://twiki.org/cgi-bin/view/TWiki/TWikiSettingsCookie.
 */
 
-twiki.Pref = {
+visdoc.Pref = {
 	
-	TWIKI_PREF_COOKIE_NAME:"TWIKIPREF",
+	VISDOC_PREF_COOKIE_NAME:"VISDOCPREF",
 	/**
 	Separates key-value pairs
 	*/
@@ -37,25 +37,25 @@ twiki.Pref = {
 	COOKIE_EXPIRY_TIME:365 * 24 * 60 * 60 * 1000,
 
 	/**
-	Writes a TWiki preference value. If the TWiki preference of given name already exists, a new value is written. If the preference name is new, a new preference is created.
+	Writes a preference value. If the preference of given name already exists, a new value is written. If the preference name is new, a new preference is created.
 	Characters '|' and '=' are reserved as separators.
 	@param inPrefName : (String) name of the preference to write, for instance 'SHOWATTACHMENTS'
 	@param inPrefValue : (String) stringified value to write, for instance '1'
 	*/
 	setPref:function(inPrefName, inPrefValue) {
-		var prefName = twiki.Pref._getSafeString(inPrefName);
-		var prefValue = (isNaN(inPrefValue)) ? twiki.Pref._getSafeString(inPrefValue) : inPrefValue;
-		var cookieString = twiki.Pref._getPrefCookie();
-		var prefs = cookieString.split(twiki.Pref.COOKIE_PREF_SEPARATOR);
-		var index = twiki.Pref._getKeyValueLoc(prefs, prefName);
+		var prefName = visdoc.Pref._getSafeString(inPrefName);
+		var prefValue = (isNaN(inPrefValue)) ? visdoc.Pref._getSafeString(inPrefValue) : inPrefValue;
+		var cookieString = visdoc.Pref._getPrefCookie();
+		var prefs = cookieString.split(visdoc.Pref.COOKIE_PREF_SEPARATOR);
+		var index = visdoc.Pref._getKeyValueLoc(prefs, prefName);
 		if (index != -1) {
 			// updating this entry is done by removing the existing entry from the array and then pushing the new key-value onto it
 			prefs.splice(index, 1);
 		}
 		// else not found, so don't remove an existing entry
-		var keyvalueString = prefName + twiki.Pref.COOKIE_PREF_VALUE_SEPARATOR + prefValue;
+		var keyvalueString = prefName + visdoc.Pref.COOKIE_PREF_VALUE_SEPARATOR + prefValue;
 		prefs.push(keyvalueString);
-		twiki.Pref._writePrefValues(prefs);
+		visdoc.Pref._writePrefValues(prefs);
 	},
 	
 	/**
@@ -65,8 +65,8 @@ twiki.Pref = {
 	@return The value of the preference; an empty string when no value is found.
 	*/
 	getPref:function(inPrefName) {
-		var prefName = twiki.Pref._getSafeString(inPrefName);
-		return twiki.Pref.getPrefValueFromPrefList(prefName, twiki.Pref.getPrefList());
+		var prefName = visdoc.Pref._getSafeString(inPrefName);
+		return visdoc.Pref.getPrefValueFromPrefList(prefName, visdoc.Pref.getPrefList());
 	},
 	
 	/**
@@ -76,7 +76,7 @@ twiki.Pref = {
 	@return The value of the preference; an empty string when no value is found.
 	*/
 	getPrefValueFromPrefList:function(inPrefName, inPrefList) {
-		var keyvalue = twiki.Pref._getKeyValue(inPrefList, inPrefName);
+		var keyvalue = visdoc.Pref._getKeyValue(inPrefList, inPrefName);
 		if (keyvalue != null) return keyvalue[1];
 		return '';
 	},
@@ -86,13 +86,13 @@ twiki.Pref = {
 	@return An Array of key-value pair pref values; null if no value has been set before.
 	*/
 	getPrefList:function() {
-		var cookieString = twiki.Pref._getPrefCookie();
+		var cookieString = visdoc.Pref._getPrefCookie();
 		if (!cookieString) return null;
-		return cookieString.split(twiki.Pref.COOKIE_PREF_SEPARATOR);
+		return cookieString.split(visdoc.Pref.COOKIE_PREF_SEPARATOR);
 	},
 	
 	/**
-	To write a TWiki preference cookie (TWIKIPREF), use twiki.Pref.setPref.
+	To write a preference cookie (VISDOCPREF), use visdoc.Pref.setPref.
 	
 	Retrieves the value of the cookie specified by "name".
 	@param inName : (String) identifier name of the cookie
@@ -106,7 +106,7 @@ twiki.Pref = {
 		while (i < clen) {
 			var j = i + alen;
 			if (document.cookie.substring(i, j) == arg) {
-				return twiki.Pref._getCookieVal(j);
+				return visdoc.Pref._getCookieVal(j);
 			}
 			i = document.cookie.indexOf(" ", i) + 1;
 			if (i == 0) break; 
@@ -125,11 +125,11 @@ twiki.Pref = {
 	@use
 	To call setCookie using name, value and path, write:
 	<pre>
-	twiki.Pref.setCookie ("myCookieName", "myCookieValue", null, "/");
+	visdoc.Pref.setCookie ("myCookieName", "myCookieValue", null, "/");
 	</pre>	
 	To set a secure cookie for path "/myPath", that expires after the current session, write:
 	<pre>
-	twiki.Pref.setCookie ("myCookieName", "myCookieValue", null, "/myPath", null, true);
+	visdoc.Pref.setCookie ("myCookieName", "myCookieValue", null, "/myPath", null, true);
 	</pre>
 	*/
 	setCookie:function(inName, inValue, inExpires, inPath, inDomain, inUsesSecure) {
@@ -148,7 +148,7 @@ twiki.Pref = {
 	@param inDomain : (String) The domain for which the cookie is valid. This MUST be the same as the domain used to create the cookie, or null/omitted if no domain was specified when creating the cookie.
 	*/
 	deleteCookie:function(inName, inPath, inDomain) {
-		if (twiki.Pref.getCookie(inName)) {
+		if (visdoc.Pref.getCookie(inName)) {
 			document.cookie = inName + "=" + ((inPath) ? "; path=" + inPath : "") + ((inDomain) ? "; domain=" + inDomain : "") + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
 		}
 	},
@@ -165,7 +165,7 @@ twiki.Pref = {
 		if (!inKeyValues) return null;
 		var i = inKeyValues.length;
 		while (i--) {
-			var keyvalue = inKeyValues[i].split(twiki.Pref.COOKIE_PREF_VALUE_SEPARATOR);
+			var keyvalue = inKeyValues[i].split(visdoc.Pref.COOKIE_PREF_VALUE_SEPARATOR);
 			if (keyvalue[0] == inKey) return keyvalue;	
 		}
 		return null;
@@ -181,7 +181,7 @@ twiki.Pref = {
 		if (!inKeyValues) return null;
 		var i = inKeyValues.length;
 		while (i--) {
-			var keyvalue = inKeyValues[i].split(twiki.Pref.COOKIE_PREF_VALUE_SEPARATOR);
+			var keyvalue = inKeyValues[i].split(visdoc.Pref.COOKIE_PREF_VALUE_SEPARATOR);
 			if (keyvalue[0] == inKey) return i;	
 		}
 		return -1;
@@ -192,19 +192,19 @@ twiki.Pref = {
 	@param inValues: (Array) an array with key-value tuples
 	*/
 	_writePrefValues:function(inValues) {
-		var cookieString = (inValues != null) ? inValues.join(twiki.Pref.COOKIE_PREF_SEPARATOR) : '';
+		var cookieString = (inValues != null) ? inValues.join(visdoc.Pref.COOKIE_PREF_SEPARATOR) : '';
 		var expiryDate = new Date ();
-		twiki.Pref._fixCookieDate (expiryDate); // Correct for Mac date bug - call only once for given Date object!
-		expiryDate.setTime (expiryDate.getTime() + twiki.Pref.COOKIE_EXPIRY_TIME);
-		twiki.Pref.setCookie(twiki.Pref.TWIKI_PREF_COOKIE_NAME, cookieString, expiryDate, '/');
+		visdoc.Pref._fixCookieDate (expiryDate); // Correct for Mac date bug - call only once for given Date object!
+		expiryDate.setTime (expiryDate.getTime() + visdoc.Pref.COOKIE_EXPIRY_TIME);
+		visdoc.Pref.setCookie(visdoc.Pref.VISDOC_PREF_COOKIE_NAME, cookieString, expiryDate, '/');
 	},
 	
 	/**
-	Gets the TWiki pref cookie; creates a new cookie if it does not exist.
-	@return The TWiki pref cookie.
+	Gets the pref cookie; creates a new cookie if it does not exist.
+	@return The pref cookie.
 	*/
 	_getPrefCookie:function() {
-		var cookieString = twiki.Pref.getCookie(twiki.Pref.TWIKI_PREF_COOKIE_NAME);
+		var cookieString = visdoc.Pref.getCookie(visdoc.Pref.VISDOC_PREF_COOKIE_NAME);
 		if (cookieString == undefined) {
 			cookieString = "";
 		}
@@ -250,9 +250,9 @@ twiki.Pref = {
 /**
 Singleton class.
 */
-var twiki;
-if (!twiki) twiki = {};
-twiki.JQueryTwistyPlugin = new function () {
+var visdoc;
+if (!visdoc) visdoc = {};
+visdoc.TwistyPlugin = new function () {
 
 	var self = this;
 
@@ -289,24 +289,24 @@ twiki.JQueryTwistyPlugin = new function () {
 	*/
 	this._toggleTwisty = function (ref) {
 		if (!ref) return;
-		ref.state = (ref.state == twiki.JQueryTwistyPlugin.CONTENT_HIDDEN) ? twiki.JQueryTwistyPlugin.CONTENT_SHOWN : twiki.JQueryTwistyPlugin.CONTENT_HIDDEN;
+		ref.state = (ref.state == visdoc.TwistyPlugin.CONTENT_HIDDEN) ? visdoc.TwistyPlugin.CONTENT_SHOWN : visdoc.TwistyPlugin.CONTENT_HIDDEN;
 		self._update(ref, true);
 	}
 	
 	/**
 	Updates the states of UI trinity 'show', 'hide' and 'content'.
 	Saves new state in a cookie if one of the elements has CSS class 'twistyRememberSetting'.
-	@param ref : (Object) twiki.JQueryTwistyPlugin.Storage object
+	@param ref : (Object) visdoc.TwistyPlugin.Storage object
 	@privileged
 	*/
 	this._update = function (ref, inMaySave) {
 		var showControl = ref.show;
 		var hideControl = ref.hide;
 		var contentElem = ref.toggle;
-		if (ref.state == twiki.JQueryTwistyPlugin.CONTENT_SHOWN) {
+		if (ref.state == visdoc.TwistyPlugin.CONTENT_SHOWN) {
 			// show content
                         if (inMaySave) {
-                          $(contentElem).show();
+                          visdoc.TwistyPlugin.showAnimation(contentElem);
                         } else {
                           $(contentElem).show();
 
@@ -317,7 +317,7 @@ twiki.JQueryTwistyPlugin = new function () {
 		} else {
 			// hide content
                         if (inMaySave) {
-                          $(contentElem).hide();
+                          visdoc.TwistyPlugin.hideAnimation(contentElem);
                         } else {
                           $(contentElem).hide();
                         }
@@ -326,10 +326,10 @@ twiki.JQueryTwistyPlugin = new function () {
                         $(contentElem).addClass("twistyHidden");
 		}
 		if (inMaySave && ref.saveSetting) {
-	        twiki.Pref.setPref(twiki.JQueryTwistyPlugin.COOKIE_PREFIX + ref.name, ref.state);
+	        visdoc.Pref.setPref(visdoc.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state);
 		}
 		if (ref.clearSetting) {
-	        twiki.Pref.setPref(twiki.JQueryTwistyPlugin.COOKIE_PREFIX + ref.name, "");
+	        visdoc.Pref.setPref(visdoc.TwistyPlugin.COOKIE_PREFIX + ref.name, "");
 		}
 	}
 	
@@ -343,7 +343,7 @@ twiki.JQueryTwistyPlugin = new function () {
 		var name = self._getName(e);
 		var ref = self._storage[name];
 		if (!ref) {
-			ref = new twiki.JQueryTwistyPlugin.Storage();
+			ref = new visdoc.TwistyPlugin.Storage();
 		}
                 var classValue = $(e).attr('class');
 		if (classValue.match(/\btwistyRememberSetting\b/)) 
@@ -376,7 +376,7 @@ twiki.JQueryTwistyPlugin = new function () {
 	}
 	
 	/**
-	Key-value set of twiki.JQueryTwistyPlugin.Storage objects. The value is accessed by twisty id identifier name.
+	Key-value set of visdoc.TwistyPlugin.Storage objects. The value is accessed by twisty id identifier name.
 	@example var ref = self._storage["demo"];
 	@privileged
 	*/
@@ -386,30 +386,26 @@ twiki.JQueryTwistyPlugin = new function () {
 /**
 Public constants.
 */
-twiki.JQueryTwistyPlugin.CONTENT_HIDDEN = 0;
-twiki.JQueryTwistyPlugin.CONTENT_SHOWN = 1;
-twiki.JQueryTwistyPlugin.COOKIE_PREFIX = "JQueryTwistyPlugin_";
+visdoc.TwistyPlugin.CONTENT_HIDDEN = 0;
+visdoc.TwistyPlugin.CONTENT_SHOWN = 1;
+visdoc.TwistyPlugin.COOKIE_PREFIX = "JQueryTwistyPlugin_";
 
 /**
-The cached full TWiki cookie string so the data has to be read only once during init.
+The cached full cookie string so the data has to be read only once during init.
 */
-twiki.JQueryTwistyPlugin.prefList;
+visdoc.TwistyPlugin.prefList;
 
 /**
 Initializes a twisty HTML element (either show control, hide control or content 'toggle') by registering and setting the visible state.
 Calls _register() and _update().
 @public
 @param inId : (String) id of HTMLElement
-@return The stored twiki.JQueryTwistyPlugin.Storage object.
+@return The stored visdoc.TwistyPlugin.Storage object.
 */
-twiki.JQueryTwistyPlugin.initId = function(inId) {
-	//twiki.JQueryTwistyPlugin.init(document.getElementById(inId));
-}
-
-twiki.JQueryTwistyPlugin.init = function(e) {
+visdoc.TwistyPlugin.init = function(e) {
 	if (!e) return;
 	// check if already inited
-        var name = this._getName(e);
+    var name = this._getName(e);
 	var ref = this._storage[name];
 	if (ref && ref.show && ref.hide && ref.toggle) return ref;
 
@@ -421,36 +417,36 @@ twiki.JQueryTwistyPlugin.init = function(e) {
 
          var classValue = $(e).attr('class');
 		if (classValue.match(/\btwistyInited1\b/)) {
-			ref.state = twiki.JQueryTwistyPlugin.CONTENT_SHOWN
+			ref.state = visdoc.TwistyPlugin.CONTENT_SHOWN
 			this._update(ref, false);
 			return ref;
 		}
 		if (classValue.match(/\btwistyInited0\b/)) {
-			ref.state = twiki.JQueryTwistyPlugin.CONTENT_HIDDEN
+			ref.state = visdoc.TwistyPlugin.CONTENT_HIDDEN
 			this._update(ref, false);
 			return ref;
 		}
 
-		if (twiki.JQueryTwistyPlugin.prefList == null) {
+		if (visdoc.TwistyPlugin.prefList == null) {
 			// cache complete cookie string
-			twiki.JQueryTwistyPlugin.prefList = twiki.Pref.getPrefList();
+			visdoc.TwistyPlugin.prefList = visdoc.Pref.getPrefList();
 		}
-		var cookie = twiki.Pref.getPrefValueFromPrefList(twiki.JQueryTwistyPlugin.COOKIE_PREFIX + ref.name, twiki.JQueryTwistyPlugin.prefList);
-		if (ref.firstStartHidden) ref.state = twiki.JQueryTwistyPlugin.CONTENT_HIDDEN;
-		if (ref.firstStartShown) ref.state = twiki.JQueryTwistyPlugin.CONTENT_SHOWN;
+		var cookie = visdoc.Pref.getPrefValueFromPrefList(visdoc.TwistyPlugin.COOKIE_PREFIX + ref.name, visdoc.TwistyPlugin.prefList);
+		if (ref.firstStartHidden) ref.state = visdoc.TwistyPlugin.CONTENT_HIDDEN;
+		if (ref.firstStartShown) ref.state = visdoc.TwistyPlugin.CONTENT_SHOWN;
 		// cookie setting may override  firstStartHidden and firstStartShown
-		if (cookie && cookie == "0") ref.state = twiki.JQueryTwistyPlugin.CONTENT_HIDDEN;
-		if (cookie && cookie == "1") ref.state = twiki.JQueryTwistyPlugin.CONTENT_SHOWN;
+		if (cookie && cookie == "0") ref.state = visdoc.TwistyPlugin.CONTENT_HIDDEN;
+		if (cookie && cookie == "1") ref.state = visdoc.TwistyPlugin.CONTENT_SHOWN;
 		// startHidden and startShown may override cookie
-		if (ref.startHidden) ref.state = twiki.JQueryTwistyPlugin.CONTENT_HIDDEN;
-		if (ref.startShown) ref.state = twiki.JQueryTwistyPlugin.CONTENT_SHOWN;
+		if (ref.startHidden) ref.state = visdoc.TwistyPlugin.CONTENT_HIDDEN;
+		if (ref.startShown) ref.state = visdoc.TwistyPlugin.CONTENT_SHOWN;
 
 		this._update(ref, false);
 	}
 	return ref;	
 }
 
-twiki.JQueryTwistyPlugin.toggleAll = function(inState) {
+visdoc.TwistyPlugin.toggleAll = function(inState) {
 	var i;
 	for (var i in this._storage) {
 		var e = this._storage[i];
@@ -460,11 +456,22 @@ twiki.JQueryTwistyPlugin.toggleAll = function(inState) {
 }
 
 /**
+Callbacks when animating the twisty
+*/
+visdoc.TwistyPlugin.showAnimation = 
+visdoc.TwistyPlugin.hideAnimation = function (elem) {
+  jQuery(elem).animate({
+    height:'toggle', 
+    opacity:'toggle'
+  }, 'fast');
+};
+
+/**
 Storage container for properties of a twisty HTML element: show control, hide control or toggle content.
 */
-twiki.JQueryTwistyPlugin.Storage = function () {
+visdoc.TwistyPlugin.Storage = function () {
 	this.name;										// String
-	this.state = twiki.JQueryTwistyPlugin.CONTENT_HIDDEN;	// Number
+	this.state = visdoc.TwistyPlugin.CONTENT_HIDDEN;	// Number
 	this.hide;										// HTMLElement
 	this.show;										// HTMLElement
 	this.toggle;									// HTMLElement (content element)
@@ -481,15 +488,15 @@ twiki.JQueryTwistyPlugin.Storage = function () {
  */
 $(function() {
   $(".twistyTrigger, .twistyContent").
-    removeClass("twistyMakeHidden twikiMakeHidden twikiMakeVisible twikiMakeVisibleBlock twikiMakeVisibleInline").
+    removeClass("twistyMakeHidden visdocMakeHidden visdocMakeVisible visdocMakeVisibleBlock visdocMakeVisibleInline").
     addClass("twistyHidden").
     each(function() {
-      twiki.JQueryTwistyPlugin.init(this);
+      visdoc.TwistyPlugin.init(this);
     });
   $(".twistyExpandAll").click(function() {
-    twiki.JQueryTwistyPlugin.toggleAll(twiki.JQueryTwistyPlugin.CONTENT_SHOWN);
+    visdoc.TwistyPlugin.toggleAll(visdoc.TwistyPlugin.CONTENT_SHOWN);
   });
   $(".twistyCollapseAll").click(function() {
-    twiki.JQueryTwistyPlugin.toggleAll(twiki.JQueryTwistyPlugin.CONTENT_HIDDEN);
+    visdoc.TwistyPlugin.toggleAll(visdoc.TwistyPlugin.CONTENT_HIDDEN);
   });
 });

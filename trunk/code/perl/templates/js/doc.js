@@ -90,15 +90,15 @@ var VisDoc = {
 	updateState:function(inMode, inState) {
 		if (inState == "show") {
 			this.showMembers(inMode);
-			twiki.Pref.setPref("show" + inMode, "1");
+			visdoc.Pref.setPref("show" + inMode, "1");
 			return;
 		} else if (inState == "hide") {
 			this.hideMembers(inMode);
-			twiki.Pref.setPref("show" +inMode, "0");
+			visdoc.Pref.setPref("show" +inMode, "0");
 			return;		
 		}
 		if (!inState) {
-			var doShowPrivateMembers = twiki.Pref.getPref("show" + inMode);
+			var doShowPrivateMembers = visdoc.Pref.getPref("show" + inMode);
 			if (doShowPrivateMembers == "0") {
 				this.hideMembers(inMode);
 			} else {
@@ -112,15 +112,15 @@ var VisDoc = {
 	updateSort:function(inMode) {
 		if (inMode == "alphabetically") {
 			this.sortMembers(inMode);
-			twiki.Pref.setPref(SORT, "1");
+			visdoc.Pref.setPref(SORT, "1");
 			return;
 		} else if (inMode == "sourceorder") {
 			this.sortMembers(inMode);
-			twiki.Pref.setPref(SORT, "0");
+			visdoc.Pref.setPref(SORT, "0");
 			return;		
 		}
 		if (!inMode) {
-			var sortState = twiki.Pref.getPref(SORT);
+			var sortState = visdoc.Pref.getPref(SORT);
 			if (sortState == "0") {
 				this.sortMembers("sourceorder");
 			} else {

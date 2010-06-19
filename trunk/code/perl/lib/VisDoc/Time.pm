@@ -60,7 +60,7 @@ sub formatTime {
         ( $sec, $min, $hour, $day, $mon, $year, $wday ) = gmtime($epochSeconds);
     }
 
-    #standard twiki date time formats
+    #standard date time formats
     if ( $formatString =~ /rcs/i ) {
 
         # RCS format, example: "2001/12/31 23:59:59"

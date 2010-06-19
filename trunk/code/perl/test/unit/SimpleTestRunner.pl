@@ -22,11 +22,6 @@ BEGIN {
     # root the tree
     my $here = Cwd::abs_path;
 
-    # Look for the TWiki installation that we are testing in context
-    # with. This will be defined by either by finding an installation
-    # on the path to the current dir, or by finding the first install
-    # in TWIKI_LIBS.
-
     my $root = _findRelativeTo( $here, '..' );
     
     unshift @INC, "$root/test/unit";
@@ -68,9 +63,6 @@ print STDERR "Options: ",join(' ',keys %options),"\n";
 if ($options{-clean}) {
     require File::Path;
 }
-
-#testForFiles($TWiki::cfg{DataDir}.'/Temp*');
-#testForFiles($TWiki::cfg{PubDir}.'/Temp*');
 
 use Test::Harness;
 use Test::Harness;
