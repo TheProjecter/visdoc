@@ -592,8 +592,6 @@ sub _copyFields {
 
 	my $superJavadoc = $inSuperMemberData->{javadoc};
 	return if !$superJavadoc;
-				
-	print "_copyFields for $inFieldName\n";
 	
 	my $fields = $superJavadoc->getMultipleFieldsWithName($inFieldName);
 	foreach my $field (@{$fields}) {
@@ -612,8 +610,6 @@ Copies fieldData to member, only if value if not yet set.
 
 sub _copyField {
 	my ($inFileData, $inSuperclassData, $inSuperMemberData, $inField, $inMember) = @_;
-
-	print "_copyField for $inField->{name}\n";
 	
 	my $currentFields;
 	$currentFields = $inMember->{javadoc}->fieldsWithName($inField->{name}) if $inMember->{javadoc};
@@ -633,9 +629,6 @@ sub _copyField {
 		$fieldCopy->{value} = '%STARTINHERITDOC%' . $fieldCopy->{value} . ' ' . "<span class=\"inheritDocLink\">$linkStub</span>" . '%ENDINHERITDOC%';					
 					
 		$inMember->{javadoc}->addField($fieldCopy);
-		print "** copied field $fieldCopy\n";
-	} else {
-		print "--- field exists \n";
 	}
 }
 
@@ -647,27 +640,10 @@ sub _createAutomaticInheritDocsFromSuperClassOrInterface {
 	my ($inFileData, $inClass, $inSuperChain) = @_;
 	
 	return if !scalar @{$inSuperChain};
-	
-	print "_createAutomaticInheritDocsFromSuperClassOrInterface for $inClass->{name}; inSuperChain=" . scalar @{$inSuperChain} . "\n";
-	
+		
 	foreach my $member ( @{ $inClass->getMembers() } ) {
 
-=pod
-		my $javadoc = $member->{javadoc};		
-		if ($javadoc) {
-			my $fields = $javadoc->getFields();
-			foreach my $field (@{$fields}) {	
-				#print "javadoc field with name:$field->{name} \n";
-				#print "\t no value\n" if !$field->{value};
-			}
-		} else {
-			
-			# no javadoc yet, so copy fields up the superinterface/class chain
-			# until a field value is found
-=cut
-
 			my $memberName = $member->getName();
-			print "-- no javadoc for member $memberName\n";
 
 			foreach my $superclass ( @{$inSuperChain} ) {
 				my $superclassData = $superclass->{classdata};
