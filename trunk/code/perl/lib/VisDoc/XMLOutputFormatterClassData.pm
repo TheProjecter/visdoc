@@ -250,7 +250,7 @@ sub _writeImplements {
 
     my $interfaces = $this->{data}->{interfaces};
 
-    return if !defined $interfaces || !scalar @{$interfaces};
+    return if !$interfaces || !scalar @{$interfaces};
 
     $inWriter->startTag('conformsTo');
 
@@ -287,7 +287,7 @@ sub _writeImplementedBy {
     my ( $this, $inWriter ) = @_;
 
     my $implementedBy = $this->{data}->{implementedBy};
-    return if !defined $implementedBy || !scalar @{$implementedBy};
+    return if !$implementedBy || !scalar @{$implementedBy};
 
     $inWriter->startTag('implementedBy');
 
@@ -321,7 +321,7 @@ sub _writeSubclasses {
     my ( $this, $inWriter ) = @_;
 
     my $subclasses = $this->{data}->{subclasses};
-    return if !defined $subclasses || !scalar @{$subclasses};
+    return if !$subclasses || !scalar @{$subclasses};
 
     $inWriter->startTag('subclasses');
 
@@ -358,7 +358,7 @@ sub _writeDispatchedBy {
     my ( $this, $inWriter ) = @_;
 
     my $dispatchedBy = $this->{data}->{dispatchedBy};
-    return if !defined $dispatchedBy || !scalar @{$dispatchedBy};
+    return if !$dispatchedBy || !scalar @{$dispatchedBy};
 
     $inWriter->startTag('dispatchedBy');
 
@@ -715,7 +715,7 @@ sub _writeMetadataFields {
 				foreach my $key (keys %{$item}) {
 					my $name = $key eq $VisDoc::MetadataData::NO_KEY ? '' : $key;
 					$inWriter->cdataElement( 'name', $name );
-					my $description = defined $item->{$key} ? $item->{$key} : '';
+					my $description = $item->{$key} ? $item->{$key} : '';
 					$inWriter->cdataElement( 'description', $description );
 				}
 

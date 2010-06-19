@@ -35,9 +35,9 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'Class:';
-    $str .= "\n\t name=$this->{name}"           if defined $this->{name};
-    $str .= "\n\t classpath=$this->{classpath}" if defined $this->{classpath};
-    $str .= "\n\t classdata=$this->{classdata}" if defined $this->{classdata};
+    $str .= "\n\t name=$this->{name}"           if $this->{name};
+    $str .= "\n\t classpath=$this->{classpath}" if $this->{classpath};
+    $str .= "\n\t classdata=$this->{classdata}" if $this->{classdata};
     $str .= "\n";
     return $str;
 }

@@ -65,9 +65,9 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'FieldData:';
-    $str .= "\n\t name=$this->{name}"   if defined $this->{name};
-    $str .= "\n\t value=$this->{value}" if defined $this->{value};
-    $str .= "\n\t type=" . typeString( $this->{type} ) if defined $this->{type};
+    $str .= "\n\t name=$this->{name}"   if $this->{name};
+    $str .= "\n\t value=$this->{value}" if $this->{value};
+    $str .= "\n\t type=" . typeString( $this->{type} ) if $this->{type};
     $str .= "\n";
     
     return $str;

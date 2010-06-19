@@ -498,7 +498,7 @@ sub _handleMethodMatches {
 
     # javadoc
     $i = $inPatternMap->{javadoc} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
 
         #$data->{javadocStub} = $inMatches->[$i];
         my $javadoc =
@@ -508,14 +508,14 @@ sub _handleMethodMatches {
 
     # metadata
     $i = $inPatternMap->{metadata} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $metadata = $inMatches->[$i];
         $data->{metadata} = $this->_parseMetadataData($metadata);
     }
 
     # access
     $i = $inPatternMap->{access} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $accessStr = $inMatches->[$i];
         if ($accessStr) {
             my @access = $this->_parseMemberAccess($accessStr);
@@ -526,21 +526,21 @@ sub _handleMethodMatches {
     
     # type: read or write
     $i = $inPatternMap->{name} - 1;    # beware: type is parsed from name
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $typeStr = $inMatches->[$i];
         $data->{type} = $this->_parseMethodType($typeStr);
     }
 
     # name
     $i = $inPatternMap->{name} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $nameStr = $inMatches->[$i];
         $data->{name} = $this->_parseMethodName($nameStr);
     }
 
     # parameters
     $i = $inPatternMap->{parameters} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $parametersStr = $inMatches->[$i];
         $data->{parameters} = $this->_parseMethodParameters($parametersStr);
         
@@ -550,7 +550,7 @@ sub _handleMethodMatches {
 	
     # return type
     $i = $inPatternMap->{returnType} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $returnTypeStr = $inMatches->[$i];
         $data->{returnType} = $this->_parseMethodReturnType($returnTypeStr);
     }
@@ -558,7 +558,7 @@ sub _handleMethodMatches {
     # last char
     my $lastChar = '';
     $i = $inPatternMap->{end} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         $lastChar = $inMatches->[$i];
     }
 
@@ -758,41 +758,41 @@ sub _copyAttributesOfPropertiesOnOneLine {
     my $text;
 
     # complete match
-    if ( defined $inMatches->[0] && $inMatches->[0] ) {
+    if ( $inMatches->[0] && $inMatches->[0] ) {
         $text = $inMatches->[0];
     }
 
     # javadoc
     my $javadocStr = '';
     $i = $inPatternMap->{javadoc};
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         $javadocStr = $inMatches->[$i];
     }
 
     # javadoc side
     my $javadocSideStr = '';
     $i = $inPatternMap->{javadocSide};
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         $javadocSideStr = $inMatches->[$i];
     }
 
     # type
     my $typeStr = '';
     $i = $inPatternMap->{type};
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         $typeStr = $inMatches->[$i];
     }
 
     # access
     my $accessStr = '';
     $i = $inPatternMap->{access};
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         $accessStr = $inMatches->[$i];
     }
 
     # property id
     $i = $inPatternMap->{nameAndDataType};
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $valueStr = $inMatches->[$i];
         if ( $valueStr ne '' ) {
             my @values =
@@ -835,7 +835,7 @@ sub _handlePropertyMatches {
 
     # javadoc
     $i = $inPatternMap->{javadoc} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocStub = $inMatches->[$i];
         my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
         $data->setJavadoc( $javadoc );
@@ -843,7 +843,7 @@ sub _handlePropertyMatches {
 
     # javadoc side
     $i = $inPatternMap->{javadocSide} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocSideStub = $inMatches->[$i];
         my $javadoc = $this->{fileParser}->parseJavadoc($javadocSideStub);
         $data->setJavadoc( $javadoc );
@@ -851,14 +851,14 @@ sub _handlePropertyMatches {
 
     # metadata
     $i = $inPatternMap->{metadata} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $metadataStr = $inMatches->[$i];
         $data->{metadata} = $this->_parseMetadataData($metadataStr);
     }
 
     # access
     $i = $inPatternMap->{access} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $accessStr = $inMatches->[$i];
         if ($accessStr) {
             my @access = $this->_parseMemberAccess($accessStr);
@@ -869,28 +869,28 @@ sub _handlePropertyMatches {
 
     # type
     $i = $inPatternMap->{type} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $typeStr = $inMatches->[$i];
         $data->{type} = $this->_parsePropertyType($typeStr);
     }
 
     # name
     $i = $inPatternMap->{nameAndDataType} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $nameStr = $inMatches->[$i];
         $data->{name} = $this->_parsePropertyName($nameStr);
     }
 
     # data type
     $i = $inPatternMap->{nameAndDataType} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $dataTypeStr = $inMatches->[$i];
         $data->{dataType} = $this->_parsePropertyDataType($dataTypeStr);
     }
 
     # value
     $i = $inPatternMap->{nameAndDataType} - 1;
-    if ( defined $inMatches->[$i] && $inMatches->[$i] ) {
+    if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $valueStr = $inMatches->[$i];
         $data->{value} = $this->_parsePropertyValue($valueStr);
     }

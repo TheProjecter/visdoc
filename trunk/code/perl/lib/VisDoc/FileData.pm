@@ -390,7 +390,7 @@ This function calls a dispatch function for each stub so that each can be proces
 sub _expandMacro {
     #my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
 
-    if ( defined( $functionTags{$_[2]}->{fn} ) ) {
+    if ( $functionTags{$_[2]}->{fn} ) {
         my $owner = $functionTags{$_[2]}->{owner} || $_[0];
 
 		my @params = @_;
@@ -644,7 +644,7 @@ sub _getContentsOfStub {
     local $_ = $inText;
 
     while (m/$re/gxs) {
-        next if ( !defined $1 || !defined $2 );
+        next if ( !$1 || !$2 );
 
         my $key = VisDoc::StringUtils::getStubKey( $1, $2 );
 

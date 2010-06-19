@@ -140,19 +140,19 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'LinkData:';
-    $str .= "\n\t name=$this->{name}"       if defined $this->{name};
-    $str .= "\n\t qualifiedName=$this->{qualifiedName}"       if defined $this->{qualifiedName};
-    $str .= "\n\t uri=$this->{uri}"         if defined $this->{uri};
-    $str .= "\n\t stub=$this->{stub}"       if defined $this->{stub};
-    $str .= "\n\t package=$this->{package}" if defined $this->{package};
-    $str .= "\n\t class=$this->{class}"     if defined $this->{class};
-    $str .= "\n\t member=$this->{member}"   if defined $this->{member};
-    $str .= "\n\t params=$this->{params}"   if defined $this->{params};
-    $str .= "\n\t label=$this->{label}"     if defined $this->{label};
-    $str .= "\n\t comment=$this->{comment}" if defined $this->{comment};
+    $str .= "\n\t name=$this->{name}"       if $this->{name};
+    $str .= "\n\t qualifiedName=$this->{qualifiedName}"       if $this->{qualifiedName};
+    $str .= "\n\t uri=$this->{uri}"         if $this->{uri};
+    $str .= "\n\t stub=$this->{stub}"       if $this->{stub};
+    $str .= "\n\t package=$this->{package}" if $this->{package};
+    $str .= "\n\t class=$this->{class}"     if $this->{class};
+    $str .= "\n\t member=$this->{member}"   if $this->{member};
+    $str .= "\n\t params=$this->{params}"   if $this->{params};
+    $str .= "\n\t label=$this->{label}"     if $this->{label};
+    $str .= "\n\t comment=$this->{comment}" if $this->{comment};
     $str .= "\n\t isValidRef=$this->{isValidRef}"
-      if defined $this->{isValidRef};
-    $str .= "\n\t isPublic=$this->{isPublic}" if defined $this->{isPublic};
+      if $this->{isValidRef};
+    $str .= "\n\t isPublic=$this->{isPublic}" if $this->{isPublic};
     $str .= "\n";
     return $str;
 }

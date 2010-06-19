@@ -60,7 +60,7 @@ sub formatClassAccess {
 
     my @accessItems;
     @accessItems = @{$inAccess}
-      if defined $inAccess;
+      if $inAccess;
 
     my $isDefaultAccess = $this->_isDefaultAccess($inAccess);
 
@@ -110,7 +110,7 @@ sub formatMethodAccess {
 
     my @accessItems;
     @accessItems = @{$inAccess}
-      if defined $inAccess;
+      if $inAccess;
 
     my $isDefaultAccess = $this->_isDefaultAccess($inAccess);
 
@@ -161,7 +161,7 @@ sub formatPropertyAccess {
 
     my @accessItems;
     @accessItems = @{$inAccess}
-      if defined $inAccess;
+      if $inAccess;
 
     my $isDefaultAccess = $this->_isDefaultAccess($inAccess);
 

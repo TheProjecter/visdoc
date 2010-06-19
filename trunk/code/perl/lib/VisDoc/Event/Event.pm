@@ -33,8 +33,8 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'Event:';
-    $str .= "\n\t name=$this->{name}"     if defined $this->{name};
-    $str .= "\n\t source=$this->{source}" if defined $this->{source};
+    $str .= "\n\t name=$this->{name}"     if $this->{name};
+    $str .= "\n\t source=$this->{source}" if $this->{source};
     $str .= "\n";
     return $str;
 }

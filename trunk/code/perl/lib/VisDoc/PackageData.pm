@@ -165,7 +165,7 @@ sub as_string {
 
     my $str = 'PackageData:';
     $str .= "\n\t name=$this->{name}"                  if $this->{name};
-    $str .= "\n\t anonymous=$this->{anonymous}"                  if defined $this->{anonymous};
+    $str .= "\n\t anonymous=$this->{anonymous}"                  if $this->{anonymous};
     $str .= "\n";
     return $str;
 }

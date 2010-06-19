@@ -22,7 +22,7 @@ sub createPropertyListFromData {
     my @list              = ();
 
     while ( my ( $ikey, $ivalue ) = each %{$inData} ) {
-        $ivalue = '' if !defined $ivalue;
+        $ivalue = '' if !$ivalue;
         $ivalue =~ s/\"/\\"/go;    # escape quotes
         push @list, "\"$ikey\"$itemSeparator\"$ivalue\";";
     }

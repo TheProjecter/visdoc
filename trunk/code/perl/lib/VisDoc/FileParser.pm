@@ -124,7 +124,7 @@ sub parseFile {
     my ( $fileData, $fileText ) = $this->getFileData( $inPath, $inLanguageId );
 
     my $languageId = $fileData->{language} || getLanguageId( undef, $fileText );
-    return undef if !defined $languageId;
+    return undef if !$languageId;
 
     $this->{data} = $fileData;
     $this->parseText( $fileText, $languageId );
@@ -144,7 +144,7 @@ sub parseText {
     my $text = _cleanText($inText);
 
     my $languageId = $inLanguageId || getLanguageId( undef, $text );
-    return undef if !defined $languageId;
+    return undef if !$languageId;
 
     $this->{data}->{language} = $languageId;
 
