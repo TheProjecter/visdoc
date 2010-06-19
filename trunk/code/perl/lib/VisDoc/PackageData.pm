@@ -6,6 +6,8 @@ use strict;
 use warnings;
 use VisDoc::StringUtils;
 
+use overload ( '""' => \&as_string );
+
 our $MEMBER_TYPE = {
     CLASS    => ( 1 << 1 ),
     FUNCTION => ( 1 << 2 ),
@@ -152,6 +154,20 @@ sub setJavadoc {
 	} else {
 		$this->{javadoc} = $inJavadocData;
 	}
+}
+
+=pod
+
+=cut
+
+sub as_string {
+    my ($this) = @_;
+
+    my $str = 'PackageData:';
+    $str .= "\n\t name=$this->{name}"                  if $this->{name};
+    $str .= "\n\t anonymous=$this->{anonymous}"                  if defined $this->{anonymous};
+    $str .= "\n";
+    return $str;
 }
 
 1;

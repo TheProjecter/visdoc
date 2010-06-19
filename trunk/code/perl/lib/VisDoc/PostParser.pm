@@ -99,21 +99,21 @@ sub _mergePackages {
 
             # merge javadoc
             # check if one is present, otherwise we cannot do a merge
-            if (   defined $basePackage->{javadoc}
-                && defined $otherPackage->{javadoc} )
+            if (   $basePackage->{javadoc}
+                && $otherPackage->{javadoc} )
             {
                 $basePackage->{javadoc}->merge( $otherPackage->{javadoc} );
                 undef $otherPackage->{javadoc};
                 delete $otherPackage->{javadoc};
             }
-            elsif ( defined $basePackage->{javadoc}
-                && !defined $otherPackage->{javadoc} )
+            elsif ( $basePackage->{javadoc}
+                && !$otherPackage->{javadoc} )
             {
 
                 # do nothing
             }
-            elsif ( !defined $basePackage->{javadoc}
-                && defined $otherPackage->{javadoc} )
+            elsif ( !$basePackage->{javadoc}
+                && $otherPackage->{javadoc} )
             {
                 $basePackage->{javadoc} = $otherPackage->{javadoc};
                 undef $otherPackage->{javadoc};
@@ -233,13 +233,14 @@ Optionally pass $packageName if the package name should match as well.
 
 sub _getClassWithName {
     my ( $inClasses, $inName, $inPackageName ) = @_;
-
+	
     return if !$inName;
     foreach my $class ( @{$inClasses} ) {
         if ($inPackageName) {
-            return $class
-              if ( ( $class->{name} eq $inName )
-                && ( $class->{packageName} eq $inPackageName ) );
+            if ( ( $class->{name} eq $inName )
+                && ( $class->{packageName} eq $inPackageName ) ) {
+                	return $class;
+                }
         }
         else {
             if ( $class->{name} && ( $class->{name} eq $inName ) ) {
@@ -247,7 +248,6 @@ sub _getClassWithName {
             }
         }
     }
-
     # not found
     return undef;
 }
@@ -259,7 +259,7 @@ sub _findClassWithClasspath {
     foreach my $fileData ( @{$inCollectiveFileData} ) {
         foreach my $package ( @{ $fileData->{packages} } ) {
             foreach my $class ( @{ $package->{classes} } ) {
-                if (   ( defined $class->{classpath} )
+                if (   ( $class->{classpath} )
                     && ( $class->{classpath} eq $inClasspath ) )
                 {
                     return $class;
@@ -538,10 +538,12 @@ sub _cleanupTempInheritDocStubs {
                         if ($memberFields) {
                             foreach my $field ( @{$memberFields} ) {
                             
+                            	# TODO: check on these fields
                             	#next if ($field->{name} !~ m/^(description|throws|param|return)$/);
                             	
                             	if ($field->{value}) {
 									$field->{value} =~ s/$p1/$p2/go;
+									
 									$field->{value} =~ s/%STARTINHERITDOC%/<div class="inheritDoc">/go;
 									$field->{value} =~ s/%ENDINHERITDOC%/<\/div>/go;
 								}
@@ -579,13 +581,121 @@ sub _createAutomaticInheritDocs {
 
 =pod
 
+_copyFields( $fileData, $javadocData, $fieldName, $memberData )
+
+Copies fields from $javadocData to member, only if value if not yet set.
+
+=cut
+
+sub _copyFields {
+	my ($inFileData, $inSuperclassData, $inSuperMemberData, $inFieldName, $inMember) = @_;
+
+	my $superJavadoc = $inSuperMemberData->{javadoc};
+	return if !$superJavadoc;
+				
+	print "_copyFields for $inFieldName\n";
+	
+	my $fields = $superJavadoc->getMultipleFieldsWithName($inFieldName);
+	foreach my $field (@{$fields}) {
+		_copyField($inFileData, $inSuperclassData, $inSuperMemberData, $field, $inMember);
+	}
+}
+
+=pod
+
+_copyField( $fileData, $superclassData, $superMemberData, $fieldData, $memberData )
+
+Copies fieldData to member, only if value if not yet set.
+
+=cut
+
+
+sub _copyField {
+	my ($inFileData, $inSuperclassData, $inSuperMemberData, $inField, $inMember) = @_;
+
+	print "_copyField for $inField->{name}\n";
+	
+	my $currentFields;
+	$currentFields = $inMember->{javadoc}->fieldsWithName($inField->{name}) if $inMember->{javadoc};
+	
+	if (!$currentFields) {
+		$inMember->{javadoc} = VisDoc::JavadocData->new() if !$inMember->{javadoc};
+		my $fieldCopy = $inField->copy();
+		return if !$fieldCopy->getValue();
+		
+		# remove existing inheritDoc link stubs
+		my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
+		$fieldCopy->{value} =~ s/\s*$pattern\s*//g;
+
+		# add link
+		my $linkStub = $inFileData->createInheritDocLinkData($inSuperclassData->{classpath}, $inSuperMemberData->getName(), '&rarr;');
+							
+		$fieldCopy->{value} = '%STARTINHERITDOC%' . $fieldCopy->{value} . ' ' . "<span class=\"inheritDocLink\">$linkStub</span>" . '%ENDINHERITDOC%';					
+					
+		$inMember->{javadoc}->addField($fieldCopy);
+		print "** copied field $fieldCopy\n";
+	} else {
+		print "--- field exists \n";
+	}
+}
+
+=pod
+
 =cut
 
 sub _createAutomaticInheritDocsFromSuperClassOrInterface {
 	my ($inFileData, $inClass, $inSuperChain) = @_;
 	
+	return if !scalar @{$inSuperChain};
+	
+	print "_createAutomaticInheritDocsFromSuperClassOrInterface for $inClass->{name}; inSuperChain=" . scalar @{$inSuperChain} . "\n";
+	
 	foreach my $member ( @{ $inClass->getMembers() } ) {
-                    
+
+=pod
+		my $javadoc = $member->{javadoc};		
+		if ($javadoc) {
+			my $fields = $javadoc->getFields();
+			foreach my $field (@{$fields}) {	
+				#print "javadoc field with name:$field->{name} \n";
+				#print "\t no value\n" if !$field->{value};
+			}
+		} else {
+			
+			# no javadoc yet, so copy fields up the superinterface/class chain
+			# until a field value is found
+=cut
+
+			my $memberName = $member->getName();
+			print "-- no javadoc for member $memberName\n";
+
+			foreach my $superclass ( @{$inSuperChain} ) {
+				my $superclassData = $superclass->{classdata};
+				next if !$superclassData;
+				
+				my $superMember = $superclassData->getMemberWithQualifiedName( $memberName);
+				next if !$superMember;
+
+				# copy main description, or @return, @param or @throws
+				
+				_copyFields($inFileData, $superclassData, $superMember, 'description', $member);
+				_copyFields($inFileData, $superclassData, $superMember, 'return', $member);
+				_copyFields($inFileData, $superclassData, $superMember, 'throws', $member);
+
+				# copy param fields
+				my $superJavadoc = $superMember->{javadoc};
+				next if !$superJavadoc;
+	
+				my $superParams = $superJavadoc->{params};				
+				foreach my $param (@{$superParams}) {
+					_copyField($inFileData, $superclassData, $superMember, $param, $member);
+				}
+
+			}
+			
+#		}
+
+=pod
 		my $memberName = $member->getName();
 		
 		# get the corresponding member up the superclass chain
@@ -608,22 +718,31 @@ sub _createAutomaticInheritDocsFromSuperClassOrInterface {
 			
 			# has fields to copy, so create javadoc if none
 			$member->{javadoc} = VisDoc::JavadocData->new() if !$member->{javadoc};
-			
+						
 			foreach my $superField (@{$superFields}) {
+				
+				next if $superField->{didCopyInheritDoc};
 				
 				if (!$member->{javadoc}->getSingleFieldWithName($superField->{name})) {
 				
 					my $fieldCopy = $superField->copy();
-					
+
+					# remove existing inheritDoc link stubs
+					my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
+					$fieldCopy->{value} =~ s/\s*$pattern\s*//g;
+
 					# add link
-					my $linkStub = $inFileData->createInheritDocLinkData($superclassData->{name}, $superMember->getName(), '#');
-					
-					$fieldCopy->{value} = '%STARTINHERITDOC%' . $fieldCopy->{value} . ' ' . $linkStub . '%ENDINHERITDOC%';
+					my $linkStub = $inFileData->createInheritDocLinkData($superclassData->{classpath}, $superMember->getName(), '&rarr;');
+										
+					$fieldCopy->{value} = ' %STARTINHERITDOC%' . $fieldCopy->{value} . ' ' . "<span class=\"inheritDocLink\">$linkStub $superField->{didCopyInheritDoc}</span>" . '%ENDINHERITDOC%';
 					
 					push( @{$member->{javadoc}->{fields}}, $fieldCopy );
+					$superField->{didCopyInheritDoc} = 1;
 				}
 			}
-		}	
+		}
+=cut
+
 	}
 }
 
@@ -647,7 +766,7 @@ sub _validateLinks {
             if ( $package->{javadoc} ) {
 				my $linkFields = $package->{javadoc}->getLinkDataFields();
 				foreach my $link ( @{$linkFields} ) {
-					_validateLinkData( $link, $inClasses, $package, $class, $member, $inPreferences );
+					_validateLinkData( $inCollectiveFileData, $link, $inClasses, $package, $class, $member, $inPreferences );
 					$validatedLinks->{$link} = 1;
 				}
 			}
@@ -658,7 +777,7 @@ sub _validateLinks {
                 if ( $class->{javadoc} ) {
                 	my $linkFields = $class->{javadoc}->getLinkDataFields();
                 	foreach my $link ( @{$linkFields} ) {
-                		_validateLinkData( $link, $inClasses, $package, $class, $member, $inPreferences );
+                		_validateLinkData( $inCollectiveFileData, $link, $inClasses, $package, $class, $member, $inPreferences );
                 		$validatedLinks->{$link} = 1;
 					}
 				}    
@@ -669,7 +788,7 @@ sub _validateLinks {
                     if ( $member->{javadoc} ) {
                     	my $linkFields = $member->{javadoc}->getLinkDataFields();
                     	foreach my $link ( @{$linkFields} ) {
-							_validateLinkData( $link, $inClasses, $package, $class, $member, $inPreferences );
+							_validateLinkData( $inCollectiveFileData, $link, $inClasses, $package, $class, $member, $inPreferences );
 							$validatedLinks->{$link} = 1;
 						}
 					}
@@ -681,16 +800,48 @@ sub _validateLinks {
         # skip LinkData object that have been validated just before
 
         while ( my ( $key, $linkDataRef ) =
-            each %{$fileData->{linkDataRefs}} )
+            each %{$fileData->getLinkDataRefs()} )
         {
 	        my $linkData = $$linkDataRef;
             if ( !$validatedLinks->{$linkData} ) {
-            	_validateLinkData( $linkData, $inClasses, undef, undef, undef, $inPreferences );
+            	_validateLinkData( $inCollectiveFileData, $linkData, $inClasses, undef, undef, undef, $inPreferences );
             }
         }
 
         
     }
+}
+
+=pod
+
+_getClassesWithinPackage( \@collectiveFileData, $packageName ) -> \@classData
+
+=cut
+
+sub _getClassesWithinPackage {
+    my ( $inCollectiveFileData, $inClasses, $inPackageName ) = @_;
+    
+    my $classes;
+    
+    # get all of the classes within the package
+
+	# first try to get a PackageData object
+	
+	my $packageData;
+	foreach my $fileData ( @{$inCollectiveFileData} ) {
+		foreach my $package ( @{$fileData->{packages}} ) {
+			$packageData = $package if $package->{name} && $package->{name} eq $inPackageName;
+		}
+	}
+	if ($packageData) {
+		$classes = $packageData->{classes};
+	} else {
+		# next try to get classes that have the same classpath
+		
+		@{$classes} = grep { $_->{packageName} ne $inPackageName } @{$inClasses}; 
+	}
+	
+	return $classes;
 }
 
 =pod
@@ -703,13 +854,20 @@ Finds class and member references for LinkData {class} and {member} properties:
 =cut
 
 sub _validateLinkData {
-    my ( $inLink, $inClasses, $inPackage, $inClass, $inMember, $inPreferences ) = @_;
+    my ( $inCollectiveFileData, $inLink, $inClasses, $inPackage, $inClass, $inMember, $inPreferences ) = @_;
 	
 	my $className = $inLink->{class} || $inClass->{name};
-
-	my $classRef = _getClassWithName( $inClasses, $className );
+	
+	my $classes = _getClassesWithinPackage( $inCollectiveFileData, $inClasses, $inLink->{package} ) if $inLink->{package};
+	
+	# else use all classes to get our class ref
+	$classes ||= $inClasses;
+	
+	
+	my $classRef = _getClassWithName( $inClasses, $className, $inLink->{package} );
 	
 	my $member;
+	
 =pod
 	$member = $classRef->getMemberWithQualifiedName( $inLink->{qualifiedName} )
 	  if ( $classRef && $inLink->{qualifiedName} );
@@ -778,7 +936,7 @@ sub _substituteInlineLinkStubs {
             # package javadoc
             if ( $package->{javadoc} ) {
                 my $packageFields = $package->{javadoc}->getFields();
-                if ( defined $packageFields ) {
+                if ( $packageFields ) {
                     foreach my $field ( @{$packageFields} ) {
                         $field->{value} =
                           $fileData->substituteInlineLinkStub(
@@ -790,7 +948,7 @@ sub _substituteInlineLinkStubs {
             foreach $class ( @{ $package->{classes} } ) {
 
                 # class javadoc
-                if ( defined $class->{javadoc} ) {
+                if ( $class->{javadoc} ) {
                     my $classFields = $class->{javadoc}->getFields();
                     if ($classFields) {
 

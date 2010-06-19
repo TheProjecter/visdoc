@@ -17,6 +17,12 @@ sub new {
     return $self;
 }
 
+sub set_up {
+    my ($this) = @_;
+	
+	VisDoc::FileData::initLinkDataRefs();
+}
+
 =pod
 
 Tests reading in an arbitrary text file.

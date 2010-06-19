@@ -18,6 +18,12 @@ sub new {
     return $self;
 }
 
+sub set_up {
+    my ($this) = @_;
+	
+	VisDoc::FileData::initLinkDataRefs();
+}
+
 sub test_formatParameterData_as2 {
     my ($this) = @_;
     

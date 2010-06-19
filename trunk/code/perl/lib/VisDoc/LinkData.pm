@@ -31,10 +31,11 @@ sub createLinkData {
     # remove quotes from label at start and end
     $label =~ s/^\"(.*?)\"$/$1/ if $label;
 
-    return VisDoc::LinkData->new(
+    my $linkData = VisDoc::LinkData->new(
         $inFieldName, $inStub, $packageName, $className,
         $memberName,  $params, $label
     );
+    return $linkData;
 }
 
 =pod

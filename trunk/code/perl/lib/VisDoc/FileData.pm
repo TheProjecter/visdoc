@@ -23,6 +23,17 @@ my $DATA_KEYS = {
 };
 my %functionTags;
 my $macrosPattern;
+my $stubCounter = 0;
+my $linkDataRefs; # hash of references to LinkData objects, with key: STUB_INLINE_LINK and value: LinkData ref
+
+sub getStubCounterRef {	return \$VisDoc::FileData::stubCounter; }
+
+sub getLinkDataRefs { return $VisDoc::FileData::linkDataRefs; }
+
+sub initLinkDataRefs {
+	$VisDoc::FileData::linkDataRefs = {};
+	$VisDoc::FileData::stubCounter = 0;
+}
 
 BEGIN {
 
@@ -72,23 +83,11 @@ sub new {
         images           => undef,
         arrays           => undef,
         objectProperties => undef,
-        packages         => undef,    # ref of list of PackageData objects
-        stubCounter      => 0,
-        linkDataRefs     => undef,    # hash of references to LinkData objects, with key: STUB_INLINE_LINK and value: LinkData ref
+        packages         => undef,    # ref of list of PackageData objects 
     };
     bless $this, $class;
     
     return $this;
-}
-
-=pod
-
-=cut
-
-sub getStubCounterRef {
-    my ($this) = @_;
-	
-    return \$this->{stubCounter};
 }
 
 =pod
@@ -220,7 +219,7 @@ sub _parseStubInlineLink {
     my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
 
     # check to see if a linkDataRefs exists
-    my $ref = $this->{linkDataRefs}->{$inTagString};
+    my $ref = $VisDoc::FileData::linkDataRefs->{$inTagString};
 
     return '' if !$ref;
     return $$ref->formatInlineLink();
@@ -231,7 +230,7 @@ sub _parseStubInheritDoc {
 	
 	my $inheritedComment = $this->_getInheritedComment($inClass, $inMember, $inField);
 	if ( $inheritedComment ) {
-		return "%STARTINHERITDOC%$inheritedComment%ENDINHERITDOC%";
+		return " %STARTINHERITDOC%$inheritedComment%ENDINHERITDOC%";
 	} 
 	return '';
 }
@@ -288,12 +287,11 @@ sub _getInheritedCommentForSuperclassOrInterface {
 			
 			# remove existing inheritDoc link stubs
 			my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
-			
 			$existingFieldValue =~ s/\s*$pattern\s*//g;
 			
-			my $linkStub = $this->createInheritDocLinkData($superclassData->{name}, $superMember->getName(), '#');
+			my $linkStub = $this->createInheritDocLinkData($superclassData->{name}, $superMember->getName(), '&rarr;');
 
-			return "$existingFieldValue $linkStub";
+			return "$existingFieldValue <span class=\"inheritDocLink\">$linkStub</span>";
 		}
 	}
 	return undef;
@@ -637,7 +635,7 @@ sub createInheritDocLinkData {
     my ( $this, $inClassName, $inMemberName, $inLabel ) = @_;
 	
 	my $stub = $this->_createLinkData( $inClassName, $inMemberName, $inLabel );
-	
+		
 	# temporarily replace LINK stub by INHERIT_DOC stub
 	# so we can remove 'inherited' links
 	# to prevent the concatenation of links
@@ -662,7 +660,7 @@ sub createAndStoreInlineLinkData {
 
     my $linkData =
       VisDoc::LinkData::createLinkData( 'link', $inLink, $inStub );
-    $this->{linkDataRefs}->{$inStub} = \$linkData;
+    $VisDoc::FileData::linkDataRefs->{$inStub} = \$linkData;
 
     return $linkData;
 }

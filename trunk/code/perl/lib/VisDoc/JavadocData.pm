@@ -2,6 +2,8 @@ package VisDoc::JavadocData;
 
 use strict;
 use warnings;
+use overload ( '""' => \&as_string );
+
 our $FIELD_DESCRIPTION = 'description';
 
 =pod
@@ -47,7 +49,7 @@ Finds FieldData objects with name $fieldName.
 sub fieldsWithName {
     my ( $this, $inFieldName ) = @_;
 
-    return undef if !defined $this->{fields} && !defined $this->{params};
+    return undef if !$this->{fields} && !$this->{params};
 
     my $matchingFields;
     map { push( @{$matchingFields}, $_ ) if ( $_->{name} eq $inFieldName ); }
@@ -57,6 +59,20 @@ sub fieldsWithName {
 
     return $matchingFields;
 }
+
+=pod
+sub paramsWithName {
+    my ( $this, $inParamName ) = @_;
+
+    return undef if !$this->{params};
+
+    my $matchingParams;
+    map { push( @{$matchingFields}, $_ ) if ( $_->{name} eq $inParamName ); }
+      @{ $this->{params} };
+
+    return $matchingParams;
+}
+=cut
 
 =pod
 
@@ -157,6 +173,13 @@ sub getFields {
 	return $fields;
 }
 
+sub addField {
+    my ($this, $inField) = @_;
+
+    push( @{$this->{params}}, $inField ) if $inField->{type} == $VisDoc::FieldData::TYPE->{PARAM};
+    push( @{$this->{fields}}, $inField ) if $inField->{type} == $VisDoc::FieldData::TYPE->{FIELD};
+}
+
 =pod
 
 merge( $javadocData )
@@ -176,6 +199,20 @@ sub merge {
 
     # merge params
     map { push( @{ $this->{params} }, $_ ); } @{ $inJavadocData->{params} };
+}
+
+=pod
+
+=cut
+
+sub as_string {
+    my ($this) = @_;
+
+    my $str = 'JavadocData:';
+    $str .= "\n\t fields=" . join(',', @{$this->{fields}}) . "\n" if $this->{fields} and scalar @{$this->{fields}};
+    $str .= "\n\t params=" . join(',', @{$this->{params}}) . "\n" if $this->{params} and scalar @{$this->{params}};
+    $str .= "\n";
+    return $str;
 }
 
 1;

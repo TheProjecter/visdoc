@@ -23,6 +23,12 @@ sub new {
     return $self;
 }
 
+sub set_up {
+    my ($this) = @_;
+	
+	VisDoc::FileData::initLinkDataRefs();
+}
+
 =pod
 
 =cut

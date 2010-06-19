@@ -12,12 +12,17 @@ use VisDoc::ParserAS2;
 use VisDoc::ParserAS3;
 use VisDoc::ParserJava;
 
-my $debug = 0;
+my $debug = 1;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
 
     return $self;
+}
+
+sub set_up {
+    my ($this) = @_;
+	VisDoc::FileData::initLinkDataRefs();
 }
 
 =pod
@@ -997,9 +1002,8 @@ class A {}
 sub test_tag_inheritDoc {
     my ($this) = @_;
 
-	my $text = 'package {
-	
-	public class Shape {
+	my $text1 = '
+	public class Shape implements Serializable, delegatepackage.Delegate /* classpath access */, ExtendedObject { {
 	
 		/**
 		Description from class Shape.
@@ -1009,8 +1013,12 @@ sub test_tag_inheritDoc {
 		{
 			//
 		}
-	}
+		
+		public function setDelegate (inDelegate:Object) : Void
+		{}
+	}';
 
+	my $text2 = '
 	public class Rectangle extends Shape {
 	
 		/**
@@ -1022,8 +1030,9 @@ sub test_tag_inheritDoc {
 		{
 			//
 		}
-	}
+	}';
 	
+	my $text3 = '
 	public class Square extends Rectangle {
 	
 		/**
@@ -1033,24 +1042,48 @@ sub test_tag_inheritDoc {
 		{
 			//
 		}
-	}
+	}';
 	
+	my $text4 = '
 	public class Circle extends Shape {
 	
 		public function retainCount () : Number
 		{
 			//
 		}
-	}
+	}';
 
-}
-';
-	my $fileData = VisDoc::parseText($text, 'as3');
+	my $text5 = 'interface delegatepackage.Delegate {
+	
+	/**
+	This comment is written in class {@link delegatepackage.Delegate}.
+	I jumped to my feet, completely thunderstruck.
+	@param inDelegate : the delegate object
+	*/
+	public function setDelegate (inDelegate:Object) : Void;
+}';
+	
+	my @texts = ($text1, $text2, $text3, $text4, $text5);
+	
+	my $fileData = VisDoc::parseTexts(\@texts, 'as2');
 	
 	{
-		# class 1 description
-		my $javadoc = $fileData->{packages}->[0]->{classes}->[1]->{methods}->[0]->{javadoc};
+		# class Shape, method setDelegate: description
+		my $javadoc = $fileData->[0]->{packages}->[0]->{classes}->[0]->{methods}->[1]->{javadoc};
 	
+		my $result = $javadoc->getDescription();
+		my $expected = '<div class="inheritDoc">This comment is written in class <a href="delegatepackage_Delegate.html">delegatepackage.Delegate</a>.
+	I jumped to my feet, completely thunderstruck.<a href="delegatepackage_Delegate.html#setDelegate">#</a></div>';
+	
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+
+	{
+		# class Rectangle, method retainCount: description
+		my $javadoc = $fileData->[0]->{packages}->[0]->{classes}->[4]->{methods}->[0]->{javadoc};
+		
 		my $result = $javadoc->getDescription();
 		my $expected = 'Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted. <div class="inheritDoc">Description from class Shape. <a href="Shape.html#retainCount">#</a></div> Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a>';
 	
@@ -1058,10 +1091,10 @@ sub test_tag_inheritDoc {
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
-	
+
 	{
-		# class 1 param
-		my $javadoc = $fileData->{packages}->[0]->{classes}->[1]->{methods}->[0]->{javadoc};
+		# class Rectangle, method retainCount: param
+		my $javadoc = $fileData->[0]->{packages}->[0]->{classes}->[4]->{methods}->[0]->{javadoc};
 	
 		my $paramField = $javadoc->{params}->[0];
 		my $result = $paramField->{value};
@@ -1073,8 +1106,8 @@ sub test_tag_inheritDoc {
 	}
 	
 	{
-		# class 2 description
-		my $javadoc = $fileData->{packages}->[0]->{classes}->[2]->{methods}->[0]->{javadoc};
+		# class Square, method retainCount: description
+		my $javadoc = $fileData->[0]->{packages}->[0]->{classes}->[3]->{methods}->[0]->{javadoc};
 	
 		my $result = $javadoc->getDescription();
 		my $expected = 'Some. <div class="inheritDoc">Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted.Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a> <a href="Rectangle.html#retainCount">#</a></div>';
@@ -1085,16 +1118,17 @@ sub test_tag_inheritDoc {
 	}
 	
 	{
-		# class 3 description (automatic)
-		my $javadoc = $fileData->{packages}->[0]->{classes}->[3]->{methods}->[0]->{javadoc};
+		# class Circle, method retainCount: description (automatic)
+		my $javadoc = $fileData->[0]->{packages}->[0]->{classes}->[2]->{methods}->[0]->{javadoc};
 	
 		my $result = $javadoc->getDescription();
-		my $expected = '<div class="inheritDoc">Description from class Shape. <a href="Shape.html#retainCount">#</a></div>';
+		my $expected = '<div class="inheritDoc">Description from class Shape.<a href="Shape.html#retainCount">#</a></div>';
 	
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 	}
+
 }
 
 =pod

@@ -179,6 +179,21 @@ font-size:100%;
 .VisDoc .inheritDoc a:visited {
 	color:#777;
 }
+.VisDoc .inheritDoc a:link,
+.VisDoc .inheritDoc a:visited {
+	text-decoration:underline;
+}
+.VisDoc .inheritDoc a:hover {
+	color:#36c;
+}
+.VisDoc .inheritDocLink a:link,
+.VisDoc .inheritDocLink a:visited {
+	text-decoration:none;
+	margin:0 .35em 0 0;
+}
+.VisDoc .inheritDocLink a:hover {
+	text-decoration:underline;
+}
 
 .VisDoc .floatholder {
 	margin:1em 0 0;
@@ -224,8 +239,10 @@ font-size:100%;
 	padding:.4em 10px .7em;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder .inheritedList a {
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder .inheritedList a:link,
+.VisDoc div.boxWithBorder div.boxedElem div.contentHolder .inheritedList a:visited {
 	margin-right:.35em;
+	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
 }
 
 .VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item div.name {
@@ -260,7 +277,7 @@ font-size:100%;
 }
 
 .VisDoc div.classProperties table {
-	background-color:#fff;
+	background-color:#F0F5F9;
 	border-color:#e3e9ec;
 	border-style:solid none;
 	border-width:1px;
@@ -282,7 +299,7 @@ font-size:100%;
 
 .VisDoc div.classProperties td.classDetails,
 .VisDoc div.classProperties th.classDetails {
-	background-color:#F0F5F9;
+	background-color:#fff;
 }
 
 .VisDoc div.classDescription h2 {

@@ -12,16 +12,23 @@ Used for:
 
 =cut
 
+our $TYPE = {
+    FIELD    => ( 1 << 1 ),
+    PARAM    => ( 1 << 2 ),
+};
+
 =pod
 
 =cut
 
 sub new {
-    my ( $class, $inName, $inValue ) = @_;
+    my ( $class, $inName, $inValue, $inType ) = @_;
     my $this = {
         name  => $inName,
         value => $inValue || '',    # value string
-             #overridden        => 0,       # NEEDED?
+        type  => $inType  || $TYPE->{FIELD},
+       #overridden        => 0,       # NEEDED?
+        didCopyInheritDoc => 0,
     };
     bless $this, $class;
     return $this;
@@ -46,7 +53,7 @@ Creates a copy.
 sub copy {
     my ($this) = @_;
 
-	my $newField = VisDoc::FieldData->new( $this->{name}, $this->{value} );
+	my $newField = VisDoc::FieldData->new( $this->{name}, $this->{value}, $this->{type} );
 	return $newField;
 }
 
@@ -60,8 +67,26 @@ sub as_string {
     my $str = 'FieldData:';
     $str .= "\n\t name=$this->{name}"   if defined $this->{name};
     $str .= "\n\t value=$this->{value}" if defined $this->{value};
+    $str .= "\n\t type=" . typeString( $this->{type} ) if defined $this->{type};
     $str .= "\n";
+    
     return $str;
+}
+
+=pod
+
+StaticMethod typeString($typeNum) -> $typeString
+
+=cut
+
+sub typeString {
+    my ($inType) = @_;
+
+    my @type;
+    push( @type, 'FIELD' ) if ( $inType & $TYPE->{FIELD} );
+    push( @type, 'PARAM' ) if ( $inType & $TYPE->{PARAM} );
+
+    return join( ";", @type );
 }
 
 1;

@@ -42,8 +42,8 @@ sub parse {
     my ( $fields, $paramFields ) =
       $this->_processFields( $fieldNameParts, $inFileData );
 
-    $this->{data}->{fields} = $fields      if defined $fields;
-    $this->{data}->{params} = $paramFields if defined $paramFields;
+    $this->{data}->{fields} = $fields      if $fields;
+    $this->{data}->{params} = $paramFields if $paramFields;
 
     if ($firstLine) {
         VisDoc::StringUtils::trimSpaces($firstLine);
@@ -187,7 +187,11 @@ sub _processFields {
             $field = $this->_createLinkData( $fieldName, $value );
         }
         else {
-            $field = VisDoc::FieldData->new( $fieldName, $value );
+        	if ($isParam) {
+	            $field = VisDoc::FieldData->new( $fieldName, $value, $VisDoc::FieldData::TYPE->{PARAM} );
+	        } else {
+	            $field = VisDoc::FieldData->new( $fieldName, $value, $VisDoc::FieldData::TYPE->{FIELD} );
+	        }
         }
 
         # insert at beginning of array to make up for the reverse running order

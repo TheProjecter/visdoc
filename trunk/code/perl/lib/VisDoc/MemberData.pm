@@ -190,14 +190,14 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'MemberData:';
-    $str .= "\n\t name=$this->{name}"     if defined $this->{name};
-    $str .= "\n\t nameId=$this->{nameId}" if defined $this->{nameId};
-    $str .= "\n\t type=" . typeString( $this->{type} ) if defined $this->{type};
+    $str .= "\n\t name=$this->{name}"     if $this->{name};
+    $str .= "\n\t nameId=$this->{nameId}" if $this->{nameId};
+    $str .= "\n\t type=" . typeString( $this->{type} ) if $this->{type};
     $str .= "\n\t access=" . join( ',', @{ $this->{access} } )
-      if defined $this->{access};
+      if $this->{access};
     $str .= "\n\t memberOrder=$this->{memberOrder}"
-      if defined $this->{memberOrder};
-    $str .= "\n\t _id=$this->{_id}" if defined $this->{_id};
+      if $this->{memberOrder};
+    $str .= "\n\t _id=$this->{_id}" if $this->{_id};
 
     $str .= "\n";
     return $str;

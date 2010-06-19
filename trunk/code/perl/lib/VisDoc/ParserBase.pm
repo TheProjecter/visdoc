@@ -133,8 +133,9 @@ sub parsePackage {
         my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
         $packageData->{javadoc} = $javadoc;
     }
-
+    
     my $packageName = $this->retrievePackageName($inText);
+
     $packageData->{name} = $packageName;
 
     my ( $functions, $properties, $text ) = $this->_parseMembers($inText);
