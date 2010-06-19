@@ -308,7 +308,11 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
         <div class="VisDoc">
 			<div class="content">
 				<div id="topNav" class="docNav">
-					<xsl:call-template name="showHideToc" />
+					<ul class="small">
+						<xsl:call-template name="showHideToc" />
+						<xsl:call-template name="showHidePrivate" />
+					</ul>
+					<p class="clear"></p>
 					<!--
 					<xsl:if test="accessKeyInfo">
 						<ul class="accessKeyLinks">
@@ -398,8 +402,6 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 						</ul>
 					</xsl:if>
 					-->
-					<!--<xsl:call-template name="showHidePrivate" />-->
-					<br class="clear" />
 				</div>
 				<xsl:if test="title!=''">
 					<h1><xsl:value-of select="title" /></h1>
@@ -418,16 +420,14 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <!-- ......................... showHideToc ......................... -->
 <xsl:template name="showHideToc">
 	<xsl:if test="./footer/showTOC">
-		<ul>
-			<li>
-				<div id="twistyTOC_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenNotFramed">
-				  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showTOC" /></a>
-				</div>
-				<div id="twistyTOC_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenFramed">
-				  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hideTOC" /></a>
-				</div><span id="twistyTOC_toggle" class="twistyContent"><xsl:comment/></span>
-			</li>
-		</ul>
+		<li>
+			<div id="twistyTOC_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenNotFramed">
+			  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showTOC" /></a>
+			</div>
+			<div id="twistyTOC_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenFramed">
+			  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hideTOC" /></a>
+			</div><span id="twistyTOC_toggle" class="twistyContent"><xsl:comment/></span>
+		</li>
 	</xsl:if>
 </xsl:template>
 
@@ -435,16 +435,14 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <!-- ......................... showHidePrivate ......................... -->
 <xsl:template name="showHidePrivate">
 	<xsl:if test="./footer/showPrivate">
-		<ul>
-			<li>
-				<div id="twistyPrivate_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
-				  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hidePrivate" /></a>
-				</div>
-				<div id="twistyPrivate_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
-				  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showPrivate" /></a>
-				</div><span id="twistyPrivate_toggle" class="twistyContent"><xsl:comment/></span>
-			</li>
-		</ul>
+		<li>
+			<div id="twistyPrivate_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+			  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hidePrivate" /></a>
+			</div>
+			<div id="twistyPrivate_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+			  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showPrivate" /></a>
+			</div><span id="twistyPrivate_toggle" class="twistyContent"><xsl:comment/></span>
+		</li>
 	</xsl:if>
 </xsl:template>
 
@@ -1256,11 +1254,11 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			<div class="content listing">
 				<xsl:apply-templates select="tocNavigation" />
 				<div id="topNav" class="docNav">
-					<xsl:call-template name="showHideToc" />
-					<!--
-					<xsl:call-template name="showHidePrivate" />
-					-->
-					<br class="clear" />
+					<ul>
+						<xsl:call-template name="showHideToc" />
+						<xsl:call-template name="showHidePrivate" />
+					</ul>
+					<p class="clear"></p>
 				</div>
 				<xsl:if test="title!=''">
 					<h1><xsl:value-of select="title" /></h1>

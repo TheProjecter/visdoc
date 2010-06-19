@@ -1,56 +1,71 @@
-html body {
-	background-color:#fff;
-	height:100%;
-	voice-family:inherit;
-	font-size:small;
+/* baseline grid generated with http://topfunky.com/baseline-rhythm-calculator/ */
+/* settings: font-size:12px, line-height:18px; */
+
+body {
+	font-size: 12px;
+	line-height: 1.5em;
+	margin: 0; padding: 0
+}
+h1 {
+	margin: 0;
+	font-size: 1.6666666666666667em;
+	line-height: 0.9em;
+	margin-bottom: 0.9em;
+}
+h2 {
+	margin: 0;
+	font-size: 1.5em;
+	line-height: 1em;
+	margin-bottom: 1em;
+}
+h3 {
+	margin: 0;
+	font-size: 1.3333333333333333em;
+	line-height: 1.125em;
+	margin-bottom: 1.125em;
+}
+h4 {
+	margin: 0;
+	font-size: 1.1666666666666667em;
+	line-height: 1.2857142857142858em;
+	margin-bottom: 1.2857142857142858em;
+}
+p, ul, blockquote, pre, td, th, label {
+	margin: 0;
+	font-size: 1em;
+	line-height: 1.5em;
+	margin-bottom: 1.5em;
+}
+p.small {
+	margin: 0;
+	font-size: 0.8333333333333334em;
+	line-height: 1.8em;
+	margin-bottom: 1.8em;
+}
+table {
+	border-collapse: collapse;
+	margin-bottom: 1.5em;
 }
 
-html>body {
-	font-size:small;
-}
+
 
 .VisDoc {
 	font-family:"Lucida Grande",arial,helvetica,sans-serif;
-	line-height:1.4em;
-	font-size:96%;
-	background-color:transparent;
-	margin:0;
-	padding:0 0 3em 0;
 }
-
 .VisDoc div.content {
 	margin:0;
-	padding:2em 3em .5em 4em;
-}
-
-.VisDoc h1,
-.VisDoc h2,
-.VisDoc h3 {
-	line-height:100%;
+	padding:1em 4em 3em 4em;
 }
 
 .VisDoc h1 {
 	color:#000;
-	margin-top:1em;
-	font-size:2.2em;
-	line-height:1.1em;
 }
-
 .VisDoc h2 {
 	color:#3a456d;
-	font-size:1.7em;
-	margin:0 -10px .25em;
-	padding:5px 10px;
 }
-
 .VisDoc h3 {
-	display:inline;
 	color:#000;
-	font-size:1.5em;
-	font-weight:normal;
-	margin:1em 0 0;
 }
-
 .VisDoc hr {
 	color:#a2a6a9;
 	background-color:#a2a6a9;
@@ -103,7 +118,9 @@ html>body {
 }
 
 .VisDoc .attribute {
-	font-size:86%;
+	font-size: 0.8333333333333334em;
+	line-height: 1.8em;
+	margin-bottom: 1.8em;
 	color:#95adc0;
 }
 
@@ -133,12 +150,19 @@ html>body .VisDoc pre {
 	padding-bottom:.15em;
 }
 
-.VisDoc #topNav {
-	position:absolute;
-	top:1em;
+.VisDoc #topNav {}
+.VisDoc #topNav ul {
+	width:100%;
+	border-bottom:1px solid #e3e9ec;
+	height:1.8em;
+	margin-bottom:2.8em;
+}
+.VisDoc #topNav ul li {
+	font-size: 0.8333333333333334em;
+	line-height: 1.8em;
+	margin-bottom: 1.8em;
 }
 .VisDoc div.docNav {
-	font-size:86%;
 	color:#9399af;
 }
 
@@ -151,8 +175,6 @@ html>body .VisDoc pre {
 	list-style:none;
 	display:block;
 	float:left;
-	margin:0 .25em 0 0;
-	padding:0;
 }
 
 .VisDoc div.docNav a {
@@ -171,7 +193,7 @@ html>body .VisDoc pre {
 }
 
 .VisDoc div.summary div.docNav {
-font-size:100%;
+	font-size:100%;
 }
 
 .VisDoc .inheritDoc,
@@ -335,7 +357,6 @@ font-size:100%;
 }
 
 .VisDoc div.summary div.memberList div.memberSummaryPart div.boxWithBorder div.boxedElem div.contentHolder {
-	font-size:86%;
 	background-color:#fff;
 }
 
@@ -407,7 +428,6 @@ font-size:100%;
 
 .VisDoc .sourceCodeView a {
 	margin-right:.5em;
-	font-size:94%;
 }
 
 .VisDoc .twistyTrigger {
@@ -420,13 +440,14 @@ font-size:100%;
 }
 
 .VisDoc .sourceCodeView .icon {
-	font-size:86%;
+	font-size: 0.8333333333333334em;
+	line-height: 1.8em;
+	margin-bottom: 1.8em;
 	display:none;
 }
 
 .VisDoc div.list {
-	margin-top:4em;
-	padding-bottom:0;
+	margin-top:2em;
 }
 
 .VisDoc div.list ul a:hover .attribute,
@@ -533,8 +554,16 @@ margin-top:1em;
 .hasJavascript .private {
 	top:-9999px;
 }
-
 .VisDoc .private h3 {
+	color:#9399AF;
+}
+.VisDoc li.private a:link,
+.VisDoc li.private a:visited,
+.VisDoc a:link.private,
+.VisDoc a:visited.private {
+	color:#9399AF;
+}
+.VisDoc .privateColor {
 	color:#9399AF;
 }
 
@@ -678,8 +707,9 @@ list-style-type:none;
 }
 
 .VisDoc div.classDescription,
+.VisDoc .sourceCode,
 .VisDoc .sourceCodeView {
-	margin:2em 0 0;
+	margin-bottom:1em;
 }
 
 .VisDoc div.classDescription .descriptionSummary,

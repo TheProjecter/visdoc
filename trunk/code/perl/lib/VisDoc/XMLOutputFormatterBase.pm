@@ -298,10 +298,11 @@ sub _writeAttribute {
       if $inAttributes->{isInterface};
     $inWriter->cdataElement( 'class', 'true' ) if $inAttributes->{isClass};
 
-=pod
 	if (!$inAttributes->{isPublic}) {
 		$inWriter->cdataElement('private', 'true');
 	}
+	
+=pod
 	#if ($inAttributes->{type}) {
 	
 		my $language = $inAttributes->{language} || $this->{language};
