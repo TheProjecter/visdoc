@@ -8,7 +8,7 @@ use VisDoc::JavadocData;
 
 =pod
 
-process ( \@collectiveFileData, \%preferences ) -> \@collectiveFileData
+StaticMethod process( \@fileData, \%preferences ) -> \@fileData
 
 Processes FileData objects.
 
@@ -33,8 +33,7 @@ sub process {
     _createListOfDispatchedBy($classes);
     _createOverrideEntries($classes);
     _createLinkReferencesInMemberDefinitions( $collectiveFileData, $classes );
-    _substituteInheritDocStubs( $collectiveFileData, $classes );
-    _createAutomaticInheritDocs( $collectiveFileData, $classes );
+    _createInheritedComments( $collectiveFileData, $classes );    
     _validateLinks( $collectiveFileData, $classes, $inPreferences );
     _substituteInlineLinkStubs( $collectiveFileData, $classes );
 
@@ -47,6 +46,8 @@ sub process {
 }
 
 =pod
+
+StaticMethod _mergePackages( \@fileData ) -> \@fileData
 
 Store packages with same language and name in one list
 The hash stores lists with each key 'language_packagename'
@@ -136,6 +137,8 @@ sub _mergePackages {
 
 =pod
 
+StaticMethod _createListOfClasses( \@fileData ) -> \@classData
+
 =cut
 
 sub _createListOfClasses {
@@ -153,6 +156,8 @@ sub _createListOfClasses {
 }
 
 =pod
+
+StaticMethod _resolveClasspaths( \@classData )
 
 Sets the classpaths for superclasses and interfaces that do not have one yet.
 That means they are probably within the same package.
@@ -190,7 +195,7 @@ sub _resolveClasspaths {
 
 =pod
 
-StaticMethod _getClassWithName( \@classes ) -> \@classData
+StaticMethod _removeDuplicates( \@classes ) -> \@classData
 
 Finds ClassData objects with duplicate classpaths. If found, retains the newest class only.
 
@@ -253,25 +258,8 @@ sub _getClassWithName {
 }
 
 =pod
-sub _findClassWithClasspath {
-    my ( $inCollectiveFileData, $inClasspath ) = @_;
 
-    foreach my $fileData ( @{$inCollectiveFileData} ) {
-        foreach my $package ( @{ $fileData->{packages} } ) {
-            foreach my $class ( @{ $package->{classes} } ) {
-                if (   ( $class->{classpath} )
-                    && ( $class->{classpath} eq $inClasspath ) )
-                {
-                    return $class;
-                }
-            }
-        }
-    }
-    return undef;
-}
-=cut
-
-=pod
+StaticMethod _createListOfImplementedBy( \@classData )
 
 For each class=>interface, sets {implementedBy} at each class.
 
@@ -290,6 +278,8 @@ sub _createListOfImplementedBy {
 }
 
 =pod
+
+StaticMethod _createMemberNameIds( \@fileData ) 
 
 Adds a follow number to member names that have the same name, and stores the unique name with $MemberData->setNameId()
 
@@ -328,6 +318,8 @@ sub _createMemberNameIds {
 
 =pod
 
+StaticMethod _copyMethodSendsFieldsToClass( \@classData )
+
 Copies @sends tags FieldData objects to the class javadoc.
 
 =cut
@@ -354,6 +346,8 @@ sub _copyMethodSendsFieldsToClass {
 
 =pod
 
+StaticMethod _createListOfDispatchedBy( \@classData )
+
 =cut
 
 sub _createListOfDispatchedBy {
@@ -378,6 +372,8 @@ sub _createListOfDispatchedBy {
 }
 
 =pod
+
+StaticMethod _createOverrideEntries( \@classData )
 
 Adds field 'overrides' to member javadoc if member->overrides() is true.
 
@@ -409,6 +405,8 @@ sub _createOverrideEntries {
 
 =pod
 
+StaticMethod _mapSuperclasses( \@classData )
+
 For each class=>superclass, find the link to the ClassData object
 
 =cut
@@ -430,6 +428,8 @@ sub _mapSuperclasses {
 
 =pod
 
+StaticMethod _mapSubClassesBasedOnSuperclasses( \@classData )
+
 For each class=>superclass, sets {subclasses} at each class.
 
 =cut
@@ -448,6 +448,8 @@ sub _mapSubClassesBasedOnSuperclasses {
 
 =pod
 
+StaticMethod _mapInnerclasses( \@classData )
+
 For each class=>innerclasses, sets {isInnerClass} to 1.
 
 =cut
@@ -457,14 +459,16 @@ sub _mapInnerclasses {
 
     foreach my $class ( @{$inClasses} ) {
         foreach my $innerClass ( @{ $class->{innerClasses} } ) {
-
-            #			if ( $innerClass->{classdata} ) {
             $innerClass->{isInnerClass} = 1;
-
-            #			}
         }
     }
 }
+
+=pod
+
+StaticMethod _createLinkReferencesInMemberDefinitions( \@fileData, \@classData )
+
+=cut
 
 sub _createLinkReferencesInMemberDefinitions {
     my ( $inCollectiveFileData, $inClasses ) = @_;
@@ -473,6 +477,20 @@ sub _createLinkReferencesInMemberDefinitions {
         $fileData->createLinkReferencesInMemberDefinitions($inClasses);
     }
 }
+
+sub _createInheritedComments {
+    my ( $inCollectiveFileData, $inClasses ) = @_;
+    
+    _substituteInheritDocStubs( $inCollectiveFileData, $inClasses );
+    _createAutomaticInheritDocs( $inCollectiveFileData, $inClasses );
+    _cleanupTempInheritDocStubs( $inCollectiveFileData, $inClasses );
+}
+
+=pod
+
+StaticMethod _substituteInheritDocStubs( \@fileData, \@classData )
+
+=cut
 
 sub _substituteInheritDocStubs {
     my ( $inCollectiveFileData, $inClasses ) = @_;
@@ -509,10 +527,11 @@ sub _substituteInheritDocStubs {
             }
         }
     }
-	_cleanupTempInheritDocStubs( $inCollectiveFileData, $inClasses );
 }
 
 =pod
+
+StaticMethod _cleanupTempInheritDocStubs( \@fileData, \@classData )
 
 =cut
 
@@ -556,6 +575,12 @@ sub _cleanupTempInheritDocStubs {
     }
 }
 
+=pod
+
+StaticMethod _createAutomaticInheritDocs( \@fileData, \@classData )
+
+=cut
+
 sub _createAutomaticInheritDocs {
     my ( $inCollectiveFileData, $inClasses ) = @_;
     
@@ -576,63 +601,11 @@ sub _createAutomaticInheritDocs {
             }
         }
     }
-    _cleanupTempInheritDocStubs( $inCollectiveFileData, $inClasses );
 }
 
 =pod
 
-_copyFields( $fileData, $javadocData, $fieldName, $memberData )
-
-Copies fields from $javadocData to member, only if value if not yet set.
-
-=cut
-
-sub _copyFields {
-	my ($inFileData, $inSuperclassData, $inSuperMemberData, $inFieldName, $inMember) = @_;
-
-	my $superJavadoc = $inSuperMemberData->{javadoc};
-	return if !$superJavadoc;
-	
-	my $fields = $superJavadoc->getMultipleFieldsWithName($inFieldName);
-	foreach my $field (@{$fields}) {
-		_copyField($inFileData, $inSuperclassData, $inSuperMemberData, $field, $inMember);
-	}
-}
-
-=pod
-
-_copyField( $fileData, $superclassData, $superMemberData, $fieldData, $memberData )
-
-Copies fieldData to member, only if value if not yet set.
-
-=cut
-
-
-sub _copyField {
-	my ($inFileData, $inSuperclassData, $inSuperMemberData, $inField, $inMember) = @_;
-	
-	my $currentFields;
-	$currentFields = $inMember->{javadoc}->fieldsWithName($inField->{name}) if $inMember->{javadoc};
-	
-	if (!$currentFields) {
-		$inMember->{javadoc} = VisDoc::JavadocData->new() if !$inMember->{javadoc};
-		my $fieldCopy = $inField->copy();
-		return if !$fieldCopy->getValue();
-		
-		# remove existing inheritDoc link stubs
-		my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
-		$fieldCopy->{value} =~ s/\s*$pattern\s*//g;
-
-		# add link
-		my $linkStub = $inFileData->createInheritDocLinkData($inSuperclassData->{classpath}, $inSuperMemberData->getName(), '&rarr;');
-							
-		$fieldCopy->{value} = '%STARTINHERITDOC%' . $fieldCopy->{value} . ' ' . "<span class=\"inheritDocLink\">$linkStub</span>" . '%ENDINHERITDOC%';					
-					
-		$inMember->{javadoc}->addField($fieldCopy);
-	}
-}
-
-=pod
+StaticMethod _createAutomaticInheritDocs( \@fileData, $classData, \@superClasses )
 
 =cut
 
@@ -672,6 +645,55 @@ sub _createAutomaticInheritDocsFromSuperClassOrInterface {
 }
 
 =pod
+
+StaticMethod _copyFields( $fileData, $javadocData, $fieldName, $memberData )
+
+Copies fields from $javadocData to member, only if value if not yet set.
+
+=cut
+
+sub _copyFields {
+	my ($inFileData, $inSuperclassData, $inSuperMemberData, $inFieldName, $inMember) = @_;
+
+	my $superJavadoc = $inSuperMemberData->{javadoc};
+	return if !$superJavadoc;
+	
+	my $fields = $superJavadoc->getMultipleFieldsWithName($inFieldName);
+	foreach my $field (@{$fields}) {
+		_copyField($inFileData, $inSuperclassData, $inSuperMemberData, $field, $inMember);
+	}
+}
+
+=pod
+
+StaticMethod _copyField( $fileData, $superclassData, $superMemberData, $fieldData, $memberData )
+
+Copies fieldData to member, only if value if not yet set.
+
+=cut
+
+
+sub _copyField {
+	my ($inFileData, $inSuperclassData, $inSuperMemberData, $inField, $inMember) = @_;
+	
+	my $currentFields;
+	$currentFields = $inMember->{javadoc}->fieldsWithName($inField->{name}) if $inMember->{javadoc};
+	
+	if (!$currentFields) {
+		$inMember->{javadoc} = VisDoc::JavadocData->new() if !$inMember->{javadoc};
+		my $fieldCopy = $inField->copy();
+		return if !$fieldCopy->getValue();
+		
+		my $inheritedFieldValue = $inFileData->createInheritedFieldValue($inField, $inSuperclassData, $inSuperMemberData);
+		$fieldCopy->{value} = $inheritedFieldValue;					
+					
+		$inMember->{javadoc}->addField($fieldCopy);
+	}
+}
+
+=pod
+
+StaticMethod _validateLinks( \@fileData, \@classData, \%preferences )
 
 Checks for each LinkData object if the referencing class or method is valid or private.
 
@@ -739,7 +761,7 @@ sub _validateLinks {
 
 =pod
 
-_getClassesWithinPackage( \@collectiveFileData, $packageName ) -> \@classData
+StaticMethod _getClassesWithinPackage( \@fileData, $packageName ) -> \@classData
 
 =cut
 
@@ -770,6 +792,8 @@ sub _getClassesWithinPackage {
 }
 
 =pod
+
+StaticMethod _validateLinkData( \@fileData, $linkData, \@classData, $packageData, $class, $member, \%preferences ) -> \@classData
 
 Finds class and member references for LinkData {class} and {member} properties:
 - sets the URI for the LinkData objects
@@ -844,6 +868,8 @@ sub _validateLinkData {
 }
 
 =pod
+
+StaticMethod _substituteInlineLinkStubs( \@fileData, \@classData )
 
 Replaces all %VISDOC_STUB_INLINE_LINK_n% stubs with link texts.
 

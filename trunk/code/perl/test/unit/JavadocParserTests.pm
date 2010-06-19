@@ -1085,7 +1085,7 @@ sub test_tag_inheritDoc {
 		my $javadoc = $fileData->[0]->{packages}->[0]->{classes}->[4]->{methods}->[0]->{javadoc};
 		
 		my $result = $javadoc->getDescription();
-		my $expected = 'Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted.  <div class="inheritDoc">Description from class Shape. <span class="inheritDocLink"><a href="Shape.html#retainCount">&rarr;</a></span></div> Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a>';
+		my $expected = 'Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted. <div class="inheritDoc">Description from class Shape. <span class="inheritDocLink"><a href="Shape.html#retainCount">&rarr;</a></span></div> Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a>';
 	
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1098,7 +1098,7 @@ sub test_tag_inheritDoc {
 	
 		my $paramField = $javadoc->{params}->[0];
 		my $result = $paramField->{value};
-		my $expected = ' <div class="inheritDoc">This is very much alike Objective-C. <span class="inheritDocLink"><a href="Shape.html#retainCount">&rarr;</a></span></div>';
+		my $expected = '<div class="inheritDoc">This is very much alike Objective-C. <span class="inheritDocLink"><a href="Shape.html#retainCount">&rarr;</a></span></div>';
 	
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;
@@ -1110,7 +1110,7 @@ sub test_tag_inheritDoc {
 		my $javadoc = $fileData->[0]->{packages}->[0]->{classes}->[3]->{methods}->[0]->{javadoc};
 	
 		my $result = $javadoc->getDescription();
-		my $expected = 'Some.  <div class="inheritDoc">Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted.Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a> <span class="inheritDocLink"><a href="Rectangle.html#retainCount">&rarr;</a></span></div>';
+		my $expected = 'Some. <div class="inheritDoc">Custom Rectangle comment. After this line the inherited comment from class Shape should be inserted. <div class="inheritDoc">Description from class Shape. <span class="inheritDocLink"></span></div> Just two random links for testing: <a href="Circle.html">Circle</a> and <a href="Circle.html#retainCount">Circle.retainCount</a> <span class="inheritDocLink"><a href="Rectangle.html#retainCount">&rarr;</a></span></div>';
 	
 		print("RES=$result.\n")     if $debug;
 		print("EXP=$expected.\n") if $debug;

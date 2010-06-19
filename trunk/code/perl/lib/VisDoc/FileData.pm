@@ -184,177 +184,6 @@ sub substituteInheritDocStub {
 
 =pod
 
-Some stub strings need further processing. For instance, a link will be formatted differently than code text.
-This function calls a dispatch function for each stub so that each can be processed in its own way.
-
-=cut
-
-sub _expandMacro {
-    #my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
-
-    if ( defined( $functionTags{$_[2]}->{fn} ) ) {
-        my $owner = $functionTags{$_[2]}->{owner} || $_[0];
-
-		my @params = @_;
-		shift @params;
-		
-        my $result =
-          &{ $functionTags{$_[2]}->{fn} }( $owner, @params );
-        return $result;
-    }
-    else {
-        return "tag undefined";
-    }
-}
-
-sub _parseStubCode {
-    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
-
-    my $codeText = $this->getStubValue( $inTagString, $inTagName );
-    my $formatted = $this->_formatCodeText($codeText);
-    return $formatted;
-}
-
-sub _parseStubInlineLink {
-    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
-
-    # check to see if a linkDataRefs exists
-    my $ref = $VisDoc::FileData::linkDataRefs->{$inTagString};
-
-    return '' if !$ref;
-    return $$ref->formatInlineLink();
-}
-
-sub _parseStubInheritDoc {
-    my ( $this, $inClass, $inMember, $inField ) = @_;
-	
-	my $inheritedComment = $this->_getInheritedComment($inClass, $inMember, $inField);
-	if ( $inheritedComment ) {
-		return " %STARTINHERITDOC%$inheritedComment%ENDINHERITDOC%";
-	} 
-	return '';
-}
-
-=pod
-
-_getInheritedComment( $class, $member ) -> $description
-
-=cut
-
-sub _getInheritedComment {
-	my ($this, $inClass, $inMember, $inField) = @_;
-		
-	my $inherited;
-	
-	my $interfaceChain = $inClass->getSuperInterfaceChain();
-	$inherited = $this->_getInheritedCommentForSuperclassOrInterface($inMember, $inField, $interfaceChain);
-	
-	if (!$inherited) {
-		my $superclassChain = $inClass->getSuperclassChain();
-		$inherited = $this->_getInheritedCommentForSuperclassOrInterface($inMember, $inField, $superclassChain);
-	}
-	
-	return $inherited;
-}
-
-=pod
-
-=cut
-
-sub _getInheritedCommentForSuperclassOrInterface {
-	my ( $this, $inMember, $inField, $inSuperChain ) = @_;
-	
-	return undef if !$inSuperChain || !scalar @{$inSuperChain};
-
-	my $memberName = $inMember->getName();
-
-	# go through the list of Class objects
-	foreach my $superclass ( @{$inSuperChain} ) {
-	
-		my $superclassData = $superclass->{classdata};
-		return undef if !$superclassData;
-		
-		my $superMember = $superclassData->getMemberWithQualifiedName( $memberName);
-		next if !$superMember;
-		
-		my $superJavaDoc = $superMember->{javadoc};
-		if ($superJavaDoc) {
-    
-			my $existingFieldValue = $superJavaDoc->getCombinedFieldValue( $inField->{name} );
-			
-			# remove existing inheritDoc stubs
-			$existingFieldValue =~ s/\s*%STARTINHERITDOC%(.*?)%ENDINHERITDOC%\s*//g;
-			
-			# remove existing inheritDoc link stubs
-			my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
-			$existingFieldValue =~ s/\s*$pattern\s*//g;
-			
-			my $linkStub = $this->createInheritDocLinkData($superclassData->{name}, $superMember->getName(), '&rarr;');
-
-			return "$existingFieldValue <span class=\"inheritDocLink\">$linkStub</span>";
-		}
-	}
-	return undef;
-}
-
-
-sub _parseLiteralText {
-    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
-
-    my $text = $this->getStubValue( $inTagString, $inTagName );
-
-    my $formatter = VisDoc::Formatter::formatter( $this->{language} );
-    $formatter->formatLiteral($text);
-    return $text;
-}
-
-=pod
-
-_handleContentsOfVerbatimTags( $text ) -> $text
-
-=cut
-
-sub _handleContentsOfVerbatimTags {
-
-    #my $this = $_[0]
-    #my $text = $_[1]
-
-    my $re = "
-      %
-      (
-      $VisDoc::StringUtils::VERBATIM_STUB_QUOTED_STRING
-      ||
-      $VisDoc::StringUtils::VERBATIM_STUB_PROPERTY_OBJECT
-      ||
-      $VisDoc::StringUtils::VERBATIM_STUB_ARRAY
-      )
-      _
-      ([0-9]+)
-      %
-      ";
-
-    while ( $_[1] =~ m/$re/gxs ) {
-        next if !$1 || !$2;
-        my $key = VisDoc::StringUtils::getStubKey( $1, $2 )
-          ;    # includes number, for instance: %STUB_1%
-        # find original value
-        my $value = $_[0]->_getValue( $1, $key );
-        $_[1] =~ s/$key/$value/ if $value;
-    }
-}
-
-=pod
-
-=cut
-
-sub _getValue {
-    my ( $this, $inStubKey, $inKey ) = @_;
-
-    return $this->{ getDataKey($inStubKey) }->{$inKey};
-}
-
-=pod
-
 getContentsOfLinkStub( $text ) -> $text
 
 Retrieves the original contents of a link stub. For instance with tag:
@@ -372,134 +201,8 @@ Is used by JavadocParser to generate LinkData objects from text strings.
 sub getContentsOfLinkStub {
     my ( $this, $inText ) = @_;
 
-    return $this->getContentsOfStub( $VisDoc::StringUtils::STUB_INLINE_LINK,
+    return $this->_getContentsOfStub( $VisDoc::StringUtils::STUB_INLINE_LINK,
         $inText );
-}
-
-=pod
-
-_formatCodeText( $text ) -> $text
-
-Wraps <code>...</code> (for single line text) or <pre>...</pre> (for multiline text) around text.
-
-
-=cut
-
-sub _formatCodeText {
-    my ( $this, $inText ) = @_;
-
-    return '' if !$inText;
-
-    my $text = $inText;
-
-    # remove stars, preserve linebreaks
-    VisDoc::StringUtils::handleStarsInCodeText( $text, 1 );
-
-# strip spaces at end of code block, between last character of code and the tag </code> or </pre>
-    $text =~ s/[[:space:]]*(<\/code>|<\/pre>|<\/blockquote>|<\/div>)/$1/go;
-
-    # make all left spacing equal
-    $text =~ s/\n\n/\n/go;
-    $text = $this->_equalizeLeftIndent($text);
-
-    VisDoc::StringUtils::convertHtmlEntities($text);
-
-    my $formatter = VisDoc::Formatter::formatter( $this->{language} );
-    $formatter->colorize($text);
-
-    # place code text in <pre> text if running on multiple lines
-    my $tag = ( $text =~ m/\n/g ) ? 'pre' : 'code';
-    my $prefix = "<$tag>";
-    $prefix = "$prefix\n" if $tag eq 'pre';
-    my $suffix = "</$tag>";
-    $suffix = "\n$suffix" if $tag eq 'pre';
-
-    # remove spaces at end
-    $text =~ s/[[:space:]]+$//s;
-
-    return "$prefix$text$suffix";
-}
-
-=pod
-
-=cut
-
-sub _equalizeLeftIndent {
-    my ( $this, $inText ) = @_;
-
-    my @tmplines = split( "\n", $inText );
-    my @lines;
-    my $smallestLeftIndent = 99999999;
-
-    foreach my $line (@tmplines) {
-
-        # first change tabs to spaces so we can count
-        $line =~ s/\t/    /gso;
-
-        # count number of spaces at left
-        $line =~ m/^(\s+)(.*)$/g;
-        next if !$1;
-        my $leftIndent = length $1;
-        next if $leftIndent == 0;
-
-        push @lines, $line;
-        if ($2) {
-            $smallestLeftIndent = $leftIndent
-              if ( $leftIndent < $smallestLeftIndent );
-        }
-    }
-
-# Now we know how much space is redundant (smallestLeftIndent), strip each line from redundant space
-
-    foreach my $line (@lines) {
-        $line =~ m/^(\s+)(.*)$/g;
-        next if !$1;
-        my $leftIndent   = ( length $1 ) - $smallestLeftIndent;
-        my $indentString = ' ' x $leftIndent;
-        $line =~ s/^(\s+)(.*)$/$indentString$2/g;
-    }
-
-    my $text = join( "\n", @lines );
-    return $text;
-}
-
-=pod
-
-getContentsOfStub( $stubName, $text ) -> $text
-
-Replaces stubs from text with their value.
-
-=cut
-
-sub getContentsOfStub {
-    my ( $this, $inStubName, $inText ) = @_;
-
-    return $inText if !$inText;
-
-    my $re = "%($inStubName)_([0-9]+)%";
-
-    return $inText if !( $inText =~ m/$re/sx );
-    local $_ = $inText;
-
-    while (m/$re/gxs) {
-        next if ( !defined $1 || !defined $2 );
-
-        my $key = VisDoc::StringUtils::getStubKey( $1, $2 );
-
-        my $dataKey;
-        my $value = '';
-        my $tag   = '';
-        if ( $1 eq $inStubName ) {
-            $dataKey = getDataKey($1);
-
-            # find original value
-            $value = $this->{$dataKey}->{$key};
-
-            # TODO: use getStubValue
-        }
-        $_ =~ s/$key/$value/ if $value;
-    }
-    return $_;
 }
 
 =pod
@@ -594,6 +297,12 @@ sub createLinkReferencesInMemberDefinitions {
     $this->dispatchEvent($event);
 }
 
+=pod
+
+Dispatches SubstituteLinkStubsEvent to all listeners (MethodData, ParameterData, PropertyData)
+
+=cut
+
 sub substituteLinkReferencesInMemberDefinitions {
     my ( $this, $inClasses ) = @_;
 
@@ -602,27 +311,6 @@ sub substituteLinkReferencesInMemberDefinitions {
         $inClasses, \&substituteInlineLinkStub );
 
     $this->dispatchEvent($event);
-}
-
-=pod
-
-_createLinkData( $className, $memberName, $label ) -> $stubString
-
-=cut
-
-sub _createLinkData {
-    my ( $this, $inClassName, $inMemberName, $inLabel ) = @_;
-    
-    my $counterRef = $this->getStubCounterRef();
-    my $stub = VisDoc::StringUtils::getStubKey( $VisDoc::StringUtils::STUB_INLINE_LINK, ${$counterRef} );
-    ${$counterRef}++;
-    
-	my $linkText = $inMemberName ? "$inClassName#$inMemberName" : $inClassName;
-	$linkText .= " $inLabel" if $inLabel;
-		
-    my $linkData = $this->createAndStoreInlineLinkData( $linkText, $stub );
-
-    return $stub;
 }
 
 =pod
@@ -663,6 +351,338 @@ sub createAndStoreInlineLinkData {
     $VisDoc::FileData::linkDataRefs->{$inStub} = \$linkData;
 
     return $linkData;
+}
+
+=pod
+
+createInheritedFieldValue( $fieldData, $superClassData, $superMemberData ) -> $text
+
+=cut
+
+sub createInheritedFieldValue {
+    my ( $this, $inField, $inSuperclassData, $inSuperMember ) = @_;
+
+	my $superJavaDoc = $inSuperMember->{javadoc};
+	return undef if !$superJavaDoc;
+	
+	my $existingFieldValue = $superJavaDoc->getCombinedFieldValue( $inField->{name} );
+	return undef if !$existingFieldValue;
+	
+	# remove existing inheritDoc stubs
+	#$existingFieldValue =~ s/\s*%STARTINHERITDOC%(.*?)%ENDINHERITDOC%\s*//g;
+	
+	# remove existing inheritDoc link stubs
+	my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
+	$existingFieldValue =~ s/\s*$pattern\s*//gs;
+	
+	my $linkStub = $this->createInheritDocLinkData($inSuperclassData->{name}, $inSuperMember->getName(), '&rarr;');
+	
+	return "%STARTINHERITDOC%$existingFieldValue <span class=\"inheritDocLink\">$linkStub</span>%ENDINHERITDOC%";
+}
+
+=pod
+
+Some stub strings need further processing. For instance, a link will be formatted differently than code text.
+This function calls a dispatch function for each stub so that each can be processed in its own way.
+
+=cut
+
+sub _expandMacro {
+    #my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
+
+    if ( defined( $functionTags{$_[2]}->{fn} ) ) {
+        my $owner = $functionTags{$_[2]}->{owner} || $_[0];
+
+		my @params = @_;
+		shift @params;
+		
+        my $result =
+          &{ $functionTags{$_[2]}->{fn} }( $owner, @params );
+        return $result;
+    }
+    else {
+        return "tag undefined";
+    }
+}
+
+sub _parseStubCode {
+    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
+
+    my $codeText = $this->getStubValue( $inTagString, $inTagName );
+    my $formatted = $this->_formatCodeText($codeText);
+    return $formatted;
+}
+
+sub _parseStubInlineLink {
+    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
+
+    # check to see if a linkDataRefs exists
+    my $ref = $VisDoc::FileData::linkDataRefs->{$inTagString};
+
+    return '' if !$ref;
+    return $$ref->formatInlineLink();
+}
+
+sub _parseStubInheritDoc {
+    my ( $this, $inClass, $inMember, $inField ) = @_;
+	
+	my $inheritedComment = $this->_getInheritedComment($inClass, $inMember, $inField);
+	return $inheritedComment if $inheritedComment;
+	return '';
+}
+
+=pod
+
+_getInheritedComment( $class, $member ) -> $description
+
+=cut
+
+sub _getInheritedComment {
+	my ($this, $inClass, $inMember, $inField) = @_;
+		
+	my $inherited;
+	
+	my $interfaceChain = $inClass->getSuperInterfaceChain();
+	$inherited = $this->_getInheritedCommentForSuperclassOrInterface($inMember, $inField, $interfaceChain);
+	
+	if (!$inherited) {
+		my $superclassChain = $inClass->getSuperclassChain();
+		$inherited = $this->_getInheritedCommentForSuperclassOrInterface($inMember, $inField, $superclassChain);
+	}
+	
+	return $inherited;
+}
+
+=pod
+
+=cut
+
+sub _getInheritedCommentForSuperclassOrInterface {
+	my ( $this, $inMember, $inField, $inSuperChain ) = @_;
+	
+	return undef if !$inSuperChain || !scalar @{$inSuperChain};
+
+	my $memberName = $inMember->getName();
+
+	# go through the list of Class objects
+	foreach my $superclass ( @{$inSuperChain} ) {
+	
+		my $superclassData = $superclass->{classdata};
+		return undef if !$superclassData;
+		
+		my $superMember = $superclassData->getMemberWithQualifiedName( $memberName);
+		next if !$superMember;
+    
+		return $this->createInheritedFieldValue($inField, $superclassData, $superMember);
+	}
+	return undef;
+}
+
+=pod
+
+=cut
+
+sub _parseLiteralText {
+    my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
+
+    my $text = $this->getStubValue( $inTagString, $inTagName );
+
+    my $formatter = VisDoc::Formatter::formatter( $this->{language} );
+    $formatter->formatLiteral($text);
+    return $text;
+}
+
+=pod
+
+_handleContentsOfVerbatimTags( $text ) -> $text
+
+=cut
+
+sub _handleContentsOfVerbatimTags {
+
+    #my $this = $_[0]
+    #my $text = $_[1]
+
+    my $re = "
+      %
+      (
+      $VisDoc::StringUtils::VERBATIM_STUB_QUOTED_STRING
+      ||
+      $VisDoc::StringUtils::VERBATIM_STUB_PROPERTY_OBJECT
+      ||
+      $VisDoc::StringUtils::VERBATIM_STUB_ARRAY
+      )
+      _
+      ([0-9]+)
+      %
+      ";
+
+    while ( $_[1] =~ m/$re/gxs ) {
+        next if !$1 || !$2;
+        my $key = VisDoc::StringUtils::getStubKey( $1, $2 )
+          ;    # includes number, for instance: %STUB_1%
+        # find original value
+        my $value = $_[0]->_getValue( $1, $key );
+        $_[1] =~ s/$key/$value/ if $value;
+    }
+}
+
+=pod
+
+=cut
+
+sub _getValue {
+    my ( $this, $inStubKey, $inKey ) = @_;
+
+    return $this->{ getDataKey($inStubKey) }->{$inKey};
+}
+
+
+=pod
+
+_formatCodeText( $text ) -> $text
+
+Wraps <code>...</code> (for single line text) or <pre>...</pre> (for multiline text) around text.
+
+
+=cut
+
+sub _formatCodeText {
+    my ( $this, $inText ) = @_;
+
+    return '' if !$inText;
+
+    my $text = $inText;
+
+    # remove stars, preserve linebreaks
+    VisDoc::StringUtils::handleStarsInCodeText( $text, 1 );
+
+# strip spaces at end of code block, between last character of code and the tag </code> or </pre>
+    $text =~ s/[[:space:]]*(<\/code>|<\/pre>|<\/blockquote>|<\/div>)/$1/go;
+
+    # make all left spacing equal
+    $text =~ s/\n\n/\n/go;
+    $text = $this->_equalizeLeftIndent($text);
+
+    VisDoc::StringUtils::convertHtmlEntities($text);
+
+    my $formatter = VisDoc::Formatter::formatter( $this->{language} );
+    $formatter->colorize($text);
+
+    # place code text in <pre> text if running on multiple lines
+    my $tag = ( $text =~ m/\n/g ) ? 'pre' : 'code';
+    my $prefix = "<$tag>";
+    $prefix = "$prefix\n" if $tag eq 'pre';
+    my $suffix = "</$tag>";
+    $suffix = "\n$suffix" if $tag eq 'pre';
+
+    # remove spaces at end
+    $text =~ s/[[:space:]]+$//s;
+
+    return "$prefix$text$suffix";
+}
+
+=pod
+
+=cut
+
+sub _equalizeLeftIndent {
+    my ( $this, $inText ) = @_;
+
+    my @tmplines = split( "\n", $inText );
+    my @lines;
+    my $smallestLeftIndent = 99999999;
+
+    foreach my $line (@tmplines) {
+
+        # first change tabs to spaces so we can count
+        $line =~ s/\t/    /gso;
+
+        # count number of spaces at left
+        $line =~ m/^(\s+)(.*)$/g;
+        next if !$1;
+        my $leftIndent = length $1;
+        next if $leftIndent == 0;
+
+        push @lines, $line;
+        if ($2) {
+            $smallestLeftIndent = $leftIndent
+              if ( $leftIndent < $smallestLeftIndent );
+        }
+    }
+
+# Now we know how much space is redundant (smallestLeftIndent), strip each line from redundant space
+
+    foreach my $line (@lines) {
+        $line =~ m/^(\s+)(.*)$/g;
+        next if !$1;
+        my $leftIndent   = ( length $1 ) - $smallestLeftIndent;
+        my $indentString = ' ' x $leftIndent;
+        $line =~ s/^(\s+)(.*)$/$indentString$2/g;
+    }
+
+    my $text = join( "\n", @lines );
+    return $text;
+}
+
+=pod
+
+_getContentsOfStub( $stubName, $text ) -> $text
+
+Replaces stubs from text with their value.
+
+=cut
+
+sub _getContentsOfStub {
+    my ( $this, $inStubName, $inText ) = @_;
+
+    return $inText if !$inText;
+
+    my $re = "%($inStubName)_([0-9]+)%";
+
+    return $inText if !( $inText =~ m/$re/sx );
+    local $_ = $inText;
+
+    while (m/$re/gxs) {
+        next if ( !defined $1 || !defined $2 );
+
+        my $key = VisDoc::StringUtils::getStubKey( $1, $2 );
+
+        my $dataKey;
+        my $value = '';
+        my $tag   = '';
+        if ( $1 eq $inStubName ) {
+            $dataKey = getDataKey($1);
+
+            # find original value
+            $value = $this->{$dataKey}->{$key};
+
+            # TODO: use getStubValue
+        }
+        $_ =~ s/$key/$value/ if $value;
+    }
+    return $_;
+}
+
+=pod
+
+_createLinkData( $className, $memberName, $label ) -> $stubString
+
+=cut
+
+sub _createLinkData {
+    my ( $this, $inClassName, $inMemberName, $inLabel ) = @_;
+    
+    my $counterRef = $this->getStubCounterRef();
+    my $stub = VisDoc::StringUtils::getStubKey( $VisDoc::StringUtils::STUB_INLINE_LINK, ${$counterRef} );
+    ${$counterRef}++;
+    
+	my $linkText = $inMemberName ? "$inClassName#$inMemberName" : $inClassName;
+	$linkText .= " $inLabel" if $inLabel;
+		
+    my $linkData = $this->createAndStoreInlineLinkData( $linkText, $stub );
+
+    return $stub;
 }
 
 1;
