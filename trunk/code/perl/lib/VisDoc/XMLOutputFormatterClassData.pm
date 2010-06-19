@@ -644,7 +644,10 @@ sub _writeParamFields {
         else {
             $value = $field->getValue();
         }
-
+        if ($value) {
+           $value = $this->{data}->{fileData}->getContents($value);
+		}
+		
         $inWriter->startTag('paramfield');
         my $name = $field->{name};
         if ($name) {
@@ -652,6 +655,7 @@ sub _writeParamFields {
             my $padding       = ' ' x $paddingLength;
             $inWriter->cdataElement( 'name', "$name$padding" );
         }
+
         $inWriter->cdataElement( 'description', $value ) if $value;
         $inWriter->endTag('paramfield');
 

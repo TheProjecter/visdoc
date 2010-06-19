@@ -1112,6 +1112,59 @@ sub test_parseProperties_as2 {
 
 =cut
 
+sub test_parseProperties__getsetonly_as2 {
+    my ($this) = @_;
+
+	my $text = 'class AAA {
+	
+	public function get count () : Number {}
+	public function set count (inCount:Number) : void {}
+
+}';
+
+	my $fileParser = VisDoc::FileParser->new();
+    my $fileData = $fileParser->parseText($text);
+    my $classData = $fileData->{packages}->[0]->{classes}->[0];
+    my $properties = $classData->{properties};
+
+	#use Data::Dumper;
+	#print("properties=" . Dumper($properties));
+	
+	{
+		# test name
+		my $result = $properties->[0]->{name};
+		my $expected = 'count';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# test property 2 (does not exist)
+		my $result = $properties->[1];
+		$this->assert_null( $result );
+	}
+	{
+		# test dataType
+		my $result = $properties->[0]->{dataType};
+		my $expected = 'Number';
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# test isAccessPublic
+		my $result = $properties->[0]->{isAccessPublic};
+		my $expected = 1;
+		print("RES=$result.\n")     if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+}
+
+=pod
+
+=cut
+
 sub test_parseProperties_as3 {
     my ($this) = @_;
 

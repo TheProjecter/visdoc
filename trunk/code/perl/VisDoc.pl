@@ -21,8 +21,8 @@ usage() if ( scalar @ARGV == 0 );
 BEGIN {
     my $here = Cwd::abs_path;
     my $root = $here;
-    unshift @INC, "$root/lib/CPAN/lib";
-    unshift @INC, "$root/lib";
+    push @INC, "$root/lib/CPAN/lib";
+	push @INC, "$root/lib";
 }
 
 # check if we can read the right modules

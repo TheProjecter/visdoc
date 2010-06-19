@@ -406,7 +406,7 @@ sub _swapPropertyGetSetters {
             $propertyData->{name}        = $method->{name};
             $propertyData->{qualifiedName} = $method->{qualifiedName};
             $propertyData->{access}      = $method->{access};
-            $propertyData->{isAccessPublic}      = $method->{isAccessPublic};
+            $propertyData->{isAccessPublic}  = $method->{isAccessPublic};
             $propertyData->{javadoc}     = $method->{javadoc};
             $propertyData->{metadata}    = $method->{metadata};
             $propertyData->{parameters}    = $method->{parameters};

@@ -242,7 +242,7 @@ sub _parseClassData {
           $this->_handleClassMatches( \@matches, $classes, $patternMap );
 
         # enclosingClass
-        if ( defined $inOuterClass ) {
+        if ( $inOuterClass ) {
             $data->{enclosingClass} = $inOuterClass;
             $data->{isInnerClass}   = 1;
 
@@ -264,12 +264,22 @@ sub _parseClassData {
         }
 
         # super classpaths
-        if ( defined $data->{superclasses} ) {
+        if ( $data->{superclasses} ) {
             map {
                 $_->{classpath} =
                   $this->_getClasspathFromImports( $_->{name}, $inText );
             } @{ $data->{superclasses} };
         }
+        
+        # interfaces classpaths
+		if ( $data->{interfaces} ) {
+			map {
+				if (!( $_->{classpath})) {
+					$_->{classpath} =
+						$this->_getClasspathFromImports( $_->{name}, $inText );
+				}
+			} @{ $data->{interfaces} };
+		}
 
         # prepare the fetching and removal of class contents
         my $startLoc = $-[0];
@@ -344,7 +354,7 @@ sub _handleClassMatches {
 
     # javadoc
     $i = $inPatternMap->{javadoc} - 1;
-    if ( defined $inMatches->[$i] ) {
+    if ( $inMatches->[$i] ) {
 
         #$data->{javadocStub} = $inMatches->[$i];
         $data->{javadoc} =
@@ -353,7 +363,7 @@ sub _handleClassMatches {
 
     # access
     $i = $inPatternMap->{access} - 1;
-    if ( defined $inMatches->[$i] ) {
+    if ( $inMatches->[$i] ) {
         my $accessStr = $inMatches->[$i];
         if ($accessStr) {
             my @access = $this->_parseClassAccess($accessStr);
@@ -364,7 +374,7 @@ sub _handleClassMatches {
 
     # type
     $i = $inPatternMap->{type} - 1;
-    if ( defined $inMatches->[$i] ) {
+    if ( $inMatches->[$i] ) {
         my $typeStr = $inMatches->[$i];
         $data->{type} = $VisDoc::ClassData::TYPE->{'CLASS'}
           if $typeStr eq 'class';
@@ -374,14 +384,14 @@ sub _handleClassMatches {
 
     # name
     $i = $inPatternMap->{name} - 1;
-    if ( defined $inMatches->[$i] ) {
+    if ( $inMatches->[$i] ) {
         my $nameStr = $inMatches->[$i];
         $data->{name} = $this->_parseClassName($nameStr);
     }
 
     # superclasses
     $i = $inPatternMap->{superclasses} - 1;
-    if ( defined $inMatches->[$i] ) {
+    if ( $inMatches->[$i] ) {
         my $superclassesStr = $inMatches->[$i];
         my $superclassNames = $this->_parseSuperclassNames($superclassesStr);
         $data->setSuperclassNames($superclassNames);
@@ -389,7 +399,7 @@ sub _handleClassMatches {
 
     # interfaces
     $i = $inPatternMap->{interfaces} - 1;
-    if ( defined $inMatches->[$i] ) {
+    if ( $inMatches->[$i] ) {
         my $interfacesStr  = $inMatches->[$i];
         my $interfaceNames = $this->_parseInterfaceNames($interfacesStr);
         $data->setInterfaceNames($interfaceNames);
@@ -810,14 +820,6 @@ sub _parseProperties {
     my $pattern    = $this->{PATTERN_PROPERTY_WITH_JAVADOC};
     my $patternMap = $this->{MAP_PROPERTY_WITH_JAVADOC};
 
-=pod
-	print("_parseProperties inText=$inText\n");
-    print(  "_parseProperties pattern="
-          . VisDoc::StringUtils::stripCommentsFromRegex($pattern)
-          . "\n" );
-    print(" ======================\n");
-=cut
-
     my $text = $inText;
     local $_ = $text;
     my @matches = m/$pattern/sx;
@@ -838,8 +840,6 @@ sub _parseProperties {
             $endLoc - $startLoc,
             "; STRIPPED_PROPERTY_$order;\n"
         );
-
-        #print("stripped=$stripped\n");
 
         ( $text, my $dummy ) = $this->_parseProperties( $text, $properties );
     }
