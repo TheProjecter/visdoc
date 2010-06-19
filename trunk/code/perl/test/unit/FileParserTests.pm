@@ -13,7 +13,7 @@ use VisDoc::ParserAS2;
 use VisDoc::ParserAS3;
 use VisDoc::ParserJava;
 
-my $debug = 1;
+my $debug = 0;
 
 sub new {
     my $self = shift()->SUPER::new(@_);

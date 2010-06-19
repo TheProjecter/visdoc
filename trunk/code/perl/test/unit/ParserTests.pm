@@ -14,7 +14,7 @@ use VisDoc::ParserJava;
 use VisDoc::MethodData;
 use VisDoc::PropertyData;
 
-my $debug = 1;
+my $debug = 0;
 
 sub new {
     my $self = shift()->SUPER::new(@_);

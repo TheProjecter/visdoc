@@ -8,7 +8,7 @@ use base qw(Test::Unit::TestCase);
 use VisDoc::StringUtils;
 use VisDoc::ClassData; 
 
-my $debug = 1;
+my $debug = 0;
 
 sub new {
     my $self = shift()->SUPER::new(@_);

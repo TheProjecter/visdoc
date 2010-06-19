@@ -420,7 +420,7 @@ sub _mapSuperclasses {
     
     foreach my $class ( @{$inClasses} ) {
         foreach my $superclass ( @{ $class->{superclasses} } ) {
-        	my $classdata = $nameToClassMap{$superclass->{classpath}};
+        	my $classdata = $nameToClassMap{$superclass->{classpath}} if $superclass->{classpath};
         	if ( $classdata ) {
         		$superclass->{classdata} = $classdata;
         	}
@@ -643,82 +643,31 @@ sub _createAutomaticInheritDocsFromSuperClassOrInterface {
 		
 	foreach my $member ( @{ $inClass->getMembers() } ) {
 
-			my $memberName = $member->getName();
-
-			foreach my $superclass ( @{$inSuperChain} ) {
-				my $superclassData = $superclass->{classdata};
-				next if !$superclassData;
-				
-				my $superMember = $superclassData->getMemberWithQualifiedName( $memberName);
-				next if !$superMember;
-
-				# copy main description, or @return, @param or @throws
-				
-				_copyFields($inFileData, $superclassData, $superMember, 'description', $member);
-				_copyFields($inFileData, $superclassData, $superMember, 'return', $member);
-				_copyFields($inFileData, $superclassData, $superMember, 'throws', $member);
-
-				# copy param fields
-				my $superJavadoc = $superMember->{javadoc};
-				next if !$superJavadoc;
-	
-				my $superParams = $superJavadoc->{params};				
-				foreach my $param (@{$superParams}) {
-					_copyField($inFileData, $superclassData, $superMember, $param, $member);
-				}
-
-			}
-			
-#		}
-
-=pod
 		my $memberName = $member->getName();
-		
-		# get the corresponding member up the superclass chain
+
 		foreach my $superclass ( @{$inSuperChain} ) {
-				
 			my $superclassData = $superclass->{classdata};
 			next if !$superclassData;
-
+			
 			my $superMember = $superclassData->getMemberWithQualifiedName( $memberName);
 			next if !$superMember;
 
+			# copy main description, or @return, @param or @throws
+			
+			_copyFields($inFileData, $superclassData, $superMember, 'description', $member);
+			_copyFields($inFileData, $superclassData, $superMember, 'return', $member);
+			_copyFields($inFileData, $superclassData, $superMember, 'throws', $member);
+
+			# copy param fields
 			my $superJavadoc = $superMember->{javadoc};
 			next if !$superJavadoc;
-			
-			# copy fields
-			my $superFields = $superJavadoc->{fields};
-			my $superParams = $superJavadoc->{params};
-			
-			next if !$superFields && !$superParams;
-			
-			# has fields to copy, so create javadoc if none
-			$member->{javadoc} = VisDoc::JavadocData->new() if !$member->{javadoc};
-						
-			foreach my $superField (@{$superFields}) {
-				
-				next if $superField->{didCopyInheritDoc};
-				
-				if (!$member->{javadoc}->getSingleFieldWithName($superField->{name})) {
-				
-					my $fieldCopy = $superField->copy();
 
-					# remove existing inheritDoc link stubs
-					my $pattern = VisDoc::StringUtils::getStubKeyPatternForTagNames( $VisDoc::StringUtils::STUB_TAG_INHERITDOC_LINK );
-					$fieldCopy->{value} =~ s/\s*$pattern\s*//g;
-
-					# add link
-					my $linkStub = $inFileData->createInheritDocLinkData($superclassData->{classpath}, $superMember->getName(), '&rarr;');
-										
-					$fieldCopy->{value} = ' %STARTINHERITDOC%' . $fieldCopy->{value} . ' ' . "<span class=\"inheritDocLink\">$linkStub $superField->{didCopyInheritDoc}</span>" . '%ENDINHERITDOC%';
-					
-					push( @{$member->{javadoc}->{fields}}, $fieldCopy );
-					$superField->{didCopyInheritDoc} = 1;
-				}
+			my $superParams = $superJavadoc->{params};				
+			foreach my $param (@{$superParams}) {
+				_copyField($inFileData, $superclassData, $superMember, $param, $member);
 			}
-		}
-=cut
 
+		}
 	}
 }
 
