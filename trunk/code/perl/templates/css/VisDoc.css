@@ -136,7 +136,6 @@ table {
 .VisDoc tt,
 .VisDoc textarea {
 	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
-	font-size:12px;
 }
 
 .VisDoc pre {
@@ -652,7 +651,6 @@ margin-top:1em;
 .VisDoc .summary .memberList li a:visited,
 .VisDoc .summary .memberList li .typeInfo {
 	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
-	font-size:12px;
 }
 
 .VisDoc div.docNav a:hover,
