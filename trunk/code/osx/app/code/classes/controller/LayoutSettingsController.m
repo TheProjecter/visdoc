@@ -70,7 +70,6 @@
 
 - (IBAction)restoreToDefaultValues:(id)sender
 {
-	NSLog(@"restoreToDefaultValues:%@", [delegate defaultSettings]);
 	[self setToValues:[delegate defaultSettings]];
 }
 
