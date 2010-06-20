@@ -73,6 +73,7 @@
 	[self setToValues:[delegate defaultSettings]];
 }
 
+
 - (void)setToValues:(NSDictionary*)dictionary
 {
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateCssDirectory"] forKey:@"templateCssDirectory"];

@@ -77,6 +77,7 @@ $preferences->{'doc-sources'} = \$process;
     'help'
 );
 
+
 usage() if $preferences->{help};
 
 # only for VisDoc.pm

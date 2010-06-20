@@ -777,6 +777,7 @@ sub _cleanupHtml {
 
 1;
 
+
 # VisDoc - Code documentation generator, http://visdoc.org
 # This software is licensed under the MIT License
 #
