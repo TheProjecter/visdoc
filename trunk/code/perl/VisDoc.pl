@@ -69,7 +69,7 @@ $preferences->{'doc-sources'} = \$process;
     'preserveLinebreaks:i',                'saveXML:i',
     'sidebarWidth:s',                      'datapath:s',
     'templateCssDirectory:s',              'templateCss:s',
-    'templateJs:s',
+    'templateJsDirectory:s',
     'templateXslDirectory:s',              'templateXslForClasses:s',
     'templateXslForIndexFrameset:s',       'templateXslForPackagesFrameset:s',
     'templateXslForPackagesTocFrameset:s', 'feedback:i',

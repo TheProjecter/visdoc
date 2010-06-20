@@ -616,7 +616,7 @@ Copies the javascript file from the template directory to $destinationDir.
 sub _copyJs {
     my ( $inDestinationDir, $inPreferences ) = @_;
 
-    my $file = File::Spec->rel2abs( $VisDoc::Defaults::SETTINGS->{'templateJs'},
+    my $file = File::Spec->rel2abs( $VisDoc::Defaults::SETTINGS->{'templateJsDirectory'},
         $inPreferences->{base} );
 
 	my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );

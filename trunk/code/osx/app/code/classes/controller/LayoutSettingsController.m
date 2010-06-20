@@ -42,7 +42,7 @@
 	if ([[aTableColumn identifier] isEqualToString:@"value"]) {
 		if (rowIndex == 0) return [[delegate settings] objectForKey:@"templateCssDirectory"];
 		if (rowIndex == 1) return [[delegate settings] objectForKey:@"templateCss"];
-		if (rowIndex == 2) return [[delegate settings] objectForKey:@"templateJs"];
+		if (rowIndex == 2) return [[delegate settings] objectForKey:@"templateJsDirectory"];
 		if (rowIndex == 3) return [[delegate settings] objectForKey:@"templateXslDirectory"];
 		if (rowIndex == 4) return [[delegate settings] objectForKey:@"templateXslForClasses"];
 		if (rowIndex == 5) return [[delegate settings] objectForKey:@"templateXslForIndexFrameset"];
@@ -58,7 +58,7 @@
 		NSString* key;
 		if (rowIndex == 0) key = @"templateCssDirectory";
 		if (rowIndex == 1) key = @"templateCss";
-		if (rowIndex == 2) key = @"templateJs";
+		if (rowIndex == 2) key = @"templateJsDirectory";
 		if (rowIndex == 3) key = @"templateXslDirectory";
 		if (rowIndex == 4) key = @"templateXslForClasses";
 		if (rowIndex == 5) key = @"templateXslForIndexFrameset";
@@ -73,12 +73,11 @@
 	[self setToValues:[delegate defaultSettings]];
 }
 
-
 - (void)setToValues:(NSDictionary*)dictionary
 {
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateCssDirectory"] forKey:@"templateCssDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateCss"] forKey:@"templateCss"];
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateJs"] forKey:@"templateJs"];
+	[[delegate settings] setObject:[dictionary objectForKey:@"templateJsDirectory"] forKey:@"templateJsDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslDirectory"] forKey:@"templateXslDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslForClasses"] forKey:@"templateXslForClasses"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslForIndexFrameset"] forKey:@"templateXslForIndexFrameset"];
@@ -139,7 +138,7 @@
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 		[[delegate settings] objectForKey:@"templateCssDirectory"], @"templateCssDirectory",
 		[[delegate settings] objectForKey:@"templateCss"], @"templateCss",
-		[[delegate settings] objectForKey:@"templateJs"], @"templateJs",
+		[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
 		[[delegate settings] objectForKey:@"templateXslDirectory"], @"templateXslDirectory",
 		[[delegate settings] objectForKey:@"templateXslForClasses"], @"templateXslForClasses",
 		[[delegate settings] objectForKey:@"templateXslForIndexFrameset"], @"templateXslForIndexFrameset",
@@ -152,7 +151,7 @@
 {
 	if (![self compareCurrentWithDefault:@"templateCssDirectory"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateCss"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateJs"]) return NO;
+	if (![self compareCurrentWithDefault:@"templateJsDirectory"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateXslDirectory"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateXslForClasses"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateXslForIndexFrameset"]) return NO;
