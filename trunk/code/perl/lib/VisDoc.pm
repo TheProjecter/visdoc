@@ -609,21 +609,37 @@ sub _copyCss {
 
 StaticMethod _copyJs ( $destinationDir, \%preferences )
 
-Copies the javascript file from the template directory to $destinationDir.
+Copies javascript files from the template directory to $destinationDir.
 
 =cut
 
 sub _copyJs {
     my ( $inDestinationDir, $inPreferences ) = @_;
 
-    my $file = File::Spec->rel2abs( $VisDoc::Defaults::SETTINGS->{'templateJsDirectory'},
+    my $dir = File::Spec->rel2abs( $VisDoc::Defaults::FILE_JS_TEMPLATE_DIR,
         $inPreferences->{base} );
 
-	my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
-	my $result = File::Copy::copy( $path, $inDestinationDir );
-	if ( !$result ) {
-		print("Could not copy $path to $inDestinationDir: $!\n");
-	}
+    # get all .js files from that directory
+    my @files;
+    File::Find::find(
+        {
+            wanted => sub {
+
+                # check if file is javascript file
+                push @files, $File::Find::name
+                  if ( $File::Find::name =~ /(\.js)$/ );
+            },
+        },
+        $dir
+    );
+
+    foreach my $file (@files) {
+        my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
+        my $result = File::Copy::copy( $path, $inDestinationDir );
+        if ( !$result ) {
+            print("Could not copy $path to $inDestinationDir: $!\n");
+        }
+    }
 }
 
 =pod
