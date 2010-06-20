@@ -16,8 +16,6 @@ our $SETTINGS = {
     copyCSS                           => 1,
     copyright                         => 0,
     copyrightText                     => '',
-    cssTemplate                       => 'VisDoc.css',
-    cssTemplateDirectory              => 'templates/css',
     eventHandlerPrefixes              => 'on,allow',
     eventHandlers                     => 1,
     extensions                        => 'as,java',
@@ -32,11 +30,14 @@ our $SETTINGS = {
     preserveLinebreaks                => 1,
     saveXML                           => 0,
     sidebarWidth                      => '25%',
-    xslTemplateDirectory              => 'templates/xslt',
-    xslTemplateForClasses             => 'VisDoc.xsl',
-    xslTemplateForIndexFrameset       => 'VisDoc_index_frameset.xsl',
-    xslTemplateForPackagesFrameset    => 'VisDoc_packages_frameset.xsl',
-    xslTemplateForPackagesTocFrameset => 'VisDoc_packages_toc_frameset.xsl',
+    templateCss                       => 'VisDoc.css',
+    templateCssDirectory              => 'templates/css',
+    templateJsDirectory              => 'templates/js',
+    templateXslDirectory              => 'templates/xslt',
+    templateXslForClasses             => 'VisDoc.xsl',
+    templateXslForIndexFrameset       => 'VisDoc_index_frameset.xsl',
+    templateXslForPackagesFrameset    => 'VisDoc_packages_frameset.xsl',
+    templateXslForPackagesTocFrameset => 'VisDoc_packages_toc_frameset.xsl',
 };
 
 1;

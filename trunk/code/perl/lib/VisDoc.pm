@@ -181,11 +181,11 @@ sub writeData {
     _copyAssets( $dirInfo, $inPreferences );
 
     my $baseDir    = $inPreferences->{base};
-    my $xsltDir    = $inPreferences->{xslTemplateDirectory} || $baseDir;
+    my $xsltDir    = $inPreferences->{templateXslDirectory} || $baseDir;
     my $processing = {
         'classes' => {
             xsltRef => _getXslt(
-                'class', $xsltDir, $inPreferences->{xslTemplateForClasses}
+                'class', $xsltDir, $inPreferences->{templateXslForClasses}
             ),
             xmls => undef,    # array of hashes with keys 'uri' and 'textRef'
         },
@@ -563,11 +563,11 @@ sub _copyCss {
 
     return if !$inPreferences->{copyCSS};
 
-    my $cssTemplateDir = $inPreferences->{'cssTemplateDirectory'}
-      || $VisDoc::Defaults::SETTINGS->{'cssTemplateDirectory'};
+    my $cssTemplateDir = $inPreferences->{'templateCssDirectory'}
+      || $VisDoc::Defaults::SETTINGS->{'templateCssDirectory'};
 
-    my $fileName = $inPreferences->{cssTemplate}
-      || $VisDoc::Defaults::SETTINGS->{'cssTemplate'};
+    my $fileName = $inPreferences->{templateCss}
+      || $VisDoc::Defaults::SETTINGS->{'templateCss'};
 
     my $path =
       File::Spec->rel2abs( "$cssTemplateDir/$fileName",
@@ -660,15 +660,15 @@ sub _getXslt {
         $xsltFile = $inXsltFile;
     }
     else {
-        $xsltFile = $VisDoc::Defaults::SETTINGS->{'xslTemplateForClasses'}
+        $xsltFile = $VisDoc::Defaults::SETTINGS->{'templateXslForClasses'}
           if ( $inType eq 'class' );
-        $xsltFile = $VisDoc::Defaults::SETTINGS->{'xslTemplateForIndexFrameset'}
+        $xsltFile = $VisDoc::Defaults::SETTINGS->{'templateXslForIndexFrameset'}
           if ( $inType eq 'index-frameset' );
         $xsltFile =
-          $VisDoc::Defaults::SETTINGS->{'xslTemplateForPackagesFrameset'}
+          $VisDoc::Defaults::SETTINGS->{'templateXslForPackagesFrameset'}
           if ( $inType eq 'packages-frameset' );
         $xsltFile =
-          $VisDoc::Defaults::SETTINGS->{'xslTemplateForPackagesTocFrameset'}
+          $VisDoc::Defaults::SETTINGS->{'templateXslForPackagesTocFrameset'}
           if ( $inType eq 'packages-toc-frameset' );
     }
 

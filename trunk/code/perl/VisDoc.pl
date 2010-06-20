@@ -68,10 +68,11 @@ $preferences->{'doc-sources'} = \$process;
     'indexTitle|main-title:s',             'listPrivate:i',
     'preserveLinebreaks:i',                'saveXML:i',
     'sidebarWidth:s',                      'datapath:s',
-    'cssTemplateDirectory:s',              'cssTemplate:s',
-    'xslTemplateDirectory:s',              'xslTemplateForClasses:s',
-    'xslTemplateForIndexFrameset:s',       'xslTemplateForPackagesFrameset:s',
-    'xslTemplateForPackagesTocFrameset:s', 'feedback:i',
+    'templateCssDirectory:s',              'templateCss:s',
+    'templateJsDirectory:s',
+    'templateXslDirectory:s',              'templateXslForClasses:s',
+    'templateXslForIndexFrameset:s',       'templateXslForPackagesFrameset:s',
+    'templateXslForPackagesTocFrameset:s', 'feedback:i',
     'openInBrowser:i',
     'help'
 );
@@ -284,27 +285,27 @@ Default: 0
 
 To write...
 
-=item B<-cssTemplateDirectory>
+=item B<-templateCssDirectory>
 
 To write...
 
-=item B<-cssTemplate>
+=item B<-templateCss>
 
 To write...
 
-=item B<-xslTemplateDirectory>
+=item B<-templateXslDirectory>
 
 To write...
 
-=item B<-xslTemplateForIndexFrameset>
+=item B<-templateXslForIndexFrameset>
 
 To write...
 
-=item B<-xslTemplateForPackagesFrameset>
+=item B<-templateXslForPackagesFrameset>
 
 To write...
 
-=item B<-xslTemplateForPackagesTocFrameset>
+=item B<-templateXslForPackagesTocFrameset>
 
 To write...
 
