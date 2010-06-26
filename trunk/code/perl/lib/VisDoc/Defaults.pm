@@ -6,6 +6,7 @@ use warnings;
 our $FILE_DOCTERMS        = 'templates/lang/docterms.json';
 our $FILE_JAVADOCTERMS    = 'templates/lang/javadocterms.json';
 our $FILE_JS_TEMPLATE_DIR = 'templates/js/';
+our $FILE_CSS_TEMPLATE_DIR = 'templates/css/';
 
 our $FILE_CSS_DESTINATION = 'css/VisDoc.css';
 our $FILE_JS_DESTINATION  = 'js/';
@@ -16,10 +17,12 @@ our $SETTINGS = {
     copyCSS                           => 1,
     copyright                         => 0,
     copyrightText                     => '',
+    docencoding                       => 'utf-8',
     eventHandlerPrefixes              => 'on,allow',
     eventHandlers                     => 1,
     extensions                        => 'as,java',
     generateIndex                     => 0,
+    giveCredits                       => 1,
     ignoreClasses                     => '',
     includeSourceCode                 => 0,
     indexTitle                        => 'Documentation',
@@ -34,10 +37,7 @@ our $SETTINGS = {
     templateCssDirectory              => 'templates/css',
     templateJsDirectory               => 'templates/js',
     templateXslDirectory              => 'templates/xslt',
-    templateXslForClasses             => 'VisDoc.xsl',
-    templateXslForIndexFrameset       => 'VisDoc_index_frameset.xsl',
-    templateXslForPackagesFrameset    => 'VisDoc_packages_frameset.xsl',
-    templateXslForPackagesTocFrameset => 'VisDoc_packages_toc_frameset.xsl',
+    templateXsl                       => 'VisDoc.xsl',
 };
 
 1;

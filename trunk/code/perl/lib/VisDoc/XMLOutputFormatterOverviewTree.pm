@@ -43,7 +43,24 @@ package B
 sub _writeList {
     my ( $this, $inWriter ) = @_;
 
-    my $packages;
+    my ($packages, $languages) = $this->_getPackages();
+    return 0 if !scalar @{$packages};
+    
+    $inWriter->startTag('tocList');
+	$this->_writePackages($inWriter, $packages, $languages);
+    $inWriter->endTag('tocList');
+    
+    return 1;
+}
+
+=pod
+
+=cut
+
+sub _getPackages {
+    my ( $this ) = @_;
+
+	my $packages;
     my $languages
       ; # store the language of each class to pass with the class attributes later on
     foreach my $fileData ( @{ $this->{data} } ) {
@@ -58,21 +75,32 @@ sub _writeList {
     return 0 if ( !$packages || !scalar @{$packages} );
 
     # sort packages by name
-    #@{$packages} = sort { $a->{name} cmp $b->{name} } @{$packages};
+    @{$packages} = sort { $a->{name} cmp $b->{name} } @{$packages};
+    
+    return ($packages, $languages);
+}
 
-    $inWriter->startTag('tocList');
-    $inWriter->startTag('listGroup');
+=pod
 
-    foreach my $package ( sort @{$packages} ) {
+=cut
 
-        if ( $package->{name} ) {
-            $inWriter->startTag('item');
+sub _writePackages {
+    my ( $this, $inWriter, $inPackages, $inLanguages ) = @_;
+    
+    foreach my $package ( sort @{$inPackages} ) {
+
+		$inWriter->startTag('listGroup');
+		
+		if ( $package->{name} ) {
+			$inWriter->startTag('listGroupTitle');
             $this->_writeLinkXml( $inWriter, $package->{name},
                 $package->getUri() );
             $inWriter->cdataElement( 'package', 'true' );
-            $inWriter->endTag('item');
+			$inWriter->endTag('listGroupTitle');
+			$inWriter->startTag('item');
+			$inWriter->startTag('listGroup');
         }
-
+		
         my $classes = $package->{classes};
 
         # sort classes
@@ -95,20 +123,21 @@ sub _writeList {
                 isInterface =>
                   ( $class->{type} & $VisDoc::ClassData::TYPE->{INTERFACE} ),
                 type     => $class->{type},
-                language => $languages->{ $package->{name} },
+                language => $inLanguages->{ $package->{name} },
                 access   => $class->{access},
             };
             $this->_writeClassItem( $inWriter, $class->{name}, $class->getUri(),
                 $attributes );
         }
-
+        
+        if ( $package->{name} ) {
+			$inWriter->endTag('listGroup');
+			$inWriter->endTag('item');
+		}
+        $inWriter->endTag('listGroup');
     }
-
-    $inWriter->endTag('listGroup');
-    $inWriter->endTag('tocList');
-    return 1;
 }
-
+    
 1;
 
 # VisDoc - Code documentation generator, http://visdoc.org

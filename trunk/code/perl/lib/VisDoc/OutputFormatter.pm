@@ -10,9 +10,11 @@ use VisDoc::XMLOutputFormatterClassData;
 use VisDoc::XMLOutputFormatterPackageData;
 use VisDoc::Language;
 
+my $doctermsInited = 0;
+
 =pod
 
-StaticMethod format ($fileData ) -> \@xmlData
+StaticMethod formatFileData ($fileData, \%preferences ) -> \@xmlData
 
 Returns an array of xmlData hashes, each with keys:
 - uri: the uri (without file extension)
@@ -20,10 +22,8 @@ Returns an array of xmlData hashes, each with keys:
 
 =cut
 
-my $doctermsInited = 0;
-
 sub formatFileData {
-    my ( $inFileData, $inPreferences ) = @_;
+    my ( $inFileData, $inPreferences, $inXmlWriter ) = @_;
 
     _initDocTerms( $inPreferences->{base} );
 
@@ -41,7 +41,7 @@ sub formatFileData {
             my $formatter =
               VisDoc::XMLOutputFormatterPackageData->new( $inPreferences,
                 $inFileData->{language}, $packageData );
-            push @{$xmlData}, $formatter->format();
+            push @{$xmlData}, $formatter->format($inXmlWriter);
         }
 
         # class
@@ -51,7 +51,7 @@ sub formatFileData {
             my $formatter =
               VisDoc::XMLOutputFormatterClassData->new( $inPreferences,
                 $inFileData->{language}, $classData );
-            push @{$xmlData}, $formatter->format();
+            push @{$xmlData}, $formatter->format($inXmlWriter);
         }
 
     }

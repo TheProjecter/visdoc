@@ -1,11 +1,13 @@
 # See bottom of file for license and copyright information
 
-package VisDoc::XMLOutputFormatterMainPage;
+package VisDoc::XMLOutputFormatterIndexPage;
 use base 'VisDoc::XMLOutputFormatterListingBase';
 
 use strict;
 use warnings;
 use XML::Writer;
+
+our $URI = 'index';
 
 =pod
 
@@ -14,27 +16,18 @@ use XML::Writer;
 sub _uri {
     my ($this) = @_;
 
-    return 'main';
+    return $URI;
 }
 
 sub _title {
     my ($this) = @_;
 
-    return $this->{preferences}->{indexTitle} || 'main';
+    return $this->{preferences}->{indexTitle} || 'Documentation';
 }
 
-=pod
-
-_formatData ($xmlWriter) -> $bool
-
-=cut
-
-sub _formatData {
+sub _writeList {
     my ( $this, $inWriter ) = @_;
-
-    $this->_writeCSSLocation($inWriter);
-    $this->_writeTitleAndPageId($inWriter);
-
+    
     return 1;
 }
 

@@ -18,7 +18,6 @@ sub _formatData {
     my ( $this, $inWriter ) = @_;
 
     $this->_writeCSSLocation($inWriter);
-    $this->_writeAccessKeyLinks($inWriter);
     $this->_writeTitleAndPageId($inWriter);
     $this->_writeClassData($inWriter);
     $this->_writeSummary($inWriter);
@@ -27,36 +26,6 @@ sub _formatData {
 
     return 1;
 }
-
-=pod
-
-=cut
-
-=pod
-sub _writeAccessKeyLinks {
-    my ( $this, $inWriter ) = @_;
-
-    $inWriter->startTag('accessKeyInfo');
-
-    # title
-    $inWriter->cdataElement( 'title', $this->_docTerm('access_keys') );
-
-    # summary: only if TOC will be present
-    $inWriter->cdataElement( 'summary', $this->_docTerm('header_summary') )
-      if $this->{data}->getMemberCount() > 0;
-
-    # classes
-    $inWriter->cdataElement( 'classes', $this->_docTerm('header_classes') )
-      if $this->{data}->{classes};
-
-    # classes
-    $inWriter->cdataElement( 'packagefunctions',
-        $this->_docTerm('header_packagefunctions') )
-      if $this->{data}->{functions};
-
-    $inWriter->endTag('accessKeyInfo');
-}
-=cut
 
 =pod
 

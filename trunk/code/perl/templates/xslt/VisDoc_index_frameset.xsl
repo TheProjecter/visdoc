@@ -279,15 +279,19 @@ validate with The W3C Markup Validation Service at http://validator.w3.org/ .
 <!ENTITY zwsp "&#0203;">
 ]>
 <xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns="http://www.w3.org/1999/xhtml">
-<xsl:output omit-xml-declaration="yes" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Frameset//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd" indent="yes"  encoding="UTF-8" />
-
+<xsl:output
+	omit-xml-declaration="yes"
+	method="xml"
+	doctype-public="-//W3C//DTD XHTML 1.0 Frameset//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd" 
+	indent="yes"
+	encoding="%VISDOC_ENCODING%"
+/>
 
 <!-- ......................... # Index # ......................... -->
 <!-- written to index.html -->
 <xsl:template match="index"><html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title><xsl:value-of select="title" /></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script src="../js/jquery.js" type="text/javascript"><xsl:text>//</xsl:text></script>
 	<script src="../js/common.js" type="text/javascript"><xsl:text>//</xsl:text></script>
 	<script src="../js/index.js" type="text/javascript">//</script>

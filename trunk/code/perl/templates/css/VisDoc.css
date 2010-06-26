@@ -1,3 +1,120 @@
+/* START BASE LAYOUT */
+
+/* 
+Basic layout derived from http://www.positioniseverything.net/articles/pie-maker/pagemaker_form.php.
+I've changed many so things that I won't put a full copyright notice. However all hacks (and comments!) are far beyond my knowledge and this deserves full credits:
+
+Original copyright notice:
+Parts of these notes are
+(c) Big John @ www.positioniseverything.net and (c) Paul O'Brien @ www.pmob.co.uk, all of whom contributed significantly to the design of
+the css and html code.
+
+Reworked for Foswiki: (c) Arthur Clemens @ visiblearea.com
+*/
+
+html, body {
+	margin:0; /*** Do NOT set anything other than a left margin for the page
+as this will break the design ***/
+	padding:0;
+	border:0;
+/* \*/
+	height:100%;
+/* Last height declaration hidden from Mac IE 5.x */
+}
+body {
+	min-width:100%; /*** This is needed for moz. Otherwise, the header and footer will
+slide off the left side of the page if the screen width is narrower than the design.
+Not seen by IE. Left Col + Right Col + Center Col + Both Inner Borders + Both Outer Borders ***/
+	text-align:center; /*** IE/Win (not IE/MAC) alignment of page ***/
+}
+.clear {
+	clear:both;
+	/*** these next attributes are designed to keep the div
+	height to 0 pixels high, critical for Safari and Netscape 7 ***/
+	height:0px;
+	overflow:hidden;
+	line-height:1%;
+	font-size:0px;
+}
+
+#wrapper {
+	height:100%; /*** moz uses this to make full height design. As this #wrapper is inside the #page which is 100% height, moz will not inherit heights further into the design inside this container, which you should be able to do with use of the min-height style. Instead, Mozilla ignores the height:100% or min-height:100% from this point inwards to the center of the design - a nasty bug.
+If you change this to height:100% moz won't expand the design if content grows.
+Aaaghhh. I pulled my hair out over this for days. ***/
+/* \*/
+	height:100%;
+/* Last height declaration hidden from Mac IE 5.x */
+/*** Fixes height for non moz browsers, to full height ***/
+}
+#wrapp\65	r{ /*** for Opera and Moz (and some others will see it, but NOT Safari) ***/
+	height:auto; /*** For moz to stop it fixing height to 100% ***/
+}
+/* \*/
+* html #wrapper{
+	height:100%;
+}
+
+#page {
+	margin-left:auto; /*** Mozilla/Opera/Mac IE 5.x alignment of page ***/
+	margin-right:auto; /*** Mozilla/Opera/Mac IE 5.x alignment of page ***/
+	text-align:left; /*** IE Win re-alignment of page if page is centered ***/
+	position:relative;
+	width:100%; /*** Needed for Moz/Opera to keep page from sliding to left side of
+page when it calculates auto margins above. Can't use min-width. Note that putting
+width in #page shows it to IE and causes problems, so IE needs a hack
+to remove this width. Left Col + Right Col + Center Col + Both Inner Border + Both Outer Borders ***/
+/* \*/
+
+/* Last height declaration hidden from Mac IE 5.x */
+/*** Needed for Moz to give full height design if page content is
+too small to fill the page ***/
+}
+/* Last style with height declaration hidden from Mac IE 5.x */
+/*** Fixes height for IE, back to full height,
+from esc tab hack moz min-height solution ***/
+#outer {
+	z-index:1; /*** Critical value for Moz/Opera Background Column colors fudge to work ***/
+	position:relative; /*** IE needs this or the contents won't show outside the parent container. ***/
+
+	height:100%;
+/* Last height declaration hidden from Mac IE 5.x */
+/*** Needed for full height inner borders in Win IE ***/
+}
+
+#floatWrap {
+	width:100%;
+	float:left;
+	display:inline;
+}
+
+#sidebar {
+	float:left;
+	display:inline;
+	overflow:hidden;
+}
+#sidebarContent {
+	position:relative;
+}
+#main {
+	width:100%;
+	float:right;
+	display:inline;
+}
+#header {
+	z-index:1; /*** Critical value for Moz/Opera Background Column colors fudge to work ***/
+	position:absolute;
+	top:0px;
+	width:100%;
+}
+#footer {
+	z-index:1; /* Critical value for Moz/Opera Background Column colors fudge to work */
+	clear:both;
+	width:100%;
+}
+/* END BASE LAYOUT */
+
+
+/* START FONT GRID */
 /* baseline grid generated with http://topfunky.com/baseline-rhythm-calculator/ */
 /* settings: font-size:12px, line-height:18px; */
 
@@ -30,7 +147,7 @@ h4 {
 	line-height: 1.2857142857142858em;
 	margin-bottom: 1.2857142857142858em;
 }
-p, ul, blockquote, pre, td, th, label {
+p, ul, blockquote, pre, td, th, label, pre {
 	margin: 0;
 	font-size: 1em;
 	line-height: 1.5em;
@@ -46,27 +163,36 @@ table {
 	border-collapse: collapse;
 	margin-bottom: 1.5em;
 }
+/* END FONT GRID */
 
 
+/* START VISDOC STYLES */
 
-.VisDoc {
+/* START BASE HTML */
+html body {
+	background:#fafafa;
 	font-family:"Lucida Grande",arial,helvetica,sans-serif;
+	height:100%;
 }
-.VisDoc div.content {
+ul {
 	margin:0;
-	padding:1em 4em 3em 4em;
+	padding:0;
+	list-style:none;
 }
-
-.VisDoc h1 {
+li {
+	margin:0;
+	padding:0;
+}
+h1 {
 	color:#000;
 }
-.VisDoc h2 {
+h2 {
 	color:#3a456d;
 }
-.VisDoc h3 {
+h3 {
 	color:#000;
 }
-.VisDoc hr {
+hr {
 	color:#a2a6a9;
 	background-color:#a2a6a9;
 	height:1px;
@@ -75,157 +201,293 @@ table {
 	padding:0;
 }
 
-.VisDoc a:link,
-.VisDoc a:visited,
-.VisDoc a:link .linkLabel,
-.VisDoc a:visited .linkLabel {
+a:link,
+a:visited,
+a:link .linkLabel,
+a:visited .linkLabel {
 	text-decoration:none;
 	color:#36c;
-	background-color:transparent;
 }
-
-.VisDoc a:link:hover,
-.VisDoc a:visited:hover,
-.VisDoc a:link:hover .linkLabel,
-.VisDoc a:visited:hover .linkLabel,
-.VisDoc a:link:hover .icon,
-.VisDoc a:link:visited:hover .icon {
+a:link:hover,
+a:visited:hover,
+a:link:hover .linkLabel,
+a:visited:hover .linkLabel,
+a:link:hover .icon,
+a:link:visited:hover .icon {
 	text-decoration:underline;
 }
-
-.VisDoc table {
+table {
 	border-collapse:collapse;
 	border-color:#dedede;
 	border-width:1px;
 }
-
-.VisDoc th {
+th {
 	text-align:left;
 }
-
-.VisDoc img {
+img {
 	margin:.5em;
 }
 
-.VisDoc .title {
+/* END BASE HTML */
+
+/* START LAYOUT SETTINGS FOR VISDOC */
+
+/* WIDTH OF LEFT BAR */
+
+.isShowingNavigation #outer {
+	margin-left:250px;
+}
+.isShowingNavigation #sidebar {
+	width:250px;
+	margin-left:-250px;
+}
+#toggleTocButton,
+#toggleTocButton a:link,
+#toggleTocButton a:visited {
+	width:250px;
+}
+
+/* HEIGHT OF HEADER */
+
+#header,
+#clearHeaderCenter,
+#clearHeaderLeft,
+#toggleTocButton {
+	height:30px; /* top bar height; make room for header columns */
+	overflow:hidden;
+}
+/* END LAYOUT SETTINGS FOR VISDOC */
+
+#wrapper {
+	background:#f1f5fa;
+}
+#floatWrap {
+	background:#fff;
+	min-height:500px;
+}
+#header {
+	background:#fafafa;
+	border-bottom:1px solid #566d85;
+}
+.isShowingNavigation #sidebar {
+	display:block;
+	padding:0;
+}
+#sidebarContent {
+	margin:2em;
+}
+#sidebar li,
+#sidebar div div {
+	margin:.5em 0;
+	padding:0;
+}
+#sidebar ul ul {
+	margin-left:14px;
+}
+#mainContent {
+	margin:2em 3em 2em 2em;
+}
+#footer {
+	border-top:1px solid #566d85;
+}
+#footerContent {
+	height:1.8em;
+	padding:.5em 2em;
+}
+#footerContent ul {
+	margin:0;
+	clear:both;
+}
+#footerContent li {
+	float:left;
+	font-size: 0.8333333333333334em;
+	line-height: 1.8em;
+	display:block;
+	padding-right:1em;
+	height:1.8em;
+}
+.isShowingNavigation #outer {
+	border-left:1px solid #c1cfe2;
+}
+#headerButtons li {
+	float:left;
+	border-right:1px solid #c1cfe2;
+	height:30px;
+}
+.isShowingNavigation #toggleTocButton a:link,
+.isShowingNavigation #toggleTocButton a:visited {
+	background:#e3eaf3;
+}
+#headerButtons a:link,
+#headerButtons a:visited {
+	height:30px;
+	display:block;
+	padding:6px 2em;
+	color:#999;
+	text-decoration:none;
+}
+#headerButtons a:hover {
+	color:#000;
+}
+#toggleTocButton a:link,
+#toggleTocButton a:visited {
+	color:#333;
+}
+#headerButtons li a:hover {
+	background:#f2f2f2;
+}
+.isShowingNavigation #toggleTocButton a:hover {
+	background:#c8d4e6;
+	color:#000;
+}
+#header .closure {
+	display:inline;
+}
+.isShowingNavigation #header .closure {
+	display:none;
+}
+#header .disclosure {
+	display:none;
+}
+.isShowingNavigation #header .disclosure {
+	display:inline;
+}
+.closure,
+.disclosure,
+#headerButtons .icon {
+	color:inherit;
+	float:left;
+	margin-left:-14px;
+}
+.closure,
+.disclosure {
+	font-size:.6em;
+}
+.closure,
+.closure a:link,
+.closure a:visited,
+.disclosure,
+.disclosure a:link,
+.disclosure a:visited,
+#headerButtons a:hover .icon {
+	color:#3a456d;
+	text-decoration:none;
+}
+#sidebar .globalNav {
+	border-top:1px solid #C1CFE2;
+	margin:1em -2em 0 -2em;
+	padding:.5em 2em;
+	color:#bbb;
+}
+
+
+.title {
 	display:block;
 	font-weight:700;
 }
 
-.VisDoc .separator {
+.separator {
 	color:#dedede;
 	margin:0 .4em;
 }
 
-.VisDoc .attribute {
+.attribute {
 	font-size: 0.8333333333333334em;
 	line-height: 1.8em;
 	margin-bottom: 1.8em;
 	color:#95adc0;
 }
 
-.VisDoc .doesNotExist {}
+.doesNotExist {}
 
-.VisDoc .code {
+.code {
 	white-space:pre;
 }
 
-.VisDoc code,
-.VisDoc pre,
-.VisDoc .code,
-.VisDoc tt,
-.VisDoc textarea {
+code,
+pre,
+.code,
+tt,
+textarea {
 	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
 }
 
-.VisDoc pre {
+pre {
 	margin-top:1em;
 	margin-bottom:1em;
 	color:brown;
 	padding-bottom:1.5em;
 }
 
-html>body .VisDoc pre {
+html>body pre {
 	padding-bottom:.15em;
 }
 
-.VisDoc #topNav {}
-.VisDoc #topNav ul {
-	width:100%;
-	border-bottom:1px solid #e3e9ec;
-	height:1.8em;
-	margin-bottom:2.8em;
-}
-.VisDoc #topNav ul li {
-	font-size: 0.8333333333333334em;
-	line-height: 1.8em;
-	margin-bottom: 1.8em;
-}
-.VisDoc div.docNav {
+.docNav {
 	color:#9399af;
 }
 
-.VisDoc .summary div.docNav {
+.summary .docNav {
 	margin:0 0 .5em 0;
 	border-bottom:1px solid #e3e9ec;
 }
 
-.VisDoc div.docNav ul li {
-	list-style:none;
+.docNav ul li {
 	display:block;
 	float:left;
 }
 
-.VisDoc div.docNav a {
+.docNav a {
 	margin-right:.5em;
 }
 
-.VisDoc div.docNav a:link .accessKey,
-.VisDoc div.docNav a:visited .accessKey {
+.docNav a:link .accessKey,
+.docNav a:visited .accessKey {
 	border-bottom:1px solid #666;
 }
 
-.VisDoc div.docNav .icon {
+.icon {
 	font-size:100%;
 	color:#9399af;
 	margin:0 .35em 0 0;
 }
 
-.VisDoc div.summary div.docNav {
+.summary .docNav {
 	font-size:100%;
 }
 
-.VisDoc .inheritDoc,
-.VisDoc .inheritDoc a:link,
-.VisDoc .inheritDoc a:visited {
+.inheritDoc,
+.inheritDoc a:link,
+.inheritDoc a:visited {
 	color:#777;
 }
-.VisDoc .inheritDoc a:link,
-.VisDoc .inheritDoc a:visited {
+.inheritDoc a:link,
+.inheritDoc a:visited {
 	text-decoration:underline;
 }
-.VisDoc .inheritDoc a:hover {
+.inheritDoc a:hover {
 	color:#36c;
 }
-.VisDoc .inheritDocLink a:link,
-.VisDoc .inheritDocLink a:visited {
+.inheritDocLink a:link,
+.inheritDocLink a:visited {
+	color:#aaa;
 	text-decoration:none;
 	margin:0 .35em 0 0;
 }
-.VisDoc .inheritDocLink a:hover {
-	text-decoration:underline;
+.inheritDocLink a:hover {
+	color:#000;
 }
 
-.VisDoc .floatholder {
+.floatholder {
 	margin:1em 0 0;
 }
 
-.VisDoc .floatbox {
+.floatbox {
 	float:left;
 	display:block;
 }
 
-.VisDoc .clear {
+.clear {
 	height:0;
 	line-height:0;
 	clear:both;
@@ -234,7 +496,8 @@ html>body .VisDoc pre {
 	padding:0;
 }
 
-.VisDoc .clearfix:after {
+/*
+.clearfix:after {
 	content:".";
 	display:block;
 	height:0;
@@ -245,350 +508,260 @@ html>body .VisDoc pre {
 * html .clearfix {
 	height:1%;
 }
+*/
 
-.VisDoc div.boxWithBorder {
+.boxWithBorder {
 	margin-top:1em;
 	margin-bottom:1em;
 	border-top:1px solid #e3e9ec;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder {
-	background-color:#F0F5F9;
+.boxWithBorder .boxedElem .contentHolder {
+	background-color:#f1f5fa;
 	border-color:#e3e9ec;
 	border-style:none solid solid;
 	border-width:1px;
 	padding:.4em 10px .7em;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder .inheritedList a:link,
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder .inheritedList a:visited {
+.boxWithBorder .boxedElem .contentHolder .inheritedList a:link,
+.boxWithBorder .boxedElem .contentHolder .inheritedList a:visited {
 	margin-right:.35em;
 	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item div.name {
+.boxWithBorder .boxedElem .contentHolder .item .name {
 	float:left;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item .itemSeparator {
+.boxWithBorder .boxedElem .contentHolder .item .itemSeparator {
 	margin:0 2px;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table {
+.boxWithBorder .boxedElem .contentHolder .item table {
 	border:1px solid #dedede;
 	border-collapse:collapse;
 	background-color:#fff;
 	margin:.4em 0;
 	width:auto;
 }
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th {
+.boxWithBorder .boxedElem .contentHolder .item table th {
 	text-align:left;
 	font-weight:400;
 	border-bottom:1px solid #dedede;
 }
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td {
+.boxWithBorder .boxedElem .contentHolder .item table td {
 	border-left:1px solid #dedede;
 	border-bottom:1px solid #dedede;
 }
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td p {
+.boxWithBorder .boxedElem .contentHolder .item table td p {
 	margin:0;
 }
-.VisDoc div.classProperties {
+.classProperties {
 	margin:2em 0 0 2em;
 }
 
-.VisDoc div.classProperties table {
-	background-color:#F0F5F9;
+.classProperties table {
+	background-color:#f1f5fa;
 	border-color:#e3e9ec;
 	border-style:solid none;
 	border-width:1px;
 }
 
-.VisDoc div.classProperties th,
-.VisDoc div.classProperties td {
+.classProperties th,
+.classProperties td {
 	border-top:1px solid #e3e9ec;
 }
 
-.VisDoc th {
+th {
 	padding:.4em 1em;
 }
 
-.VisDoc td {
+td {
 	border-left:0;
 	padding:.4em 1em;
 }
 
-.VisDoc div.classProperties td.classDetails,
-.VisDoc div.classProperties th.classDetails {
+.classProperties td.classDetails,
+.classProperties th.classDetails {
 	background-color:#fff;
 }
 
-.VisDoc div.classDescription h2 {
+.classDescription h2 {
 	font-size:1.5em;
 	margin:0;
 	padding:0;
 }
 
-.VisDoc div.classDescription .fields {
+.classDescription .fields {
 	margin-bottom:1em;
 }
 
-.VisDoc div.classDescription .field {
+.classDescription .field {
 	font-style:italic;
 	color:red;
 }
 
-.VisDoc div.classDescription div.boxWithBorder {
+.classDescription .boxWithBorder {
 	margin-top:2em;
 }
 
-.VisDoc div.summary {
+.toc {
 	margin-top:4em;
 }
 
-.VisDoc div.summary .boxWithBorder {
+.toc .boxWithBorder {
 	margin-top:.5em;
 	margin-bottom:0;
 }
 
-.VisDoc div.summary div.memberList div.memberSummaryPart {
+.toc .memberList .memberSummaryPart {
 	padding-bottom:1em;
 }
 
-.VisDoc div.summary div.memberList div.memberSummaryPart div.boxWithBorder div.boxedElem div.contentHolder {
+.toc .memberList .memberSummaryPart .boxWithBorder .boxedElem .contentHolder {
 	background-color:#fff;
 }
 
-.VisDoc div.memberSection {
-	margin-top:3em;
+.memberSection {
+	margin-top:1.5em;
 }
 
-.VisDoc div.memberSection div.member,
-.VisDoc div.memberSection div.class {
+.memberSection .member,
+.memberSection .class {
 	height:1%;
 	margin:-1px -15px 0 -15px;
-	padding:1em 15px 13px;
+	padding:1em 15px 1.5em;
 }
 
-.VisDoc div.memberSection h2 {
+.memberSection h2 {
 	margin:0 -10px;
 	padding:0 10px 8px;
 }
 
-.VisDoc div.memberSection div.fullMemberString {
+.memberSection .fullMemberString {
 	margin-top:1em;
 }
 
-.VisDoc div.memberSection div.fullMemberString strong,
-.VisDoc div.memberSection div.fullMemberString b {
+.memberSection .fullMemberString strong,
+.memberSection .fullMemberString b {
 	font-weight:400;
 	color:#a00;
 }
 
-.VisDoc div.memberSection .access {
+.memberSection .access {
 	color:#9399af;
 	margin-left:.35em;
 }
-
-.VisDoc div.memberSection div.description {
-	padding-top:1em;
-}
-
-.VisDoc div.memberSection div.description .field {
+.memberSection .description .field {
 	font-style:italic;
 	margin:0 0 1em;
 }
 
-.VisDoc div.memberSection div.description .field,
-.VisDoc div.memberSection div.description .field a:link,
-.VisDoc div.memberSection div.description .field a:visited,
-.VisDoc div.memberSection div.description .field a:hover {
+.memberSection .description .field,
+.memberSection .description .field a:link,
+.memberSection .description .field a:visited,
+.memberSection .description .field a:hover {
 	text-decoration:underline;
 }
 
-.VisDoc div.memberSection div.description .field a:hover {
+.memberSection .description .field a:hover {
 	text-decoration:underline;
 }
 
-.VisDoc div.footer {
-	color:#9399af;
-	font-size:90%;
-	line-height:1.3em;
-	margin:5em 0 .5em;
-	padding:.5em 0;
-}
-
-.VisDoc div.footer ul li {
-	list-style:none;
-	float:left;
-	margin:0 10px 0 0;
-	padding:0;
-}
-
-.VisDoc .sourceCodeView a {
+.sourceCodeView a {
 	margin-right:.5em;
 }
 
-.VisDoc .twistyTrigger {
+.twistyTrigger {
 	margin:0 0 .25em;
 }
 
-.VisDoc .twistyTrigger a:link,
-.VisDoc .twistyTrigger a:visited {
+.twistyTrigger a:link,
+.twistyTrigger a:visited {
 	text-decoration:none;
 }
 
-.VisDoc .sourceCodeView .icon {
+.sourceCodeView .icon {
 	font-size: 0.8333333333333334em;
 	line-height: 1.8em;
 	margin-bottom: 1.8em;
 	display:none;
 }
 
-.VisDoc div.list {
-	margin-top:2em;
-}
-
-.VisDoc div.list ul a:hover .attribute,
-.VisDoc div.list ul a:hover .packagePath {
+.list ul a:hover .attribute,
+.list ul a:hover .packagePath {
 	text-decoration:underline;
 }
 
-.VisDoc div.list .packagePath {
+.list .packagePath {
 	color:#95adc0;
+}
+#main .list .packagePath {
 	font-weight:700;
 }
-
-.VisDoc div.list .packagePathTitle {
-	color:#000;
+#treemenu .packagePath {
+	display:none;
 }
-
-.VisDoc div.list .interface .attribute {
+#main .list .interface .attribute {
 	font-style:italic;
 }
 
-#overview .VisDoc div.listGroup {
+/*
+#overview .listGroup {
 	border-bottom:1px solid #dbdee1;
 	margin:2em 0 0;
 }
 
-#overview .VisDoc .listing div.listGroup ul li {
+#overview .listing .listGroup ul li {
 	border-top:1px solid #dbdee1;
 	padding:.2em 0;
 }
 
-#overview .VisDoc .listing div.listGroup ul li ul li {
+#overview .listing .listGroup ul li ul li {
 	border:none;
 	padding:0;
 }
-
-.VisDoc div.listGroup h2 {
+.listGroup h2 {
 	margin-bottom:.5em;
 }
-
-body#toc {
-	background-color:#f0f5f9;
-	margin:0;
-	padding:0;
-	height:100%;
-}
-
-#toc .VisDoc div.content {
-	color:#444;
-	padding:0 1px .5em 1.25em;
-}
-
-#toc .VisDoc h1 {
-	font-size:1.2em;
-	color:#444;
-	margin:1em 0 0;
-}
-
-#toc .VisDoc div.list {
-	margin:1em 0;
-}
-
-#toc .VisDoc .tocNavigation {
-	font-size:94%;
-	color:#9399af;
-	margin:1em 0 0;
-}
-
-#toc .VisDoc .item {
-	margin-right:.2em;
-}
-
-#toc .VisDoc .tocNavigation ul li {
-	list-style:none;
-	float:left;
-	margin:0 .5em 0 0;
-	padding:0;
-}
-
-#toc .VisDoc a:link,#toc .VisDoc a:visited {
-	color:#009;
-}
-
-#toc .VisDoc div.list ul a {
-	display:inline;
-	width:100%;
-	margin:0;
-	padding:0;
-}
-
-#toc .VisDoc div.listGroup {
-	margin:1em 0 0;
-}
-
-#toc .VisDoc div.list ul li.current a:hover,#toc .VisDoc div.list ul li.current a.className:hover,#toc .VisDoc div.list ul li.current a:hover .className {
-	text-decoration:underline;
-}
-
-#toc .VisDoc div.list ul li.name {
-margin-top:1em;
-	font-weight:700;
-	color:#666;
-}
-
-.hasJavascript .private {
-	top:-9999px;
-}
-.VisDoc .private h3 {
+*/
+.private h3 {
 	color:#9399AF;
 }
-.VisDoc li.private a:link,
-.VisDoc li.private a:visited,
-.VisDoc a:link.private,
-.VisDoc a:visited.private {
+li.private a:link,
+li.private a:visited,
+a:link.private,
+a:visited.private {
 	color:#9399AF;
 }
-.VisDoc .privateColor {
+.privateColor {
 	color:#9399AF;
 }
 
-.VisDoc div.memberSection div.member:target,
-.VisDoc div.memberSection div.class:target,
-.VisDoc h2:target {
+.memberSection .member:target,
+.memberSection .class:target,
+h2:target {
 	background-color:#f1f5f9;
 }
-.VisDoc div.member:hover {
+.member:hover {
 	background-color:#f1f5f9;
 }
 
-.VisDoc div.memberSection div.member:target div.boxWithBorder,
-.VisDoc div.memberSection div.class:target div.boxWithBorder,
-.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem,
-.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem,
-.VisDoc div.memberSection div.member:target div.boxWithBorder div.boxedElem div.contentHolder,
-.VisDoc div.memberSection div.class:target div.boxWithBorder div.boxedElem div.contentHolder {
+.memberSection .member:target .boxWithBorder,
+.memberSection .class:target .boxWithBorder,
+.memberSection .member:target .boxWithBorder .boxedElem,
+.memberSection .class:target .boxWithBorder .boxedElem,
+.memberSection .member:target .boxWithBorder .boxedElem .contentHolder,
+.memberSection .class:target .boxWithBorder .boxedElem .contentHolder {
 	border-color:#dbdee1;
 }
 
-.framed .VisDoc .activeWhenFramed {
+.framed .activeWhenFramed {
 	display:block;
 }
 
-.VisDoc textarea#source {
+textarea#source {
 	width:100%;
 	height:300px;
 	background-color:#fafafa;
@@ -596,136 +769,124 @@ margin-top:1em;
 	padding:.25em;
 }
 
-.VisDoc th,
-.VisDoc td,
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th,
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td {
+th,
+td,
+.boxWithBorder .boxedElem .contentHolder .item table th,
+.boxWithBorder .boxedElem .contentHolder .item table td {
 	vertical-align:top;
 	padding:.25em 1em;
 }
 
-.VisDoc div.docNav a:link,
-.VisDoc div.docNav a:visited,
-.VisDoc div.footer a:link,
-.VisDoc div.footer a:visited {
+.docNav a:link,
+.docNav a:visited,
+#footerContent a:link,
+#footerContent a:visited {
 	color:#9399af;
 }
 
-.VisDoc code,
-.VisDoc tt,
-.VisDoc .colorizedCode,
-.VisDoc div.memberSection div.fullMemberString .methodName {
+code,
+tt,
+.colorizedCode,
+.memberSection .fullMemberString .methodName {
 	color:brown;
 }
-.VisDoc .codeComment {
+.codeComment {
 	color:gray;
 }
-.VisDoc .codeProperty {
+.codeProperty {
 	color:#8A2BE2;
 }
-.VisDoc .codeIdentifier {
+.codeIdentifier {
 	color:#069;
 }
-.VisDoc .codeString {
+.codeString {
 	color:blue;
 }
-.VisDoc .codeNumber {
+.codeNumber {
 	color:#333;
 }
-.VisDoc .codeKeyword {
+.codeKeyword {
 	color:red;
 }
 
-.VisDoc div.docNav ul,
-.VisDoc div.summary div.memberList div.memberSummaryPart ul,
-.VisDoc div.summary div.memberList div.memberSummaryPart ul li,
-.VisDoc div.footer ul,
-.VisDoc div.list ul,
-.VisDoc div.list ul li,#toc .VisDoc .tocNavigation ul {
-	list-style:none;
-	margin:0;
-	padding:0;
-}
-
-.VisDoc .summary .memberList li a:link,
-.VisDoc .summary .memberList li a:visited,
-.VisDoc .summary .memberList li .typeInfo {
+.toc .memberList li a:link,
+.toc .memberList li a:visited,
+.toc .memberList li .typeInfo {
 	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
 }
 
-.VisDoc div.docNav a:hover,
-.VisDoc div.memberSection div.fullMemberString a:hover,
-.VisDoc div.memberSection div.fullMemberString a:visited:hover,
-.VisDoc div.footer a:hover,#toc .VisDoc a:hover,#toc .VisDoc div.list ul a:hover .repeatSign,
-.VisDoc li.private a:hover,
-.VisDoc a:hover.private {
+.docNav a:hover,
+.memberSection .fullMemberString a:hover,
+.memberSection .fullMemberString a:visited:hover,
+#footerContent a:hover,
+li.private a:hover,
+a:hover.private {
 	text-decoration:underline;
 }
 
-.VisDoc div.inheritDoc,
-.VisDoc div.classProperties ul li .title,
-.VisDoc div.classDescription .field .title,
-.VisDoc div.memberSection div.description .field .title,
-.VisDoc div.list .title,#toc .VisDoc div.list .repeatSign {
+.inheritDoc,
+.classProperties ul li .title,
+.classDescription .field .title,
+.memberSection .description .field .title,
+.list .title {
 	display:inline;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem,#toc .VisDoc div.list ul {
+.boxWithBorder .boxedElem {
 	margin:0;
 	padding:0;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item,
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul.summary li,
-.VisDoc div.summary div.memberList div.memberSummaryPart ul.summary li,
-.VisDoc div.list ul.summary li {
+.boxWithBorder .boxedElem .contentHolder .item,
+.boxWithBorder .boxedElem .contentHolder .item ul.summary li,
+.toc .memberList .memberSummaryPart ul.summary li,
+.list ul.summary li {
 	margin-left:2.5em;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul,
-.VisDoc div.classProperties ul,
-.VisDoc .sourceCodeView ul {
-list-style-type:none;
+.boxWithBorder .boxedElem .contentHolder .item ul,
+.classProperties ul,
+.sourceCodeView ul {
 	margin:0;
 	padding:0;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item ul li,
-.VisDoc div.classProperties ul li,
-.VisDoc .sourceCodeView ul li {
+.boxWithBorder .boxedElem .contentHolder .item ul li,
+.classProperties ul li,
+.sourceCodeView ul li {
 	margin:0;
 	padding:0;
 }
 
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td.uneven,
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th.uneven,
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table td.even,
-.VisDoc div.boxWithBorder div.boxedElem div.contentHolder div.item table th.even,#toc .VisDoc .current {
+.boxWithBorder .boxedElem .contentHolder .item table td.uneven,
+.boxWithBorder .boxedElem .contentHolder .item table th.uneven,
+.boxWithBorder .boxedElem .contentHolder .item table td.even,
+.boxWithBorder .boxedElem .contentHolder .item table th.even {
 	background-color:#fff;
 }
 
-.VisDoc div.classDescription,
-.VisDoc .sourceCode,
-.VisDoc .sourceCodeView {
+.classDescription,
+.sourceCode,
+.sourceCodeView {
 	margin-bottom:1em;
 }
 
-.VisDoc div.classDescription .descriptionSummary,
-.VisDoc div.list .className,
-.VisDoc div.list li.package {
+#main .classDescription .descriptionSummary,
+#main .list .className,
+#main .list li.package {
 	font-weight:700;
 }
 
-.VisDoc div.summary div.memberList div.memberSummaryPart div.boxWithBorder div.boxedElem div.contentHolder .item,
-.VisDoc div.memberSection div.boxWithBorder,
-.VisDoc div.memberSection div.description,
-.VisDoc div.memberSection div.fullMemberString {
+.toc .memberList .memberSummaryPart .boxWithBorder .boxedElem .contentHolder .item,
+.memberSection .boxWithBorder,
+.memberSection .description,
+.memberSection .fullMemberString {
 	margin-left:0;
 }
 
-.VisDoc div.list .repeatSign,#toc .VisDoc div.list a .path,#toc .VisDoc div.list .packagePath,
-.framed .VisDoc .activeWhenNotFramed,
-.VisDoc .activeWhenFramed,
+.list .repeatSign,
+.framed .activeWhenNotFramed,
+.activeWhenFramed,
 .twistyHidden,
 .twistyMakeVisible,
 .visdocMakeVisible,
@@ -734,6 +895,5 @@ list-style-type:none;
 	display:none;
 }
 
-#toc .VisDoc div.list .package,#toc .VisDoc div.list .className {
-	font-weight:400;
-}
+
+/* END VISDOC STYLES */

@@ -175,7 +175,7 @@
 	"all" : {
 		"default" : "All:"
 	},
-	"main_link" : {
+	"index_link" : {
 		"default" : "Main"
 	},
 	"tree_link" : {
@@ -193,7 +193,10 @@
 	"all_classes_title" : {
 		"default" : "All classes and interfaces"
 	},
-	"all_classes_simpletoc_title" : {
+	"all_packages_simple_title" : {
+		"default" : "Packages and classes"
+	},
+	"all_classes_simple_title" : {
 		"default" : "Classes and interfaces"
 	},
 	"all_methods_link" : {

@@ -40,23 +40,12 @@ format ($classData) -> {uri => $uri, textRef => \$xmlText, hasFormattedData => $
 =cut
 
 sub format {
-    my ($this) = @_;
-
-    #	die( "No data to process: $this" ) if !$this->{data};
+    my ($this, $inXmlWriter) = @_;
 
     my $xmlText = '';
-    my $writer  = new XML::Writer(
-        OUTPUT      => \$xmlText,
-        ENCODING    => 'utf-8',
-        DATA_MODE   => 1,
-        DATA_INDENT => 4
-    );
-
-    $writer->xmlDecl("utf-8");
-    $writer->startTag( $this->_documentType() );
-    my $hasFormattedData = $this->_formatData($writer);
-    $writer->endTag( $this->_documentType() );
-    $writer->end();
+	$inXmlWriter->setOutput(\$xmlText);
+	
+    my $hasFormattedData = $this->_formatData($inXmlWriter);
 
     return {
         uri              => $this->_uri(),
@@ -107,6 +96,18 @@ sub _writeValueXml {
 
 =pod
 
+Writes the XML declaration. Override to change behaviour.
+
+=cut
+
+sub _writeXmlDeclaration {
+    my ( $this, $inWriter ) = @_;
+
+    $inWriter->xmlDecl("utf-8");
+}
+
+=pod
+
 _docTerm( $key) -> $text
 
 Gets the doc term from Language.pm.
@@ -137,20 +138,6 @@ sub _title {
     my ($this) = @_;
 
     return $this->{data}->{name};
-}
-
-=pod
-
-_documentType() -> $text
-
-Type of this document
-
-=cut
-
-sub _documentType {
-    my ($this) = @_;
-
-    return 'document';
 }
 
 =pod
@@ -186,18 +173,6 @@ sub _writeCSSLocation {
     $inWriter->startTag('cssFile');
     $inWriter->cdata($cssLocation);
     $inWriter->endTag('cssFile');
-}
-
-=pod
-
-To be implemented by subclasses.
-
-=cut
-
-sub _writeAccessKeyLinks {
-    my ( $this, $inWriter ) = @_;
-
-    # ...
 }
 
 =pod
@@ -341,7 +316,7 @@ sub _writeAttribute {
 sub _writeFooter {
     my ( $this, $inWriter ) = @_;
 
-    $inWriter->startTag('footer');
+    $inWriter->startTag('meta');
 
     # copyright
     my $copyrightText = $this->{preferences}->{copyrightText};
@@ -368,7 +343,7 @@ sub _writeFooter {
             $this->_docTerm('menu_hidePrivate') );
     }
 
-    $inWriter->endTag('footer');
+    $inWriter->endTag('meta');
 }
 
 =pod

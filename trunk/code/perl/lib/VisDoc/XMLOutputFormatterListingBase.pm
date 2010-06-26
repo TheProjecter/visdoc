@@ -51,20 +51,6 @@ sub _writeList {
     return 0;
 }
 
-=pod
-
-_documentType() -> $text
-
-Type of this document
-
-=cut
-
-sub _documentType {
-    my ($this) = @_;
-
-    return 'listing';
-}
-
 1;
 
 # VisDoc - Code documentation generator, http://visdoc.org

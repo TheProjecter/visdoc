@@ -24,7 +24,6 @@ sub _formatData {
     my ( $this, $inWriter ) = @_;
 
     $this->_writeCSSLocation($inWriter);
-    $this->_writeAccessKeyLinks($inWriter);
     $this->_writeTitleAndPageId($inWriter);
     $this->_writeClassData($inWriter);
     $this->_writeSummary($inWriter);
@@ -32,54 +31,6 @@ sub _formatData {
     $this->_writeFooter($inWriter);
 
     return 1;
-}
-
-=pod
-
-=cut
-
-sub _writeAccessKeyLinks {
-    my ( $this, $inWriter ) = @_;
-
-    $inWriter->startTag('accessKeyInfo');
-
-    # title
-    $inWriter->cdataElement( 'title', $this->_docTerm('access_keys') );
-
-    my $title = '';
-
-    # summary: only if TOC will be present
-    $this->_writeAccessKeyLinkForSection( $inWriter, 'summary',
-        'header_summary' )
-      if $this->{data}->getMemberCount( $this->{preferences}->{listPrivate} ) >
-          0;
-
-=pod
-    # inner classes
-    $this->_writeAccessKeyLinkForSection($inWriter, 'innerclasses', 'header_innerclasses') if $this->{data}->getInnerClasses();
-    
-	# constructors
-	$this->_writeAccessKeyLinkForSection($inWriter, 'constructors', 'header_constructor') if $this->{data}->getConstructors();
-    
-    # class properties
-    $this->_writeAccessKeyLinkForSection($inWriter, 'classproperties', 'header_classproperties') if $this->{data}->getClassProperties();
-    
-    # constants
-    $this->_writeAccessKeyLinkForSection($inWriter, 'constants', 'header_constants') if $this->{data}->getConstants();
-    
-    # instance properties
-	$this->_writeAccessKeyLinkForSection($inWriter, 'instanceproperties', 'header_instanceproperties') if $this->{data}->getInstanceProperties();
-
-    # class methods
-	$this->_writeAccessKeyLinkForSection($inWriter, 'classmethods', 'header_classmethods') if $this->{data}->getClassMethods();
-
-	# instance methods
-	$this->_writeAccessKeyLinkForSection($inWriter, 'instancemethods', 'header_instancemethods') if $this->{data}->getInstanceMethods();
-	
-    # event handlers => dependent on setting
-=cut
-
-    $inWriter->endTag('accessKeyInfo');
 }
 
 =pod

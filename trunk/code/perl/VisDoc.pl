@@ -60,6 +60,7 @@ $preferences->{'doc-sources'} = \$process;
 
 &GetOptions(
     $preferences,                          'output=s',
+    'docencoding:s',                       'giveCredits=i',
     'doc-sources=s',                       'copyCSS:i',
     'copyright:i',                         'copyrightText|footer:s',
     'extensions:s',                        'eventHandlerPrefixes:s',
@@ -70,9 +71,8 @@ $preferences->{'doc-sources'} = \$process;
     'sidebarWidth:s',                      'datapath:s',
     'templateCssDirectory:s',              'templateCss:s',
     'templateJsDirectory:s',
-    'templateXslDirectory:s',              'templateXslForClasses:s',
-    'templateXslForIndexFrameset:s',       'templateXslForPackagesFrameset:s',
-    'templateXslForPackagesTocFrameset:s', 'feedback:i',
+    'templateXslDirectory:s',              'templateXsl:s',
+    'feedback:i',
     'openInBrowser:i',
     'help'
 );
@@ -181,7 +181,7 @@ if ($collectiveFileData) {
 	    	system(qq(open "$htmlDir/$indexHtml.html"));
 	    } else {
 	    	my $doc = $htmlDocFileNames->[0];
-	    	system(qq(open "$htmlDir/$doc.html"));
+	    	system(qq(open "$htmlDir/$doc.html")) if $htmlDir && $doc;
 	    }
 	}
 }
@@ -215,6 +215,11 @@ VisDoc.pl [options]
 =item B<-help>
 
 Shows this help text
+
+=item B<-docencoding>
+
+Sets the XSLT encoding. Writes charset as meta tag in HTML.
+Default: "utf-8"
 
 =item B<-doc-sources>
 
@@ -263,6 +268,11 @@ Default: 0
 Title of frameset and main.html header.
 Value: string
 Default: none, no frameset
+
+=item B<-giveCredits>
+
+Whether to give VisDoc credits in the footer.
+Default: 1
 
 =item B<-sidebarWidth>
 

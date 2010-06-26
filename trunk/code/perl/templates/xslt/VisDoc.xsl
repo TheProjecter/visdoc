@@ -6,10 +6,7 @@ This XSL template generates:
 * html for class documentation pages
 * html for the lists: allclasses-frame.html, overview_tree.html, overview-frame.html, and the package html files (toc-package-packagename.html)
 * jquery.js (js/jquery.js)
-* common javascript functions (js/commong.js)
-* javascript for class documentation pages (js/doc.js)
-* javascript for the Table of Contents (js/toc.js)
-* javascript for the frameset index.html (js/index.js)
+* VisDoc javascript functions (js/VisDoc.js)
 
 The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation Service at http://validator.w3.org/
 -->
@@ -288,166 +285,96 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <xsl:output omit-xml-declaration="yes" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" indent="yes" encoding="iso-8859-1" />
 -->
 <!-- back to transitional to validate when using frames -->
-<xsl:output omit-xml-declaration="yes" method="xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" indent="yes" encoding="UTF-8" />
+<xsl:output
+	omit-xml-declaration="yes"
+	method="xml"
+	doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" 
+	indent="yes"
+	encoding="%VISDOC_ENCODING%"
+/>
    
    
-<!-- ......................... Class documentation html page ......................... -->
+<!-- ... Class documentation html page ... -->
 <xsl:template match="document">
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title><xsl:value-of select="title" /></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css"><xsl:attribute name="href">../<xsl:value-of select="cssFile" /></xsl:attribute></link>
 		<script src="../js/jquery.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/common.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/doc.js" type="text/javascript"><xsl:text>//</xsl:text></script>
+		<script src="../js/jquery.simpletreeview.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
+		<script src="../js/VisDoc.js" type="text/javascript"><xsl:text>//</xsl:text></script>
     </head>
-    <body><xsl:attribute name="id">page_<xsl:value-of select="pageClass" /></xsl:attribute>
-		<script type="text/javascript"><xsl:text>VisDoc.initBody();</xsl:text></script>
-		<div id="PageTop"><xsl:comment/></div>
-        <div class="VisDoc">
-			<div class="content">
-				<div id="topNav" class="docNav">
-					<ul class="small">
-						<xsl:call-template name="showHideToc" />
-						<xsl:call-template name="showHidePrivate" />
-					</ul>
-					<p class="clear"></p>
-					<!--
-					<xsl:if test="accessKeyInfo">
-						<ul class="accessKeyLinks">
-							<li>
-								<a><xsl:attribute name="href">#PageTop</xsl:attribute>
-									<xsl:attribute name="accesskey">t</xsl:attribute>
-									<span class="accessKey">T</span>op</a>
-							</li>
-							<xsl:if test="accessKeyInfo/summary">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/summary" /></xsl:attribute>
-										<xsl:attribute name="accesskey">s</xsl:attribute>
-										<span class="accessKey">S</span>ummary</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/innerclasses">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/innerclasses" /></xsl:attribute>
-										<xsl:attribute name="accesskey">i</xsl:attribute>I<span class="accessKey">n</span>ner classes</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/classes">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/classes" /></xsl:attribute>
-										<xsl:attribute name="accesskey">c</xsl:attribute><span class="accessKey">C</span>lasses</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/constructors">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/constructors" /></xsl:attribute>
-										<xsl:attribute name="accesskey">c</xsl:attribute>
-										<span class="accessKey">C</span>onstructors</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/properties">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/properties" /></xsl:attribute>
-										<xsl:attribute name="accesskey">p</xsl:attribute>
-										<span class="accessKey">P</span>roperties</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/classproperties">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/classproperties" /></xsl:attribute>
-										<xsl:attribute name="accesskey">l</xsl:attribute>C<span class="accessKey">l</span>ass properties</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/instanceproperties">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/instanceproperties" /></xsl:attribute>
-										<xsl:attribute name="accesskey">l</xsl:attribute>Instance <span class="accessKey">p</span>roperties</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/methods">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/methods" /></xsl:attribute>
-										<xsl:attribute name="accesskey">m</xsl:attribute>
-										<span class="accessKey">M</span>ethods</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/packagefunctions">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/packagefunctions" /></xsl:attribute>
-										<xsl:attribute name="accesskey">f</xsl:attribute>
-										<span class="accessKey">F</span>unctions</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/classmethods">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/classmethods" /></xsl:attribute>
-										<xsl:attribute name="accesskey">a</xsl:attribute>Cl<span class="accessKey">a</span>ss methods</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/instancemethods">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/instancemethods" /></xsl:attribute>
-										<xsl:attribute name="accesskey">m</xsl:attribute>Instance <span class="accessKey">m</span>ethods</a>
-								</li>
-							</xsl:if>
-							<xsl:if test="accessKeyInfo/eventhandlers">
-								<li>
-									<a><xsl:attribute name="href">#<xsl:value-of select="accessKeyInfo/eventhandlers" /></xsl:attribute>
-										<xsl:attribute name="accesskey">e</xsl:attribute>
-										<span class="accessKey">E</span>vent handlers</a>
-								</li>
-							</xsl:if>
-						</ul>
-					</xsl:if>
-					-->
+    <body>
+    	<xsl:if test="navigation!=''">
+    		<xsl:attribute name="class">isShowingNavigation</xsl:attribute>
+    	</xsl:if>
+    	<xsl:attribute name="id">page_<xsl:value-of select="pageClass" /></xsl:attribute>
+    	<div id="page"> 
+			<div id="wrapper">
+				<div id="outer"> 
+					<div id="floatWrap"> 
+						<div id="main">
+							<div id="clearHeaderCenter"></div> 
+							<div id="mainContent">
+								<xsl:if test="title!=''">
+									<h1><xsl:value-of select="title" /></h1>
+								</xsl:if>
+								<xsl:apply-templates select="classData" />
+								<xsl:apply-templates select="pageSummary|private/pageSummary" />
+								<xsl:apply-templates select="tocList" />
+								<xsl:apply-templates select="memberSections" />
+							</div>
+						</div>
+						<xsl:if test="navigation!=''">
+							<div id="sidebar">
+								<div id="clearHeaderLeft"></div> 
+								<div id="sidebarContent">							
+									<xsl:apply-templates select="navigation/docTitle" />
+									<xsl:apply-templates select="navigation/tocList" ><xsl:with-param name="id" select="treemenu"/></xsl:apply-templates>
+									<xsl:apply-templates select="navigation/globalNav" />
+								</div>
+							</div>
+						</xsl:if>
+					</div>
+					<div class="clear">&nbsp;</div> 
 				</div>
-				<xsl:if test="title!=''">
-					<h1><xsl:value-of select="title" /></h1>
-				</xsl:if>
-				<xsl:apply-templates select="classData" />
-				<xsl:apply-templates select="pageSummary|private/pageSummary" />		
-				<xsl:apply-templates select="memberSections" />
-				<xsl:apply-templates select="footer" />
 			</div>
-        </div>
+			<div id="header">
+				<div id="headerContentWrapper">
+					<div id="headerContent">
+						<ul id="headerButtons">
+							<xsl:if test="navigation!=''">
+								<li id="toggleTocButton"><a href="#"><span class="disclosure">&#9660;</span><span class="closure">&#9658;</span>Navigation</a></li>
+							</xsl:if>
+							<xsl:call-template name="showHidePrivate" />
+						</ul>
+					</div>
+				</div>
+			</div>
+			<xsl:apply-templates select="meta" />
+		</div><!-- /page-->
      </body>
      </html>
 </xsl:template>
 
 
-<!-- ......................... showHideToc ......................... -->
-<xsl:template name="showHideToc">
-	<xsl:if test="./footer/showTOC">
-		<li>
-			<div id="twistyTOC_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenNotFramed">
-			  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showTOC" /></a>
-			</div>
-			<div id="twistyTOC_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited activeWhenFramed">
-			  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hideTOC" /></a>
-			</div><span id="twistyTOC_toggle" class="twistyContent"><xsl:comment/></span>
-		</li>
-	</xsl:if>
-</xsl:template>
-
-
-<!-- ......................... showHidePrivate ......................... -->
+<!-- ... showHidePrivate ... -->
 <xsl:template name="showHidePrivate">
-	<xsl:if test="./footer/showPrivate">
-		<li>
-			<div id="twistyPrivate_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
-			  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./footer/hidePrivate" /></a>
-			</div>
-			<div id="twistyPrivate_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
-			  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./footer/showPrivate" /></a>
-			</div><span id="twistyPrivate_toggle" class="twistyContent"><xsl:comment/></span>
+	<xsl:if test="./meta/showPrivate">
+		<li id="togglePrivateButton">
+			<span id="twistyPrivate_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+			  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./meta/hidePrivate" /></a>
+			</span>
+			<span id="twistyPrivate_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+			  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./meta/showPrivate" /></a>
+			</span><span id="twistyPrivate_toggle" class="twistyContent"><xsl:comment/></span>
 		</li>
 	</xsl:if>
 </xsl:template>
 
 
-<!-- ......................... showHideTypeInfo ......................... -->
+<!-- ... showHideTypeInfo ... -->
 <xsl:template match="showHideTypeInfo">
 	<li>
 		<div id="twistyTypeInfo_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
@@ -460,7 +387,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... showHideSummaries ......................... -->
+<!-- ... showHideSummaries ... -->
 <xsl:template match="showHideSummaries">
 	<li>
 		<div id="twistySummaries_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
@@ -473,7 +400,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... sortSummaries ......................... -->
+<!-- ... sortSummaries ... -->
 <xsl:template match="sortSummaries">
 	<li>
 		<div id="twistySort_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
@@ -486,7 +413,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 					
-<!-- ......................... classData ......................... -->
+<!-- ... classData ... -->
 <xsl:template match="classData">
 	<div class="classProperties">
 		<table cellspacing="0">
@@ -507,7 +434,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... packageTitle ......................... -->
+<!-- ... packageTitle ... -->
 <xsl:template match="packageTitle">
 	<tr>
 		<th colspan="2" align="left">
@@ -517,7 +444,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... kindOfClass ......................... -->
+<!-- ... kindOfClass ... -->
 <xsl:template match="kindOfClass">
 	<tr>
 		<th align="left">
@@ -530,7 +457,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... enclosingClass ......................... -->
+<!-- ... enclosingClass ... -->
 <xsl:template match="enclosingClass">
 	<xsl:if test="node()">
 		<tr>
@@ -541,15 +468,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 				<ul>
 				<xsl:for-each select="item">
 					<li>
-						<xsl:choose>
-							<xsl:when test="link/uri!=''">
-								<a><xsl:attribute name="class">className</xsl:attribute><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-								<xsl:value-of select="link/name" /></a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="link/name" />
-							</xsl:otherwise>
-						</xsl:choose>									
+						<xsl:call-template name="link" />						
 					</li>
 				</xsl:for-each>
 				</ul>
@@ -559,7 +478,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... package ......................... -->
+<!-- ... package ... -->
 <xsl:template match="package">
 	<xsl:if test="node()">
 		<tr>
@@ -568,15 +487,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			</th>
 			<td>
 				<xsl:for-each select="item">
-					<xsl:choose>
-						<xsl:when test="link/uri!=''">
-							<a><xsl:attribute name="class">className</xsl:attribute><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-							<xsl:value-of select="link/name" /></a>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="link/name" />
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:call-template name="link" />
 					<xsl:if test="position() != last()">
 						<xsl:text><![CDATA[ < ]]></xsl:text>
 					</xsl:if>
@@ -587,7 +498,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... inheritsFrom ......................... -->
+<!-- ... inheritsFrom ... -->
 <xsl:template match="inheritsFrom">
 	<xsl:if test="node()">
 		<tr>
@@ -596,15 +507,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			</th>
 			<td>
 				<xsl:for-each select="item">
-					<xsl:choose>
-						<xsl:when test="link/uri!=''">
-							<a><xsl:attribute name="class">className</xsl:attribute><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-							<xsl:value-of select="link/name" /></a>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="link/name" />
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:call-template name="link" />
 					<xsl:if test="position() != last()">
 						<xsl:text><![CDATA[ < ]]></xsl:text>
 					</xsl:if>
@@ -615,7 +518,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... conformsTo ......................... -->
+<!-- ... conformsTo ... -->
 <xsl:template match="conformsTo">
 	<xsl:if test="node()">
 		<tr>
@@ -626,15 +529,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 				<ul>
 				<xsl:for-each select="item">
 					<li>
-						<xsl:choose>
-							<xsl:when test="link/uri!=''">
-								<a><xsl:attribute name="class">className</xsl:attribute><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-								<xsl:value-of select="link/name" /></a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="link/name" />
-							</xsl:otherwise>
-						</xsl:choose>									
+						<xsl:call-template name="link" />								
 					</li>
 				</xsl:for-each>
 				</ul>
@@ -644,7 +539,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... implementedBy ......................... -->
+<!-- ... implementedBy ... -->
 <xsl:template match="implementedBy">
 	<xsl:if test="node()">
 		<tr>
@@ -655,15 +550,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 				<ul>
 				<xsl:for-each select="item">
 					<li>
-						<xsl:choose>
-							<xsl:when test="link/uri!=''">
-								<a><xsl:attribute name="class">className</xsl:attribute><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-								<xsl:value-of select="link/name" /></a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="link/name" />
-							</xsl:otherwise>
-						</xsl:choose>									
+						<xsl:call-template name="link" />									
 					</li>
 				</xsl:for-each>
 				</ul>
@@ -673,7 +560,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... subclasses ......................... -->
+<!-- ... subclasses ... -->
 <xsl:template match="subclasses">
 	<xsl:if test="node()">
 		<tr>
@@ -684,15 +571,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 				<ul>
 				<xsl:for-each select="item">
 					<li>
-						<xsl:choose>
-							<xsl:when test="link/uri!=''">
-								<a><xsl:attribute name="class">className</xsl:attribute><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-								<xsl:value-of select="link/name" /></a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="link/name" />
-							</xsl:otherwise>
-						</xsl:choose>									
+						<xsl:call-template name="link" />								
 					</li>
 				</xsl:for-each>
 				</ul>
@@ -702,7 +581,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... dispatchedBy ......................... -->
+<!-- ... dispatchedBy ... -->
 <xsl:template match="dispatchedBy">
 	<xsl:if test="node()">
 		<tr>
@@ -713,15 +592,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 				<ul>
 				<xsl:for-each select="item">
 					<li>
-						<xsl:choose>
-							<xsl:when test="link/uri!=''">
-								<a><xsl:attribute name="class">className</xsl:attribute><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-								<xsl:value-of select="link/name" /></a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="link/name" />
-							</xsl:otherwise>
-						</xsl:choose>									
+						<xsl:call-template name="link" />								
 					</li>
 				</xsl:for-each>
 				</ul>
@@ -731,7 +602,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... classDetails ......................... -->
+<!-- ... classDetails ... -->
 <xsl:template match="classDetails">
 	<xsl:if test="node()">
 		<xsl:for-each select="item">
@@ -750,7 +621,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 			
-<!-- ......................... sourceCode ......................... -->
+<!-- ... sourceCode ... -->
 <xsl:template match="sourceCode">
 	<xsl:if test="node()">
 		<div id="sourceCodeTop" class="sourceCodeView">
@@ -765,11 +636,11 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... pageSummary ......................... -->
+<!-- ... pageSummary ... -->
 <xsl:template match="pageSummary|private/pageSummary">
-	<div class="summary">
+	<div class="toc">
 		<xsl:if test="../../private!=''">
-			<xsl:attribute name="class">summary private</xsl:attribute>
+			<xsl:attribute name="class">toc private</xsl:attribute>
 		</xsl:if>
 		<h2><xsl:attribute name="id"><xsl:value-of select="id" /></xsl:attribute><xsl:value-of select="title" /></h2>
 		<div class="docNav">
@@ -787,7 +658,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... fields ......................... -->
+<!-- ... fields ... -->
 <xsl:template match="fields">
 	<xsl:if test="node()">
 		<div class="classFields">
@@ -799,18 +670,18 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... field ......................... -->
+<!-- ... field ... -->
 <xsl:template match="field">
 	<div class="boxedElem">
 		<div class="contentHolder">
 			<span class="title"><xsl:value-of select="title" /><xsl:text>:</xsl:text></span>
 			<xsl:choose>
 				<xsl:when test="paramfield!=''">
-					<!-- ......................... param ......................... -->
+					<!-- ... param ... -->
 					<xsl:apply-templates select="paramfield" />
 				</xsl:when>
 				<xsl:otherwise>
-					<!-- ......................... field ......................... -->
+					<!-- ... field ... -->
 					<div class="item">
 						<xsl:if test="description/item!=''">
 							<ul>
@@ -834,7 +705,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 								</xsl:for-each>
 							</ul>
 							</xsl:if>
-						<!-- ......................... metadatatags ......................... -->
+						<!-- ... metadatatags ... -->
 						<xsl:apply-templates select="metadatatags" />
 					</div>
 				</xsl:otherwise>
@@ -844,7 +715,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... metadatatags ......................... -->
+<!-- ... metadatatags ... -->
 <xsl:template match="metadatatags">
 	<table>
 	<xsl:for-each select="tag">
@@ -873,7 +744,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... descriptionfield ......................... -->
+<!-- ... descriptionfield ... -->
 <xsl:template name="descriptionfield">
 	<div class="field">
 		<span class="title"><xsl:value-of select="title" /><xsl:text><![CDATA[ ]]></xsl:text></span>
@@ -886,7 +757,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... paramfield ......................... -->
+<!-- ... paramfield ... -->
 <xsl:template match="paramfield">
 	<div class="item">
 		<xsl:call-template name="keyvalue">
@@ -896,7 +767,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... metadatatagattribute ......................... -->
+<!-- ... metadatatagattribute ... -->
 <xsl:template match="metadatatagattribute">
 	<p>
 	<xsl:call-template name="keyvalue">
@@ -906,7 +777,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... keyvalue ......................... -->
+<!-- ... keyvalue ... -->
 <xsl:template name="keyvalue">
 	<span class="colorizedCode code"><xsl:value-of select="name" />
 	<xsl:if test="name!=''"><span class="itemSeparator"><xsl:text><![CDATA[:]]></xsl:text></span></xsl:if></span>
@@ -926,10 +797,10 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... classDescription ......................... -->
+<!-- ... classDescription ... -->
 <xsl:template match="classDescription">
 	<div class="classDescription">
-		<!-- ......................... fields at top of description ......................... -->
+		<!-- ... fields at top of description ... -->
 		<xsl:if test="fields!=''">
 			<div class="fields">
 				<xsl:for-each select="fields/field">
@@ -949,13 +820,13 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 		<xsl:call-template name="substituteLinefeeds">
 			<xsl:with-param name="string" select="restOfDescription" />
 		</xsl:call-template>
-		<!-- ......................... CLASS FIELDS ......................... -->
+		<!-- ... CLASS FIELDS ... -->
 		<xsl:apply-templates select="../fields" />
 	</div>
 </xsl:template>
 
 
-<!-- ......................... memberList ......................... -->
+<!-- ... memberList ... -->
 <xsl:template match="memberList">
 	<xsl:for-each select="memberSummaryPart|private/memberSummaryPart">
 		<xsl:if test="node()">
@@ -993,7 +864,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... inheritedMethods ......................... -->
+<!-- ... inheritedMethods ... -->
 <xsl:template match="inheritedMethods">
 	<xsl:if test="node()">
 		<div>
@@ -1038,7 +909,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 
 
 
-<!-- ......................... memberSections ......................... -->
+<!-- ... memberSections ... -->
 <xsl:template match="memberSections">
 	<xsl:for-each select="memberSection|private/memberSection">
 		<div class="memberSection">
@@ -1092,17 +963,17 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 					<xsl:if test="attribute!=''">
 						<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text><span class="attribute"><xsl:value-of select="attribute" /></span>
 					</xsl:if>
-					<!-- ......................... full member ......................... -->
+					<!-- ... full member ... -->
 					<xsl:if test="fullMemberString!=''">
 						<div class="fullMemberString">
 								<span class="code"><xsl:value-of select="fullMemberString/member" disable-output-escaping="yes" /></span>
 								<xsl:if test="fullMemberString/access!=''"><span class="access"><xsl:text>(</xsl:text><xsl:value-of select="fullMemberString/access" /><xsl:text>)</xsl:text></span></xsl:if>
 						</div>
 					</xsl:if>
-					<!-- ......................... description ......................... -->
+					<!-- ... description ... -->
 					<xsl:if test="description!=''">
 						<div class="description">
-							<!-- ......................... fields at top of description ......................... -->
+							<!-- ... fields at top of description ... -->
 							<xsl:if test="description/fields!=''">
 								<div class="fields">
 									<xsl:for-each select="description/fields/field">
@@ -1117,7 +988,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 							</xsl:call-template>
 						</div>
 					</xsl:if>
-					<!-- ......................... fields ......................... -->
+					<!-- ... fields ... -->
 					<xsl:if test="fields!=''">
 						<div class="boxWithBorder">
 							<xsl:apply-templates select="fields/field" />
@@ -1130,27 +1001,29 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... footer ......................... -->
-<xsl:template match="footer">
+<!-- ... footer ... -->
+<xsl:template match="meta">
 	<xsl:if test="(copyright!='') or (createdWith!='')">
-		<div class="footer">
-			<ul class="docFooter">
-				<xsl:if test="copyright!=''">
-					<li class="copyright">
-						<xsl:value-of select="copyright" />
-					</li>
-				</xsl:if>
-				<xsl:if test="createdWith!=''">
-					<li class="createdWith"><xsl:value-of select="createdWith" /><xsl:text> </xsl:text><xsl:if test="link!=''"><a><xsl:attribute name="href"><xsl:value-of select="link/uri" /></xsl:attribute><xsl:value-of select="link/name" /></a></xsl:if>
-					</li>
-				</xsl:if>
-			</ul>
-		</div><!-- /footer-->
+		<div id="footer">
+			<div id="footerContent">
+				<ul>
+					<xsl:if test="copyright!=''">
+						<li class="copyright">
+							<xsl:value-of select="copyright" />
+						</li>
+					</xsl:if>
+					<xsl:if test="createdWith!=''">
+						<li class="createdWith"><xsl:value-of select="createdWith" /><xsl:text> </xsl:text><xsl:if test="link!=''"><a><xsl:attribute name="href"><xsl:value-of select="link/uri" /></xsl:attribute><xsl:value-of select="link/name" /></a></xsl:if>
+						</li>
+					</xsl:if>
+				</ul>
+			</div>
+		</div>
 	</xsl:if>
 </xsl:template>
 
 
-<!-- ......................... substituteLinefeeds ......................... -->
+<!-- ... substituteLinefeeds ... -->
 <!-- substitutes \n with <br /> -->
 
 <xsl:template name="substituteLinefeeds">
@@ -1174,13 +1047,13 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... summary ......................... -->
+<!-- ... summary ... -->
 <xsl:template match="summary">
 	<strong><xsl:value-of select="." disable-output-escaping="yes" /></strong>
 </xsl:template>
 
 
-<!-- ......................... copy .........................
+<!-- ... copy ...
     copy template to replace <xsl:copy-of select="." /> /
     now use: <xsl:apply-templates select="." mode="copy" />
 -->
@@ -1196,218 +1069,151 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
-<!-- ......................... Table of contents ......................... -->
-<!-- written to various toc pages -->
-<xsl:template match="tableofcontents|simpletableofcontents">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title><xsl:value-of select="title" /></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css"><xsl:attribute name="href">../<xsl:value-of select="cssFile" /></xsl:attribute></link>
-<!--
-<xsl:if test="classTocScript">
--->
-			<script src="../js/jquery.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-			<script src="../js/common.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-			<script src="../js/toc.js" type="text/javascript">//</script>
-<!--
-		</xsl:if>
--->
-		<xsl:apply-templates select="tocMarker" /><xsl:apply-templates select="tocMarkerOverviewFrame" />
-    </head>
-    <body id="toc">
-		<div id="PageTop"><xsl:comment/></div>
-        <div class="VisDoc">
-			<div class="content">
-				<xsl:apply-templates select="tocNavigation" />
-				<h1><xsl:value-of select="title" />
-				<xsl:if test="link/uri!=''">
-					<xsl:text> </xsl:text><a><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute><xsl:value-of select="link/name" /></a>
-				</xsl:if>
-				<xsl:if test="link/uri=''">
-					<xsl:text> </xsl:text><xsl:value-of select="link/name" />
-				</xsl:if>
-				</h1>
-				<xsl:apply-templates select="tocList" />
-				<xsl:apply-templates select="footer" />
-			</div>
-        </div>
-     </body>
-     </html>
-</xsl:template>
-
-
-<!-- ......................... Overview tree ......................... -->
-<!-- written to overview_tree.html -->
-<xsl:template match="listing">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title><xsl:value-of select="title" /></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css"><xsl:attribute name="href">../<xsl:value-of select="cssFile" /></xsl:attribute></link>
-		<script src="../js/jquery.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/common.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/doc.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-    </head>
-    <body id="overview">
-        <div class="VisDoc">
-			<div class="content listing">
-				<xsl:apply-templates select="tocNavigation" />
-				<div id="topNav" class="docNav">
-					<ul>
-						<xsl:call-template name="showHideToc" />
-						<xsl:call-template name="showHidePrivate" />
-					</ul>
-					<p class="clear"></p>
-				</div>
-				<xsl:if test="title!=''">
-					<h1><xsl:value-of select="title" /></h1>
-				</xsl:if>
-				<xsl:if test="text!=''">
-					<p><xsl:value-of select="text" /></p>
-				</xsl:if>
-				<xsl:if test="comment!=''">
-					<xsl:comment><xsl:value-of select="comment" /></xsl:comment>
-				</xsl:if>
-				<xsl:apply-templates select="tocList" />
-				<xsl:apply-templates select="footer" />
-			</div>
-        </div>
-     </body>
-     </html>
-</xsl:template>
-
-
-<!-- ......................... tocMarker ......................... -->
-<xsl:template match="tocMarker">
-    <base target="docFrame" />
-</xsl:template>
-
-<!-- ......................... tocMarkerOverviewFrame ......................... -->
-<xsl:template match="tocMarkerOverviewFrame">
-    <base target="tocFrame" />
-</xsl:template>
-
-<!-- ......................... tocNavigation ......................... -->
-<xsl:template match="tocNavigation">
-	<div class="tocNavigation">
-		<xsl:if test="title!=''">
-			<span><xsl:attribute name="class">item</xsl:attribute><xsl:value-of select="title" /></span>
-		</xsl:if>
-		<xsl:if test="item!=''">
-			<ul>
-				<xsl:for-each select="item">
-					<li><xsl:attribute name="class">item</xsl:attribute>
-						<xsl:choose>
-							<xsl:when test="link/uri!=''">
-								<a><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute><xsl:attribute name="target">docFrame</xsl:attribute><xsl:value-of select="link/name" /></a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="name" />
-							</xsl:otherwise>
-						</xsl:choose>
+<!-- ... listGroupItem ... -->
+<xsl:template name="listGroupItem">
+	<xsl:if test="node()">
+		<li>
+			<xsl:if test="(link/name) and (not(member))">
+				<xsl:attribute name="id">
+					<xsl:choose>
+						<xsl:when test="link/uri!=''"><xsl:value-of select="link/uri" /></xsl:when>
+						<xsl:otherwise><xsl:value-of select="link/name" /></xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="(package!='') or (interface!='') or (private!='')">
+				<xsl:attribute name="class">
+					<xsl:if test="package='true'">package </xsl:if>
+					<xsl:if test="interface='true'">interface </xsl:if>
+					<xsl:if test="private='true'">private </xsl:if>
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="link/uri!=''">
+				<a>
+					<xsl:choose>
+						<xsl:when test="link/member!=''">
+							<xsl:attribute name="href"><xsl:value-of select="link/uri" />.html#<xsl:value-of select="link/member" /></xsl:attribute>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
+						</xsl:otherwise>
+					</xsl:choose>
+					<xsl:if test="packagePath!=''">
+						<span class="packagePath"><xsl:value-of select="packagePath" /></span>
+					</xsl:if>
+					<xsl:if test="link/name!=''">
+						<span><xsl:if test="(class|interface)='true'">
+								<xsl:attribute name="class">className</xsl:attribute>
+							</xsl:if>
+							<xsl:value-of select="link/name" />
+						</span>
+					</xsl:if>
+					<xsl:if test="className!=''">
+						<span class="className"><xsl:text disable-output-escaping="yes">(</xsl:text><xsl:value-of select="className" /><xsl:text disable-output-escaping="yes"><![CDATA[)]]></xsl:text></span>
+					</xsl:if>
+					<xsl:if test="attribute!=''">
+						<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text><span class="attribute"><xsl:value-of select="attribute" /></span>
+					</xsl:if>
+				</a>
+			</xsl:if>
+			<xsl:if test="not(link/uri)">
+				<xsl:attribute name="class">name</xsl:attribute><xsl:value-of select="link/name" />
+			</xsl:if>
+			<xsl:if test="summary!=''">
+				<ul>
+					<xsl:attribute name="class">summary</xsl:attribute>
+					<li>
+						<xsl:call-template name="substituteLinefeeds">
+							<xsl:with-param name="string" select="summary" />
+						</xsl:call-template>
 					</li>
-				</xsl:for-each>
-			</ul>
-		</xsl:if>
-	<br class="clear" />
-    </div>
+				</ul>
+			</xsl:if>
+		</li>
+	</xsl:if>
 </xsl:template>
 
 
-<!-- ......................... tocList ......................... -->
+<!-- ... tocList ... -->
 <xsl:template match="tocList">
 	<xsl:if test="node()">
 		<div class="list">
+			<xsl:if test="title!=''">
+				<xsl:value-of select="title" />
+			</xsl:if>
 			<xsl:for-each select="listGroup">
-				<div class="listGroup">
-					<xsl:if test="listGroupTitle!=''">
-						<xsl:choose>
-							<xsl:when test="../../../listing!=''">
-								<h2><xsl:value-of select="listGroupTitle" /></h2>
-							</xsl:when>
-							<xsl:otherwise>
-								<strong><xsl:value-of select="listGroupTitle" /></strong>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:if>
-					<ul>
-						<xsl:for-each select="item">
-							<li>
-								<xsl:if test="(link/name) and (not(member))">
-									<xsl:attribute name="id">
-										<xsl:choose>
-											<xsl:when test="link/uri!=''"><xsl:value-of select="link/uri" /></xsl:when>
-											<xsl:otherwise><xsl:value-of select="link/name" /></xsl:otherwise>
-										</xsl:choose>
-									</xsl:attribute>
-								</xsl:if>
-								<xsl:if test="(package!='') or (interface!='') or (private!='')">
-									<xsl:attribute name="class">
-										<xsl:if test="package='true'">package </xsl:if>
-										<xsl:if test="interface='true'">interface </xsl:if>
-										<xsl:if test="private='true'">private </xsl:if>
-									</xsl:attribute>
-								</xsl:if>
-								<xsl:if test="link/uri!=''">
-									<a>
-										<xsl:choose>
-											<xsl:when test="link/member!=''">
-												<xsl:attribute name="href"><xsl:value-of select="link/uri" />.html#<xsl:value-of select="link/member" /></xsl:attribute>
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute>
-											</xsl:otherwise>
-										</xsl:choose>
-										<xsl:if test="packagePath!=''">
-											<span class="packagePath"><xsl:value-of select="packagePath" /></span>
-										</xsl:if>
-										<xsl:if test="//simpletableofcontents!='' and link!='' and packagePath!=''">
-											<span class="repeatSign"><xsl:text disable-output-escaping="yes">-&nbsp;</xsl:text></span>
-										</xsl:if>
-										<xsl:if test="link/name!=''">
-											<span><xsl:if test="(class|interface)='true'">
-													<xsl:attribute name="class">className</xsl:attribute>
-												</xsl:if>
-												<xsl:value-of select="link/name" />
-											</span>
-										</xsl:if>
-										<xsl:if test="className!=''">
-											<span class="className"><xsl:text disable-output-escaping="yes">(</xsl:text><xsl:value-of select="className" /><xsl:text disable-output-escaping="yes"><![CDATA[)]]></xsl:text></span>
-										</xsl:if>
-										<xsl:if test="attribute!=''">
-											<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text><span class="attribute"><xsl:value-of select="attribute" /></span>
-										</xsl:if>
-									</a>
-								</xsl:if>
-								<xsl:if test="not(link/uri)">
-									<xsl:attribute name="class">name</xsl:attribute><xsl:value-of select="link/name" />
-								</xsl:if>
-								<xsl:if test="summary!=''">
-									<ul>
-										<xsl:attribute name="class">summary</xsl:attribute>
-										<li>
-											<xsl:call-template name="substituteLinefeeds">
-												<xsl:with-param name="string" select="summary" />
-											</xsl:call-template>
-										</li>
-									</ul>
-								</xsl:if>
-							</li>
-						</xsl:for-each>
-					</ul>
-				</div>
+				<xsl:call-template name="tocListGroup" />
 			</xsl:for-each>
 		</div>
 	</xsl:if>
 </xsl:template>
 
 
-<!-- ......................... treeClassList ......................... -->
-<xsl:template match="treeClassList">
-    <div class="classList listing">
-		<xsl:apply-templates select="packages" />
-    </div>
+<!-- ... tocListGroup ... -->
+<xsl:template name="tocListGroup">
+	<ul>
+		<xsl:if test="id">
+			<xsl:attribute name="id"><xsl:value-of select="id" /></xsl:attribute>
+		</xsl:if>
+		<li>
+			<xsl:for-each select="listGroupTitle">
+				<xsl:call-template name="link" />
+			</xsl:for-each>
+			<xsl:for-each select="item">
+				<xsl:for-each select="listGroup">
+					<xsl:call-template name="tocListGroup" />
+				</xsl:for-each>
+				<xsl:call-template name="listGroupItem" />
+			</xsl:for-each>
+		</li>							
+	</ul>
+</xsl:template>
+
+
+<!-- ... docTitle ... -->
+<xsl:template match="docTitle">
+	<xsl:call-template name="link" />
+</xsl:template>
+	
+
+<!-- ... globalNav ... -->
+<xsl:template match="globalNav">
+	<div class="globalNav">
+		<xsl:if test="title!=''">
+			<span><xsl:attribute name="class">item</xsl:attribute><xsl:value-of select="title" /></span>
+		</xsl:if>
+		<xsl:if test="items!=''">
+			<ul>
+				<xsl:for-each select="items/item">
+					<li><xsl:attribute name="class">item</xsl:attribute>
+						<xsl:call-template name="link" />
+					</li>
+				</xsl:for-each>
+			</ul>
+		</xsl:if>
+	</div>
+</xsl:template>
+
+
+<!-- ... link ... -->
+<xsl:template name="link">
+	<xsl:if test="node()">
+		<xsl:choose>
+			<xsl:when test="link/uri!=''">
+				<a><xsl:attribute name="href"><xsl:value-of select="link/uri" />.html</xsl:attribute><xsl:value-of select="link/name" /></a>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:choose>
+					<xsl:when test="name!=''">
+						<xsl:value-of select="name" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="." />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:if>
 </xsl:template>
 
 

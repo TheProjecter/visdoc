@@ -13,12 +13,11 @@ use File::Find;
 use File::stat;
 use XML::LibXSLT;
 use XML::LibXML;
+use XML::Writer;
 use VisDoc::FileParser;
 use VisDoc::FileData;
 use VisDoc::OutputFormatter;
-use VisDoc::XMLOutputFormatterMainPage;
-use VisDoc::XMLOutputFormatterIndex;
-use VisDoc::XMLOutputFormatterEmptyFrame;
+use VisDoc::XMLOutputFormatterIndexPage;
 use VisDoc::XMLOutputFormatterToc;
 use VisDoc::XMLOutputFormatterOverviewTree;
 use VisDoc::XMLOutputFormatterAllClassesFrame;
@@ -26,8 +25,6 @@ use VisDoc::XMLOutputFormatterAllMethodsFrame;
 use VisDoc::XMLOutputFormatterAllConstantsFrame;
 use VisDoc::XMLOutputFormatterAllPropertiesFrame;
 use VisDoc::XMLOutputFormatterAllDeprecatedFrame;
-use VisDoc::XMLOutputFormatterTocPackages;
-use VisDoc::XMLOutputFormatterPackageToc;
 use VisDoc::Defaults;
 use VisDoc::HashUtils;
 use VisDoc::PostParser;
@@ -182,64 +179,32 @@ sub writeData {
 
     my $baseDir    = $inPreferences->{base};
     my $xsltDir    = $inPreferences->{templateXslDirectory} || $baseDir;
+    my $xsltRef = _getXslt( $xsltDir, $inPreferences->{templateXsl} );
+    
     my $processing = {
         'classes' => {
-            xsltRef => _getXslt(
-                'class', $xsltDir, $inPreferences->{templateXslForClasses}
-            ),
-            xmls => undef,    # array of hashes with keys 'uri' and 'textRef'
+            XMLs => undef,    # array of hashes with keys 'uri' and 'textRef'
         },
-        'main' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls => undef,    # array of hashes with keys 'uri' and 'textRef'
-        },
-        'index-frameset' => {
-            xsltRef => _getXslt( 'index-frameset', $xsltDir ),
-            xmls => undef,    # array of hashes with keys 'uri' and 'textRef'
-        },
-        'packages-frameset' => {
-            xsltRef => _getXslt( 'packages-frameset', $xsltDir ),
-            xmls => undef,    # array of hashes with keys 'uri' and 'textRef'
-        },
-        'packages-toc-frameset' => {
-            xsltRef => _getXslt( 'packages-toc-frameset', $xsltDir ),
-            xmls    => undef,
-        },
-        'toc' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
-        },
-        'toc-packages' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
-        },
-        'empty-frame' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
-        },
-        'package-toc' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
+        'index' => {
+            XMLs => undef,    # array of hashes with keys 'uri' and 'textRef'
         },
         'overview-tree' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
+            XMLs    => undef,
         },
         'methods' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
+            XMLs    => undef,
+        },
+        'toc' => {
+            XMLs    => undef,
         },
         'constants' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
+            XMLs    => undef,
         },
         'properties' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
+            XMLs    => undef,
         },
         'deprecated' => {
-            xsltRef => _getXslt( 'class', $xsltDir ),
-            xmls    => undef,
+            XMLs    => undef,
         },
     };
 
@@ -248,23 +213,32 @@ sub writeData {
     my @htmlDocFileNames;
     my @htmlSupportingFileNames;
 
+	my $xmlWriter  = new XML::Writer(
+        ENCODING    => 'utf-8',
+        DATA_MODE   => 1,
+        DATA_INDENT => 4,
+        UNSAFE      => 1,
+    );
+
     # classes
     foreach my $fileData ( @{$inCollectiveFileData} ) {
 
         # get (potentially multiple) xml texts from each FileData
         my $xmlData =
-          VisDoc::OutputFormatter::formatFileData( $fileData, $inPreferences );
+          VisDoc::OutputFormatter::formatFileData( $fileData, $inPreferences, $xmlWriter );
         my $key = 'classes';
 
         # store
-        map { push( @{ $processing->{$key}->{xmls} }, $_ ) } @{$xmlData};
+        map { push( @{ $processing->{$key}->{XMLs} }, $_ ) } @{$xmlData};
         map { push( @htmlDocFileNames, $_->{uri} ) } @{$xmlData};
     }
 
+	my $tocXML = '';
+	
     if ( $inPreferences->{generateIndex} ) {
 
         my $tocNavigationKeys = {
-            'main'          => undef,
+            'index'          => undef,
             'overview-tree' => undef,
             'classes'       => undef,
             'methods'       => undef,
@@ -278,15 +252,16 @@ sub writeData {
         };
 
         {
+            # index.html
+            my $xmlData = _createIndexHtmlPageXmlData( $dirInfo->{dir}->{html},
+                $inPreferences, $inCollectiveFileData, $xmlWriter );
+            my $key = 'index';
+            if ($xmlData) {
+				push( @{ $processing->{$key}->{XMLs} }, $xmlData );
+				push( @htmlSupportingFileNames, $xmlData->{uri} );
+				$indexHtml = $xmlData->{uri};
+			}
 
-            # main.html
-            my $xmlData = _createMainHtmlPageXmlData( $dirInfo->{dir}->{html},
-                $inPreferences, $inCollectiveFileData );
-            my $key = 'main';
-            push( @{ $processing->{$key}->{xmls} }, $xmlData ) if $xmlData;
-            push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
-
-            #
             &$addToTocNavigation($key);
         }
 
@@ -295,8 +270,8 @@ sub writeData {
 
             my $formatter =
               $inFormatterName->new( $inPreferences, $inCollectiveFileData );
-            my $xmlData = $formatter->format();
-            push( @{ $processing->{$inKey}->{xmls} }, $xmlData ) if $xmlData;
+            my $xmlData = $formatter->format($xmlWriter);
+            push( @{ $processing->{$inKey}->{XMLs} }, $xmlData ) if $xmlData;
             push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
             &$addToTocNavigation($inKey) if $xmlData->{hasFormattedData};
         };
@@ -322,119 +297,79 @@ sub writeData {
                 last if $packagesCount > 0;
             }
         }
-
-        if ( $packagesCount > 0 ) {
-
-            {
-
-                # index.html - packages frameset
-                my $formatter =
-                  VisDoc::XMLOutputFormatterIndex->new( $inPreferences,
-                    'index' );
-                my $xmlData = $formatter->format();
-                my $key     = 'packages-frameset';
-                push( @{ $processing->{$key}->{xmls} }, $xmlData ) if $xmlData;
-                $indexHtml = $xmlData->{uri} if $xmlData;
-            }
-            {
-
-                # toc-frame.html - packages frameset
-                my $formatter =
-                  VisDoc::XMLOutputFormatterIndex->new( $inPreferences,
-                    'toc-frame' );
-                my $xmlData = $formatter->format();
-                my $key     = 'packages-toc-frameset';
-                push( @{ $processing->{$key}->{xmls} }, $xmlData ) if $xmlData;
-                push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
-            }
-            {
-
-                # overview-frame.html
-                my $formatter =
-                  VisDoc::XMLOutputFormatterTocPackages->new( $inPreferences,
-                    undef, $inCollectiveFileData, $tocNavigationKeys );
-                my $xmlData = $formatter->format();
-                my $key     = 'toc-packages';
-                push( @{ $processing->{$key}->{xmls} }, $xmlData ) if $xmlData;
-                push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
-            }
-            {
-
-                # empty-frame.html
-                my $formatter =
-                  VisDoc::XMLOutputFormatterEmptyFrame->new( $inPreferences,
-                    $inCollectiveFileData );
-                my $xmlData = $formatter->format();
-                my $key     = 'empty-frame';
-                push( @{ $processing->{$key}->{xmls} }, $xmlData ) if $xmlData;
-                push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
-            }
-
-            # create TOC for each package
-            foreach my $fileData ( @{$inCollectiveFileData} ) {
-                foreach my $package ( @{ $fileData->{packages} } ) {
-                    my $formatter =
-                      VisDoc::XMLOutputFormatterPackageToc->new( $inPreferences,
-                        $fileData->{language}, $package );
-                    my $xmlData = $formatter->format();
-                    my $key     = 'package-toc';
-                    push( @{ $processing->{$key}->{xmls} }, $xmlData )
-                      if $xmlData;
-                    push( @htmlSupportingFileNames, $xmlData->{uri} )
-                      if $xmlData;
-                }
-            }
-
-        }
-        else {
-
-            {
-
-                # index.html frameset
-                my $formatter =
-                  VisDoc::XMLOutputFormatterIndex->new( $inPreferences,
-                    'index' );
-                my $xmlData = $formatter->format();
-                my $key     = 'index-frameset';
-                push( @{ $processing->{$key}->{xmls} }, $xmlData ) if $xmlData;
-                $indexHtml = $xmlData->{uri} if $xmlData;
-            }
-            {
-
-                # toc.html
-                my $formatter =
-                  VisDoc::XMLOutputFormatterToc->new( $inPreferences, undef,
-                    $inCollectiveFileData, $tocNavigationKeys );
-                my $xmlData = $formatter->format();
-                my $key     = 'toc';
-                push( @{ $processing->{$key}->{xmls} }, $xmlData ) if $xmlData;
-                push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
-            }
-        }
-
+		
+		# toc
+		my $formatter =
+		  VisDoc::XMLOutputFormatterToc->new( $inPreferences, undef,
+			$inCollectiveFileData, $tocNavigationKeys );
+		my $xmlData = $formatter->format($xmlWriter);
+		$tocXML = $xmlData;
+		my $key     = 'toc';
+		push( @{ $processing->{$key}->{XMLs} }, $xmlData ) if $xmlData;
+		push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
+		
+		# add TOC XML to each class XML
+		if ($tocXML) {
+			while ( my ( $key, $value ) = each %{$processing} ) {
+				foreach my $xml ( @{ $value->{XMLs} } ) {
+					${$xml->{textRef}} .= ${$tocXML->{textRef}};
+				}
+			}
+		}
     }
+	
+    # add enclosing tag and XML declaration
 
+    while ( my ( $key, $value ) = each %{$processing} ) {
+
+        foreach my $xml ( @{ $value->{XMLs} } ) {
+
+			my $xmlText = '<?xml version="1.0" encoding="utf-8"?>
+<document>';
+			$xmlText .= ${$xml->{textRef}};
+			$xmlText .= '</document>';
+
+    		$xml->{textRef} = \$xmlText;
+		}
+	}
+	
     # write everything to files
     while ( my ( $key, $value ) = each %{$processing} ) {
 
-        foreach my $xml ( @{ $value->{xmls} } ) {
+        foreach my $xml ( @{ $value->{XMLs} } ) {
 
             # write XML
-            _writeXmlDataFile( $dirInfo->{dir}->{xml},
+            _writeXmlFile( $dirInfo->{dir}->{xml},
                 "$xml->{uri}.xml", $xml->{textRef} )
               if $inPreferences->{saveXML};
 
+			_writeXsltProcessingAttributes( $xsltRef, $inPreferences );
+			
             # write HTML
             my $htmlRef =
-              _transformXmlToHtml( $xml->{textRef}, $value->{xsltRef} );
+              _transformXmlToHtml( $xml->{textRef}, $xsltRef );
             _cleanupHtml($htmlRef);
             _writeHtmlFile( $dirInfo->{dir}->{html},
                 "$xml->{uri}.html", $htmlRef );
+
         }
 
     }
     return ( $dirInfo->{dir}->{html},
         $indexHtml, \@htmlDocFileNames, \@htmlSupportingFileNames );
+}
+
+=pod
+
+=cut
+
+sub _writeXsltProcessingAttributes {
+    my ( $inXsltTextRef, $inPreferences ) = @_;
+
+	return if !$inXsltTextRef;
+	
+	# encoding and charset
+	${$inXsltTextRef} =~ s/%VISDOC_ENCODING%/$inPreferences->{docencoding}/g if $inPreferences->{docencoding};
 }
 
 =pod
@@ -520,13 +455,13 @@ sub _createSubDirectory {
 
 =pod
 
-StaticMethod _writeXmlDataFile ( $xmlDirectory, $fileName, \$xmlText )
+StaticMethod _writeXmlFile ( $xmlDirectory, $fileName, \$xmlText )
 
 Writes XML text to file $fileName.
 
 =cut
 
-sub _writeXmlDataFile {
+sub _writeXmlFile {
     my ( $inXmlDirectory, $inFileName, $inXmlTextRef ) = @_;
 
     # append the filename to the path
@@ -561,46 +496,28 @@ Uses template css from %preferences (property 'cssFile'), otherwise uses default
 sub _copyCss {
     my ( $inDestinationDir, $inPreferences ) = @_;
 
-    return if !$inPreferences->{copyCSS};
-
-    my $cssTemplateDir = $inPreferences->{'templateCssDirectory'}
-      || $VisDoc::Defaults::SETTINGS->{'templateCssDirectory'};
-
-    my $fileName = $inPreferences->{templateCss}
-      || $VisDoc::Defaults::SETTINGS->{'templateCss'};
-
-    my $path =
-      File::Spec->rel2abs( "$cssTemplateDir/$fileName",
+    my $dir = File::Spec->rel2abs( $VisDoc::Defaults::FILE_CSS_TEMPLATE_DIR,
         $inPreferences->{base} );
 
-    die "No such file $path" unless -e $path;
-
-    my $result = File::Copy::copy( $path, $inDestinationDir );
-    if ( !$result ) {
-        print("Could not copy $path to $inDestinationDir: $!\n");
-    }
-
-    my $dir = File::Spec->rel2abs( $cssTemplateDir, $inPreferences->{base} );
-
-    # get all files from the css template directory
+    # get all .js files from that directory
     my @files;
     File::Find::find(
         {
             wanted => sub {
 
-                # check if file is javascript file
+                # check if file is css file
                 push @files, $File::Find::name
-                  if ( $File::Find::name =~ /(\.css|\.png|\.gif|\.jpg)$/i );
+                  if ( $File::Find::name =~ /(\.css)$/ );
             },
         },
         $dir
     );
 
-    foreach my $copyFile (@files) {
-        my $copyPath = File::Spec->rel2abs( $copyFile, $inPreferences->{base} );
-        my $copyResult = File::Copy::copy( $copyPath, $inDestinationDir );
-        if ( !$copyResult ) {
-            print("Could not copy $copyPath to $inDestinationDir: $!\n");
+    foreach my $file (@files) {
+        my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
+        my $result = File::Copy::copy( $path, $inDestinationDir );
+        if ( !$result ) {
+            print("Could not copy $path to $inDestinationDir: $!\n");
         }
     }
 }
@@ -644,32 +561,21 @@ sub _copyJs {
 
 =pod
 
-StaticMethod _getXslt( $type, $xsltDir, $xsltFile ) -> $textRef
+StaticMethod _getXslt( $xsltDir, $xsltFile ) -> $textRef
 
 Reads XSLT text from file.
-
-$type: 'class', 'index', 'packages' or 'packages_toc'
 
 =cut
 
 sub _getXslt {
-    my ( $inType, $inXsltDir, $inXsltFile ) = @_;
+    my ( $inXsltDir, $inXsltFile ) = @_;
 
     my $xsltFile;
     if ($inXsltFile) {
         $xsltFile = $inXsltFile;
     }
     else {
-        $xsltFile = $VisDoc::Defaults::SETTINGS->{'templateXslForClasses'}
-          if ( $inType eq 'class' );
-        $xsltFile = $VisDoc::Defaults::SETTINGS->{'templateXslForIndexFrameset'}
-          if ( $inType eq 'index-frameset' );
-        $xsltFile =
-          $VisDoc::Defaults::SETTINGS->{'templateXslForPackagesFrameset'}
-          if ( $inType eq 'packages-frameset' );
-        $xsltFile =
-          $VisDoc::Defaults::SETTINGS->{'templateXslForPackagesTocFrameset'}
-          if ( $inType eq 'packages-toc-frameset' );
+        $xsltFile = $VisDoc::Defaults::SETTINGS->{'templateXsl'};
     }
 
     my $xsltPath = File::Spec->rel2abs( $xsltFile, $inXsltDir );
@@ -685,22 +591,21 @@ sub _getXslt {
 
 =pod
 
-StaticMethod _transformXmlToHtml( \$xmlText, \$classXsltText ) -> \$html
+StaticMethod _transformXmlToHtml( \$xmlText, \$xsltText ) -> \$html
 
 Transforms XML to HTML using XSLT.
-Uses LbXML engine (must be installed).
+Uses LibXML engine (must be installed).
 
 =cut
 
 sub _transformXmlToHtml {
-    my ( $inXmlTextRef, $inClassXsltTextRef ) = @_;
+    my ( $inXmlTextRef, $inXsltTextRef ) = @_;
 
     my $parser = XML::LibXML->new();
 
-    my $source    = $parser->parse_string($$inXmlTextRef);
-    my $style_doc = $parser->parse_string($$inClassXsltTextRef);
-
-    # TODO: this could be optimized so that this is called only once per session
+    my $source    = $parser->parse_string(${$inXmlTextRef});    
+    my $style_doc = $parser->parse_string(${$inXsltTextRef});
+    
     my $xslt       = XML::LibXSLT->new();
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
 
@@ -712,73 +617,27 @@ sub _transformXmlToHtml {
 
 =pod
 
-StaticMethod _createMainHtmlPageXmlData( $htmlDirectory, \%preferences, \@collectiveFileData ) -> { uri => ..., textRef => ... }
+StaticMethod _createIndexHtmlPageXmlData( $htmlDirectory, \%preferences, \@collectiveFileData, $xmlWriter ) -> { uri => ..., textRef => ... }
 
-Creates main.html if it does not exist yet.
-If it does exist, checks the version number (in meta). If older, updates the html and saves.
+Creates index.html if it does not exist yet.
 
 =cut
 
-sub _createMainHtmlPageXmlData {
-    my ( $inHtmlDirectory, $inPreferences, $inCollectiveFileData ) = @_;
+sub _createIndexHtmlPageXmlData {
+    my ( $inHtmlDirectory, $inPreferences, $inCollectiveFileData, $inXmlWriter ) = @_;
 
-    my $file = "$inHtmlDirectory/main.html";
+    my $file = "$inHtmlDirectory/index.html";
     my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
 
     use File::stat;
     my $st = stat($path);
-    if ($st) {
-        my $fileText = readFile($path);
-
-        my $check = "<meta name=\"VERSION\" content=\"$VERSION\" \/>";
-        if ( $fileText =~ m/$check/ ) {
-
-            # is recent
-            return undef;
-        }
-
-        # convert old js code to new
-        my $pattern;
-        my $replacement;
-
-        my $meta =
-'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-        $pattern     = $meta;
-        $replacement = "$meta$check";
-        $fileText =~ s/$pattern/$replacement/go;
-
-        $pattern =
-          '<script src="../js/behaviour.js" type="text/javascript">//</script>';
-        $replacement =
-          '<script src="../js/jquery.js" type="text/javascript">//</script>';
-        $fileText =~ s/$pattern/$replacement/go;
-
-        $pattern = '<div id="toggleTOC_off"';
-        $replacement =
-'<span id="twistyTOC_toggle" class="twistyContent"><!----></span><div id="toggleTOC_off"';
-        $fileText =~ s/$pattern/$replacement/go;
-
-        $pattern     = 'toggleTOC_on';
-        $replacement = 'twistyTOC_show';
-        $fileText =~ s/$pattern/$replacement/go;
-
-        $pattern     = 'toggleTOC_off';
-        $replacement = 'twistyTOC_hide';
-        $fileText =~ s/$pattern/$replacement/go;
-
-        $pattern = 'toggleTrigger toggleMakeVisible';
-        $replacement =
-          'twistyTrigger visdocUnvisited visdocMakeVisible twistyInited';
-        $fileText =~ s/$pattern/$replacement/go;
-
-        _writeHtmlFile( $inHtmlDirectory, 'main.html', \$fileText );
-        return;
-    }
+    return if $st;
 
     # does not exist yet
-    my $formatter = VisDoc::XMLOutputFormatterMainPage->new( $inPreferences,
+    my $formatter = VisDoc::XMLOutputFormatterIndexPage->new( $inPreferences,
         $inCollectiveFileData );
-    return $formatter->format();
+
+	return $formatter->format($inXmlWriter);
 }
 
 sub _cleanupHtml {
@@ -789,6 +648,13 @@ sub _cleanupHtml {
     # remove space before span
     # commented out because this messes up spans inside pre blocks
     #$$htmlRef =~ s/[[:space:]]+(<span)/ $1/go;
+    
+}
+
+sub _cleanupSpacesBetweenSpans {
+    my ($htmlRef) = @_;
+
+    ${$htmlRef} =~ s/(<\/span>)[[:space:]]+(<span)/$1$2/go;
 }
 
 1;
