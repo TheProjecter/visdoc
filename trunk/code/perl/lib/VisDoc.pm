@@ -333,9 +333,13 @@ sub writeData {
 		}
 	}
 	
+
+	
     # write everything to files
     while ( my ( $key, $value ) = each %{$processing} ) {
 
+		next if $key =~ m/^(toc)$/;	# exclude from writing to files
+		
         foreach my $xml ( @{ $value->{XMLs} } ) {
 
             # write XML
