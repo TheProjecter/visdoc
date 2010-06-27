@@ -46,7 +46,7 @@ sub getFiles {
         return if !$file;
         return if $file =~ /^\..*?$/;
         return if !( $file =~ /\./ );
-        if ( $validExtensions ) {
+        if ($validExtensions) {
             my @parts = split( /\./, $file );
             my $extension = pop @parts;
             return if !( $validExtensions->{$extension} );

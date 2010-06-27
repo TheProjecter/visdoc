@@ -15,7 +15,8 @@ param classes: list of references to all ClassData objects
 sub new {
     my ( $class, $inName, $inSource, $inClasses, $inCallBack ) = @_;
 
-    my VisDoc::SubstituteLinkStubsEvent $this = $class->SUPER::new( $inName, $inSource );
+    my VisDoc::SubstituteLinkStubsEvent $this =
+      $class->SUPER::new( $inName, $inSource );
     $this->{classes}  = $inClasses;
     $this->{callback} = $inCallBack;
 

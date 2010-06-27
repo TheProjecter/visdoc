@@ -24,14 +24,14 @@ sub new {
 
 sub set_up {
     my ($this) = @_;
-	
-	VisDoc::FileData::initLinkDataRefs();
+
+    VisDoc::FileData::initLinkDataRefs();
 }
 
 sub test_parseClassData_as2 {
     my ($this) = @_;
 
-	my $text = '
+    my $text = '
 /**
 The first sentence of the class description is the class summary.
 */
@@ -41,78 +41,89 @@ The first sentence of the class description is the class summary.
 	{
 		//
 	}';
-	
-	my $fileParser = VisDoc::FileParser->new();
-    my $fileData = $fileParser->parseText($text, 'as2');
-	my $classes = $fileData->{packages}->[0]->{classes};
-    my $classData = $classes->[0];
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
 
-	{
-		# test package (classpath)
-		my $result = $classData->{classpath};
-		my $expected = 'com.visiblearea.SpeakingPets';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test description
-		my $result = $classData->{javadoc}->getDescription();
-		my $expected = 'The first sentence of the class description is the class summary.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class name
-		my $result = $classData->{name};
-		my $expected = 'SpeakingPets';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test type
-		my $result = $classData->{type};
-		my $expected = $VisDoc::ClassData::TYPE->{'CLASS'};
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test acccess
-		my $result = $classData->{access}[0];
-		$this->assert_null( $result );
-	}
-	{
-		# test is public
-		my $result = $classData->isPublic();
-		my $expected = 1;
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test superClass
-		my $result = $classData->{superclasses}->[0]->{name};
-		my $expected = 'Sprite';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test interface
-		my $result = $classData->{interfaces}->[0]->{name};
-		my $expected = 'IAnimal';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc
+    my $fileParser = VisDoc::FileParser->new();
+    my $fileData   = $fileParser->parseText( $text, 'as2' );
+    my $classes    = $fileData->{packages}->[0]->{classes};
+    my $classData  = $classes->[0];
+
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test package (classpath)
+        my $result   = $classData->{classpath};
+        my $expected = 'com.visiblearea.SpeakingPets';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test description
+        my $result = $classData->{javadoc}->getDescription();
+        my $expected =
+          'The first sentence of the class description is the class summary.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class name
+        my $result   = $classData->{name};
+        my $expected = 'SpeakingPets';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test type
+        my $result   = $classData->{type};
+        my $expected = $VisDoc::ClassData::TYPE->{'CLASS'};
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test acccess
+        my $result = $classData->{access}[0];
+        $this->assert_null($result);
+    }
+    {
+
+        # test is public
+        my $result   = $classData->isPublic();
+        my $expected = 1;
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test superClass
+        my $result   = $classData->{superclasses}->[0]->{name};
+        my $expected = 'Sprite';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test interface
+        my $result   = $classData->{interfaces}->[0]->{name};
+        my $expected = 'IAnimal';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc
+
 =pod
 		my $result = $classData->{javadocStub};
 		my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_1%';
@@ -120,7 +131,8 @@ The first sentence of the class description is the class summary.
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 =cut
-	}
+
+    }
 }
 
 =pod
@@ -130,7 +142,7 @@ The first sentence of the class description is the class summary.
 sub test_parseClassData_as3 {
     my ($this) = @_;
 
-	my $text = '
+    my $text = '
 	
 	%VISDOC_STUB_JAVADOC_COMMENT_1%
 	
@@ -146,61 +158,69 @@ sub test_parseClassData_as3 {
 		}
 		var customItem:CustomClass = new CustomClass()
 	}';
-	my $fileParser = VisDoc::FileParser->new();
-	my $parser = $fileParser->getParserForLanguage('as3');
-	$parser->parseClasses($text);
-	my $classes = $parser->{classes};
-	
-	{
-		# test class name
-		my $result = $classes->[0]->{name};
-		my $expected = 'SpeakingPets';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test type
-		my $result = $classes->[0]->{type};
-		my $expected = $VisDoc::ClassData::TYPE->{'CLASS'};
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test acccess
-		my $result = $classes->[0]->{access}[0];
-		my $expected = 'public';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test superClass
-		my $result = $classes->[0]->{superclasses}->[0]->{name};
-		my $expected = 'Sprite';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test interface 1
-		my $result = $classes->[0]->{interfaces}->[0]->{name};
-		my $expected = 'IAnimal';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test interface 2
-		my $result = $classes->[0]->{interfaces}->[1]->{name};
-		my $expected = 'ISprite';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc
+    my $fileParser = VisDoc::FileParser->new();
+    my $parser     = $fileParser->getParserForLanguage('as3');
+    $parser->parseClasses($text);
+    my $classes = $parser->{classes};
+
+    {
+
+        # test class name
+        my $result   = $classes->[0]->{name};
+        my $expected = 'SpeakingPets';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test type
+        my $result   = $classes->[0]->{type};
+        my $expected = $VisDoc::ClassData::TYPE->{'CLASS'};
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test acccess
+        my $result   = $classes->[0]->{access}[0];
+        my $expected = 'public';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test superClass
+        my $result   = $classes->[0]->{superclasses}->[0]->{name};
+        my $expected = 'Sprite';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test interface 1
+        my $result   = $classes->[0]->{interfaces}->[0]->{name};
+        my $expected = 'IAnimal';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test interface 2
+        my $result   = $classes->[0]->{interfaces}->[1]->{name};
+        my $expected = 'ISprite';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc
+
 =pod
 		my $result = $classes->[0]->{javadocStub};
 		my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_1%';
@@ -208,7 +228,8 @@ sub test_parseClassData_as3 {
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 =cut
-	}
+
+    }
 }
 
 =pod
@@ -218,7 +239,7 @@ sub test_parseClassData_as3 {
 sub test_parseClassData_java {
     my ($this) = @_;
 
-	my $text = '
+    my $text = '
 	
 	%VISDOC_STUB_JAVADOC_COMMENT_1%
 	
@@ -303,95 +324,107 @@ sub test_parseClassData_java {
 		private String name;
 		private SFSObject params;
 	}';
-	
-	my $fileData = VisDoc::parseText( $text, 'java' );
-	my $classData = $fileData->{packages}->[0]->{classes}->[0];
 
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'java' );
+    my $classData = $fileData->{packages}->[0]->{classes}->[0];
 
-	{
-		# test class name
-		my $result = $classData->{name};
-		my $expected = 'RawMembers<T>';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test type
-		my $result = $classData->{type};
-		my $expected = $VisDoc::ClassData::TYPE->{'CLASS'};
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test acccess 1
-		my $result = $classData->{access}[0];
-		my $expected = 'public';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test acccess 1
-		my $result = $classData->{access}[1];
-		my $expected = 'abstract';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test throws
-		my $result = $classData->{methods}->[1]->{exceptionType};
-		my $expected = 'TMExceptionBadTMNodeKind';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test superClass
-		my $result = $classData->{superclasses}->[0]->{name};
-		my $expected = 'ColoredPoint';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test interface 1
-		my $result = $classData->{interfaces}->[0]->{name};
-		my $expected = 'Paintable';
-		print("RES=interface 1=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test interface 2: name
-		my $result = $classData->{interfaces}->[1]->{name};
-		my $expected = 'Serializable';
-		print("RES=interface 2=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test interface 2: classpath
-		my $result = $classData->{interfaces}->[1]->{classpath};
-		my $expected = 'java.io.Serializable';
-		print("RES=interface 2=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test interface 3
-		my $result = $classData->{interfaces}->[2]->{name};
-		my $expected = 'Collection<String>';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test class name
+        my $result   = $classData->{name};
+        my $expected = 'RawMembers<T>';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test type
+        my $result   = $classData->{type};
+        my $expected = $VisDoc::ClassData::TYPE->{'CLASS'};
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test acccess 1
+        my $result   = $classData->{access}[0];
+        my $expected = 'public';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test acccess 1
+        my $result   = $classData->{access}[1];
+        my $expected = 'abstract';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test throws
+        my $result   = $classData->{methods}->[1]->{exceptionType};
+        my $expected = 'TMExceptionBadTMNodeKind';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test superClass
+        my $result   = $classData->{superclasses}->[0]->{name};
+        my $expected = 'ColoredPoint';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test interface 1
+        my $result   = $classData->{interfaces}->[0]->{name};
+        my $expected = 'Paintable';
+        print("RES=interface 1=$result.\n") if $debug;
+        print("EXP=$expected.\n")           if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test interface 2: name
+        my $result   = $classData->{interfaces}->[1]->{name};
+        my $expected = 'Serializable';
+        print("RES=interface 2=$result.\n") if $debug;
+        print("EXP=$expected.\n")           if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test interface 2: classpath
+        my $result   = $classData->{interfaces}->[1]->{classpath};
+        my $expected = 'java.io.Serializable';
+        print("RES=interface 2=$result.\n") if $debug;
+        print("EXP=$expected.\n")           if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test interface 3
+        my $result   = $classData->{interfaces}->[2]->{name};
+        my $expected = 'Collection<String>';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc
+
 =pod
 		my $result = $classData->{javadocStub};
 		my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_1%';
@@ -399,9 +432,9 @@ sub test_parseClassData_java {
 		print("EXP=$expected.\n") if $debug;
 		$this->assert( $result eq $expected );
 =cut
-	}
-}
 
+    }
+}
 
 =pod
 
@@ -410,10 +443,11 @@ sub test_parseClassData_java {
 sub test_memberpattern_as3 {
     my ($this) = @_;
 
-	my $tmp_parser = VisDoc::ParserAS3->new();
-	my $pattern = VisDoc::StringUtils::stripCommentsFromRegex($tmp_parser->{PATTERN_METHOD_WITH_JAVADOC});
-		
-	my $text = '%VISDOC_STUB_JAVADOC_COMMENT_1%
+    my $tmp_parser = VisDoc::ParserAS3->new();
+    my $pattern    = VisDoc::StringUtils::stripCommentsFromRegex(
+        $tmp_parser->{PATTERN_METHOD_WITH_JAVADOC} );
+
+    my $text = '%VISDOC_STUB_JAVADOC_COMMENT_1%
 	private override (undefined) function AllTags () : void {}
 	
 	%VISDOC_STUB_JAVADOC_COMMENT_2%
@@ -424,136 +458,154 @@ sub test_memberpattern_as3 {
 	
 	%VISDOC_STUB_JAVADOC_COMMENT_4%
 	function get method_B (inValue:Number) : Boolean;';
-	
-	my @matches = ();
-	local $_ = $text;
-	while (/$pattern/gosx) {
-		push(@matches, {
-			javadoc => $1,
-			metadata => $2,
-			access => $3,
-			name => $6,
-			parameters => $9,
-			return => $10,
-		});
-	}
-	# method 1
-	{
-		# test method 1, javadoc
-		my $result = $matches[0]->{javadoc};
-		my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_1%';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 1, access
-		my $result = $matches[0]->{access};
-		my $expected = 'private override (undefined)';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 1, name
-		my $result = $matches[0]->{name};
-		my $expected = 'AllTags';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 1, return
-		my $result = $matches[0]->{return};
-		my $expected = 'void';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 2
-	{
-		# test method 2, javadoc
-		my $result = $matches[1]->{javadoc};
-		my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_2%';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 2, access
-		my $result = $matches[1]->{access};
-		my $expected = 'protected ';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 2, name
-		my $result = $matches[1]->{name};
-		my $expected = 'method_B';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 2, parameters
-		my $result = $matches[1]->{parameters};
-		my $expected = 'inValue:Number';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 2, return
-		my $result = $matches[1]->{return};
-		my $expected = 'Boolean';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 4
-	{
-		# test method 4, javadoc
-		my $result = $matches[3]->{javadoc};
-		my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_4%';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 4, access
-		my $result = $matches[3]->{access};
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 4, name
-		my $result = $matches[3]->{name};
-		my $expected = 'get method_B';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 4, parameters
-		my $result = $matches[3]->{parameters};
-		my $expected = 'inValue:Number';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 4, return
-		my $result = $matches[3]->{return};
-		my $expected = 'Boolean';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+
+    my @matches = ();
+    local $_ = $text;
+    while (/$pattern/gosx) {
+        push(
+            @matches,
+            {
+                javadoc    => $1,
+                metadata   => $2,
+                access     => $3,
+                name       => $6,
+                parameters => $9,
+                return     => $10,
+            }
+        );
+    }
+
+    # method 1
+    {
+
+        # test method 1, javadoc
+        my $result   = $matches[0]->{javadoc};
+        my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_1%';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 1, access
+        my $result   = $matches[0]->{access};
+        my $expected = 'private override (undefined)';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 1, name
+        my $result   = $matches[0]->{name};
+        my $expected = 'AllTags';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 1, return
+        my $result   = $matches[0]->{return};
+        my $expected = 'void';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 2
+    {
+
+        # test method 2, javadoc
+        my $result   = $matches[1]->{javadoc};
+        my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_2%';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 2, access
+        my $result   = $matches[1]->{access};
+        my $expected = 'protected ';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 2, name
+        my $result   = $matches[1]->{name};
+        my $expected = 'method_B';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 2, parameters
+        my $result   = $matches[1]->{parameters};
+        my $expected = 'inValue:Number';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 2, return
+        my $result   = $matches[1]->{return};
+        my $expected = 'Boolean';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 4
+    {
+
+        # test method 4, javadoc
+        my $result   = $matches[3]->{javadoc};
+        my $expected = '%VISDOC_STUB_JAVADOC_COMMENT_4%';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 4, access
+        my $result   = $matches[3]->{access};
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 4, name
+        my $result   = $matches[3]->{name};
+        my $expected = 'get method_B';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 4, parameters
+        my $result   = $matches[3]->{parameters};
+        my $expected = 'inValue:Number';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 4, return
+        my $result   = $matches[3]->{return};
+        my $expected = 'Boolean';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -563,7 +615,7 @@ sub test_memberpattern_as3 {
 sub test_parseMethods_as2 {
     my ($this) = @_;
 
-	my $text = 'class Asd {
+    my $text = 'class Asd {
 	
 	public function get count () : Number {}
 	public function set count (inCount:Number) : void {}
@@ -603,105 +655,114 @@ sub test_parseMethods_as2 {
 	}
 }';
 
-	my $fileData = VisDoc::parseText( $text, 'as2' );
-	my $classData = $fileData->{packages}->[0]->{classes}->[0];
-	my $methods = $classData->{methods};
+    my $fileData  = VisDoc::parseText( $text, 'as2' );
+    my $classData = $fileData->{packages}->[0]->{classes}->[0];
+    my $methods   = $classData->{methods};
 
-#use Data::Dumper;
-#print("methods=" . Dumper($methods));
+    #use Data::Dumper;
+    #print("methods=" . Dumper($methods));
 
-	{
-		# test name
-		my $result = $methods->[0]->{name};
-		my $expected = 'Asd';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc
-		my $result = $methods->[0]->{javadoc}->getDescription;
-		my $expected = 'constructor javadoc';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 2
-	{
-		# test access
-		my $access = $methods->[2]->{access};
-		my $result = join(",", @{$access});
-		my $expected = 'public';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 3
-	{
-		# test access
-		my $access = $methods->[1]->{access};
-		my $result = join(",", @{$access});
-		my $expected = 'public,static';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test parameters 0
-		my $parameters = $methods->[1]->{parameters};
-		my $param = $parameters->[0];
-		my $name = $param->{name};
-		my $dataType = $param->{dataType};
-		my $value = $param->{value};
-		my $result = "$name:$dataType=$value";
-		my $expected = 'inKey:String=",."';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test parameters 1
-		my $parameters = $methods->[1]->{parameters};
-		my $param = $parameters->[1];
-		my $name = $param->{name};
-		my $dataType = $param->{dataType};
-		my $result = "$name:$dataType";
-		my $expected = 'inValue:Number';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test return
-		my $result = $methods->[1]->{returnType};
-		my $expected = 'Boolean';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 4
-	{
-		# test name
-		my $result = $methods->[4]->{name};
-		my $expected = 'interfaceMethod';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test parameters
-		my $parameters = $methods->[4]->{parameters};
-		my $param = $parameters->[0];
-		my $name = $param->{name};
-		my $result = $name;
-		my $expected = 'inValue';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    {
+
+        # test name
+        my $result   = $methods->[0]->{name};
+        my $expected = 'Asd';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc
+        my $result   = $methods->[0]->{javadoc}->getDescription;
+        my $expected = 'constructor javadoc';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 2
+    {
+
+        # test access
+        my $access   = $methods->[2]->{access};
+        my $result   = join( ",", @{$access} );
+        my $expected = 'public';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 3
+    {
+
+        # test access
+        my $access   = $methods->[1]->{access};
+        my $result   = join( ",", @{$access} );
+        my $expected = 'public,static';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test parameters 0
+        my $parameters = $methods->[1]->{parameters};
+        my $param      = $parameters->[0];
+        my $name       = $param->{name};
+        my $dataType   = $param->{dataType};
+        my $value      = $param->{value};
+        my $result     = "$name:$dataType=$value";
+        my $expected   = 'inKey:String=",."';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test parameters 1
+        my $parameters = $methods->[1]->{parameters};
+        my $param      = $parameters->[1];
+        my $name       = $param->{name};
+        my $dataType   = $param->{dataType};
+        my $result     = "$name:$dataType";
+        my $expected   = 'inValue:Number';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test return
+        my $result   = $methods->[1]->{returnType};
+        my $expected = 'Boolean';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 4
+    {
+
+        # test name
+        my $result   = $methods->[4]->{name};
+        my $expected = 'interfaceMethod';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test parameters
+        my $parameters = $methods->[4]->{parameters};
+        my $param      = $parameters->[0];
+        my $name       = $param->{name};
+        my $result     = $name;
+        my $expected   = 'inValue';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -711,7 +772,7 @@ sub test_parseMethods_as2 {
 sub test_parseMethods_as3 {
     my ($this) = @_;
 
-	my $text = 'class Z {
+    my $text = 'class Z {
 	
 	public function get count () : Number {}
 	public function set count (inCount:Number) : void {}
@@ -751,101 +812,111 @@ sub test_parseMethods_as3 {
 	}
 }';
 
-	my $fileData = VisDoc::parseText( $text, 'as3' );
-	my $classData = $fileData->{packages}->[0]->{classes}->[0];
-	my $methods = $classData->{methods};
-	
-#use Data::Dumper;
-#print("methods=" . Dumper($methods));
+    my $fileData  = VisDoc::parseText( $text, 'as3' );
+    my $classData = $fileData->{packages}->[0]->{classes}->[0];
+    my $methods   = $classData->{methods};
 
-	{
-		# test name
-		my $result = $methods->[0]->{name};
-		my $expected = 'Z';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc
-		my $result = $methods->[0]->{javadoc}->getDescription;
-		my $expected = 'constructor javadoc';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	# method 3
-	{
-		# test access
-		my $access = $methods->[1]->{access};
-		my $result = join(",", @{$access});
-		my $expected = 'override(false),public';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test override
-		my $member = $methods->[1];
-		my $result = $member->overrides();
-		my $expected = 0;
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test parameters
-		my $parameters = $methods->[1]->{parameters};
-		my $param = $parameters->[0];
-		my $name = $param->{name};
-		my $dataType = $param->{dataType};
-		my $value = $param->{value};
-		my $result = "$name:$dataType=$value";
-		my $expected = 'inKey:String=",."';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test return
-		my $result = $methods->[1]->{returnType};
-		my $expected = 'Boolean';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 2
-	{
-		# test access
-		my $access = $methods->[2]->{access};
-		my $result = join(",", @{$access});
-		my $expected = 'public,override(true)';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	# method 4
-	{
-		# test name
-		my $result = $methods->[4]->{name};
-		my $expected = 'interfaceMethod';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test parameters
-		my $parameters = $methods->[4]->{parameters};
-		my $param = $parameters->[0];
-		my $name = $param->{name};
-		my $result = $name;
-		my $expected = '_some_weird_type_';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("methods=" . Dumper($methods));
+
+    {
+
+        # test name
+        my $result   = $methods->[0]->{name};
+        my $expected = 'Z';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc
+        my $result   = $methods->[0]->{javadoc}->getDescription;
+        my $expected = 'constructor javadoc';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 3
+    {
+
+        # test access
+        my $access   = $methods->[1]->{access};
+        my $result   = join( ",", @{$access} );
+        my $expected = 'override(false),public';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test override
+        my $member   = $methods->[1];
+        my $result   = $member->overrides();
+        my $expected = 0;
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test parameters
+        my $parameters = $methods->[1]->{parameters};
+        my $param      = $parameters->[0];
+        my $name       = $param->{name};
+        my $dataType   = $param->{dataType};
+        my $value      = $param->{value};
+        my $result     = "$name:$dataType=$value";
+        my $expected   = 'inKey:String=",."';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test return
+        my $result   = $methods->[1]->{returnType};
+        my $expected = 'Boolean';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 2
+    {
+
+        # test access
+        my $access   = $methods->[2]->{access};
+        my $result   = join( ",", @{$access} );
+        my $expected = 'public,override(true)';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    # method 4
+    {
+
+        # test name
+        my $result   = $methods->[4]->{name};
+        my $expected = 'interfaceMethod';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test parameters
+        my $parameters = $methods->[4]->{parameters};
+        my $param      = $parameters->[0];
+        my $name       = $param->{name};
+        my $result     = $name;
+        my $expected   = '_some_weird_type_';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -855,7 +926,7 @@ sub test_parseMethods_as3 {
 sub test_parseProperties_as2 {
     my ($this) = @_;
 
-	my $text = 'class AllTags {
+    my $text = 'class AllTags {
 	
 	/**
 	Count property
@@ -925,187 +996,207 @@ sub test_parseProperties_as2 {
 	}
 }';
 
-	
-	my $fileParser = VisDoc::FileParser->new();
-    my $fileData = $fileParser->parseText($text);
-    my $classData = $fileData->{packages}->[0]->{classes}->[0];
+    my $fileParser = VisDoc::FileParser->new();
+    my $fileData   = $fileParser->parseText($text);
+    my $classData  = $fileData->{packages}->[0]->{classes}->[0];
     my $properties = $classData->{properties};
 
-	#use Data::Dumper;
-	#print("properties=" . Dumper($properties));
-	
+    #use Data::Dumper;
+    #print("properties=" . Dumper($properties));
+
     # property 1
-	{
-		# test name
-		my $result = $properties->[1]->{name};
-		my $expected = 'CLICK';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test access 1
-		my $result = $properties->[1]->{access}->[0];
-		my $expected = 'public';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test access 2
-		my $result = $properties->[1]->{access}->[1];
-		my $expected = 'static';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test dataType
-		my $result = $properties->[1]->{dataType};
-		my $expected = 'String';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test value
-		my $result = $properties->[1]->{value};
-		my $expected = '"click"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata name
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $result = $metadataItem0->{name};
-		my $expected = '"Event"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata: item 0: value
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $listOfHashes = $metadataItem0->{items};
-		my $contentHash0 = $listOfHashes->[0];
-		my $result = $contentHash0->{'NO_KEY'};
-		my $expected = '"resizeVideo"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test access 'private'
-		my $result = $properties->[3]->{access}->[0];
-		my $expected = 'private';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: name
-		my $result = $properties->[9]->{name};
-		my $expected = 'elephant';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: javadoc
-		my $result = $properties->[9]->{javadoc}->getDescription();
-		my $expected = 'Num vars.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: name (2)
-		my $result = $properties->[13]->{name};
-		my $expected = 'c1';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: javadoc side
-		my $result = $properties->[13]->{javadoc}->getDescription();
-		my $expected = 'more num vars';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	{
-		# test side javadoc
-		my $result = $properties->[16]->{javadoc}->getDescription();
-		my $expected = 'Typecode for debugging messages.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	
-		{
-		# test metadata: item 2: name
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $result = $metadataItem0->{name};
-		my $expected = '"Event"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata: item 2: value
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $listOfHashes = $metadataItem0->{items};
-		my $contentHash0 = $listOfHashes->[0];
-		my $result = $contentHash0->{'NO_KEY'};
-		my $expected = '"resizeVideo"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata: item 2: value
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem1 = $metadataList->[1];
-		my $listOfHashes = $metadataItem1->{items};
-		my $contentHash2 = $listOfHashes->[2];
-		my $key = (keys %$contentHash2)[0];
-		{
-			my $result = $key;
-			my $expected = 'collectionClass';
-			print("RES=$result.\n")     if $debug;
-			print("EXP=$expected.\n") if $debug;
-			$this->assert( $result eq $expected );
-		}
-		{
-			my $stubKey = $contentHash2->{$key};
-			my $expected = '"config/OpenSpace.xml"';
-			my $result = $fileParser->getContents($stubKey);
-			print("RES=$result.\n")     if $debug;
-			print("EXP=$expected.\n") if $debug;
-			$this->assert( $result eq $expected );
-		}
-	}
-	{
-		# test getter/setter method
-		my $result = $properties->[19]->{name};
-		my $expected = 'selectedIndex';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    {
+
+        # test name
+        my $result   = $properties->[1]->{name};
+        my $expected = 'CLICK';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test access 1
+        my $result   = $properties->[1]->{access}->[0];
+        my $expected = 'public';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test access 2
+        my $result   = $properties->[1]->{access}->[1];
+        my $expected = 'static';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test dataType
+        my $result   = $properties->[1]->{dataType};
+        my $expected = 'String';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test value
+        my $result   = $properties->[1]->{value};
+        my $expected = '"click"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata name
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $result        = $metadataItem0->{name};
+        my $expected      = '"Event"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata: item 0: value
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $listOfHashes  = $metadataItem0->{items};
+        my $contentHash0  = $listOfHashes->[0];
+        my $result        = $contentHash0->{'NO_KEY'};
+        my $expected      = '"resizeVideo"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test access 'private'
+        my $result   = $properties->[3]->{access}->[0];
+        my $expected = 'private';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: name
+        my $result   = $properties->[9]->{name};
+        my $expected = 'elephant';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: javadoc
+        my $result   = $properties->[9]->{javadoc}->getDescription();
+        my $expected = 'Num vars.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: name (2)
+        my $result   = $properties->[13]->{name};
+        my $expected = 'c1';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: javadoc side
+        my $result   = $properties->[13]->{javadoc}->getDescription();
+        my $expected = 'more num vars';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    {
+
+        # test side javadoc
+        my $result   = $properties->[16]->{javadoc}->getDescription();
+        my $expected = 'Typecode for debugging messages.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    {
+
+        # test metadata: item 2: name
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $result        = $metadataItem0->{name};
+        my $expected      = '"Event"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata: item 2: value
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $listOfHashes  = $metadataItem0->{items};
+        my $contentHash0  = $listOfHashes->[0];
+        my $result        = $contentHash0->{'NO_KEY'};
+        my $expected      = '"resizeVideo"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata: item 2: value
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem1 = $metadataList->[1];
+        my $listOfHashes  = $metadataItem1->{items};
+        my $contentHash2  = $listOfHashes->[2];
+        my $key           = ( keys %$contentHash2 )[0];
+        {
+            my $result   = $key;
+            my $expected = 'collectionClass';
+            print("RES=$result.\n")   if $debug;
+            print("EXP=$expected.\n") if $debug;
+            $this->assert( $result eq $expected );
+        }
+        {
+            my $stubKey  = $contentHash2->{$key};
+            my $expected = '"config/OpenSpace.xml"';
+            my $result   = $fileParser->getContents($stubKey);
+            print("RES=$result.\n")   if $debug;
+            print("EXP=$expected.\n") if $debug;
+            $this->assert( $result eq $expected );
+        }
+    }
+    {
+
+        # test getter/setter method
+        my $result   = $properties->[19]->{name};
+        my $expected = 'selectedIndex';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -1115,50 +1206,54 @@ sub test_parseProperties_as2 {
 sub test_parseProperties__getsetonly_as2 {
     my ($this) = @_;
 
-	my $text = 'class AAA {
+    my $text = 'class AAA {
 	
 	public function get count () : Number {}
 	public function set count (inCount:Number) : void {}
 
 }';
 
-	my $fileParser = VisDoc::FileParser->new();
-    my $fileData = $fileParser->parseText($text);
-    my $classData = $fileData->{packages}->[0]->{classes}->[0];
+    my $fileParser = VisDoc::FileParser->new();
+    my $fileData   = $fileParser->parseText($text);
+    my $classData  = $fileData->{packages}->[0]->{classes}->[0];
     my $properties = $classData->{properties};
 
-	#use Data::Dumper;
-	#print("properties=" . Dumper($properties));
-	
-	{
-		# test name
-		my $result = $properties->[0]->{name};
-		my $expected = 'count';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test property 2 (does not exist)
-		my $result = $properties->[1];
-		$this->assert_null( $result );
-	}
-	{
-		# test dataType
-		my $result = $properties->[0]->{dataType};
-		my $expected = 'Number';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test isAccessPublic
-		my $result = $properties->[0]->{isAccessPublic};
-		my $expected = 1;
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("properties=" . Dumper($properties));
+
+    {
+
+        # test name
+        my $result   = $properties->[0]->{name};
+        my $expected = 'count';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test property 2 (does not exist)
+        my $result = $properties->[1];
+        $this->assert_null($result);
+    }
+    {
+
+        # test dataType
+        my $result   = $properties->[0]->{dataType};
+        my $expected = 'Number';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test isAccessPublic
+        my $result   = $properties->[0]->{isAccessPublic};
+        my $expected = 1;
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -1168,7 +1263,7 @@ sub test_parseProperties__getsetonly_as2 {
 sub test_parseProperties_as3 {
     my ($this) = @_;
 
-	my $text = 'class Def {
+    my $text = 'class Def {
 	
 	/**
 	Count property
@@ -1238,176 +1333,199 @@ sub test_parseProperties_as3 {
 	}
 }';
 
-	my $fileData = VisDoc::parseText( $text, 'as3' );
-	my $classData = $fileData->{packages}->[0]->{classes}->[0];
-	my $properties = $classData->{properties};
+    my $fileData   = VisDoc::parseText( $text, 'as3' );
+    my $classData  = $fileData->{packages}->[0]->{classes}->[0];
+    my $properties = $classData->{properties};
 
-#use Data::Dumper;
-#print("properties=" . Dumper($properties));
+    #use Data::Dumper;
+    #print("properties=" . Dumper($properties));
 
     # property 2
-	{
-		# test name
-		my $result = $properties->[1]->{name};
-		my $expected = 'CLICK';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test access 2->0
-		my $result = $properties->[1]->{access}->[0];
-		my $expected = 'public';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test access 2->1
-		my $result = $properties->[1]->{access}->[1];
-		my $expected = 'static';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test type
-		my $result = VisDoc::PropertyData::typeString( $properties->[1]->{type} );
-		my $expected = 'CONST';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test dataType
-		my $result = $properties->[1]->{dataType};
-		my $expected = 'String';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test value
-		my $result = $properties->[1]->{value};
-		my $expected = '"click"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata name
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $result = $metadataItem0->{name};
-		my $expected = '"Event"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata: item 0: value
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $listOfHashes = $metadataItem0->{items};
-		my $contentHash0 = $listOfHashes->[0];
-		my $result = $contentHash0->{'NO_KEY'};
-		my $expected = '"resizeVideo"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test access 'protected'
-		my $result = $properties->[3]->{access}->[0];
-		my $expected = 'protected';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: name
-		my $result = $properties->[9]->{name};
-		my $expected = 'camel';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: javadoc
-		my $result = $properties->[9]->{javadoc}->getDescription();
-		my $expected = 'Num vars.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: name (2)
-		my $result = $properties->[13]->{name};
-		my $expected = 'c1';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test multiple vars on one line: javadoc side
-		my $result = $properties->[13]->{javadoc}->getDescription();
-		my $expected = 'more num vars';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	{
-		# test side javadoc
-		my $result = $properties->[16]->{javadoc}->getDescription();
-		my $expected = 'Typecode for debugging messages.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	
-		{
-		# test metadata: item 2: name
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $result = $metadataItem0->{name};
-		my $expected = '"Event"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata: item 2: value
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem0 = $metadataList->[0];
-		my $listOfHashes = $metadataItem0->{items};
-		my $contentHash0 = $listOfHashes->[0];
-		my $result = $contentHash0->{'NO_KEY'};
-		my $expected = '"resizeVideo"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test metadata: item 2: value
-		my $metadataList = $properties->[1]->{metadata};
-		# item 0
-		my $metadataItem1 = $metadataList->[1];
-		my $listOfHashes = $metadataItem1->{items};
-		my $contentHash2 = $listOfHashes->[2];
-		my $key = (keys %$contentHash2)[0];
-		{
-			my $result = $key;
-			my $expected = 'collectionClass';
-			print("RES=$result.\n")     if $debug;
-			print("EXP=$expected.\n") if $debug;
-			$this->assert( $result eq $expected );
-		}
+    {
+
+        # test name
+        my $result   = $properties->[1]->{name};
+        my $expected = 'CLICK';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test access 2->0
+        my $result   = $properties->[1]->{access}->[0];
+        my $expected = 'public';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test access 2->1
+        my $result   = $properties->[1]->{access}->[1];
+        my $expected = 'static';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test type
+        my $result =
+          VisDoc::PropertyData::typeString( $properties->[1]->{type} );
+        my $expected = 'CONST';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test dataType
+        my $result   = $properties->[1]->{dataType};
+        my $expected = 'String';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test value
+        my $result   = $properties->[1]->{value};
+        my $expected = '"click"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata name
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $result        = $metadataItem0->{name};
+        my $expected      = '"Event"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata: item 0: value
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $listOfHashes  = $metadataItem0->{items};
+        my $contentHash0  = $listOfHashes->[0];
+        my $result        = $contentHash0->{'NO_KEY'};
+        my $expected      = '"resizeVideo"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test access 'protected'
+        my $result   = $properties->[3]->{access}->[0];
+        my $expected = 'protected';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: name
+        my $result   = $properties->[9]->{name};
+        my $expected = 'camel';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: javadoc
+        my $result   = $properties->[9]->{javadoc}->getDescription();
+        my $expected = 'Num vars.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: name (2)
+        my $result   = $properties->[13]->{name};
+        my $expected = 'c1';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test multiple vars on one line: javadoc side
+        my $result   = $properties->[13]->{javadoc}->getDescription();
+        my $expected = 'more num vars';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    {
+
+        # test side javadoc
+        my $result   = $properties->[16]->{javadoc}->getDescription();
+        my $expected = 'Typecode for debugging messages.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    {
+
+        # test metadata: item 2: name
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $result        = $metadataItem0->{name};
+        my $expected      = '"Event"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata: item 2: value
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem0 = $metadataList->[0];
+        my $listOfHashes  = $metadataItem0->{items};
+        my $contentHash0  = $listOfHashes->[0];
+        my $result        = $contentHash0->{'NO_KEY'};
+        my $expected      = '"resizeVideo"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test metadata: item 2: value
+        my $metadataList = $properties->[1]->{metadata};
+
+        # item 0
+        my $metadataItem1 = $metadataList->[1];
+        my $listOfHashes  = $metadataItem1->{items};
+        my $contentHash2  = $listOfHashes->[2];
+        my $key           = ( keys %$contentHash2 )[0];
+        {
+            my $result   = $key;
+            my $expected = 'collectionClass';
+            print("RES=$result.\n")   if $debug;
+            print("EXP=$expected.\n") if $debug;
+            $this->assert( $result eq $expected );
+        }
+
 =pod
 		{
 			my $stubKey = $contentHash2->{$key};
@@ -1418,15 +1536,17 @@ sub test_parseProperties_as3 {
 			$this->assert( $result eq $expected );
 		}
 =cut
-	}
-	{
-		# test getter/setter method
-		my $result = $properties->[19]->{name};
-		my $expected = 'selectedIndex';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+
+    }
+    {
+
+        # test getter/setter method
+        my $result   = $properties->[19]->{name};
+        my $expected = 'selectedIndex';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -1436,50 +1556,53 @@ sub test_parseProperties_as3 {
 sub test_parseClasses_java_short {
     my ($this) = @_;
 
-	my $text = 'package points; 
+    my $text = 'package points; 
 class PointVec { Point[] vec; }';
 
-	    
-	my $fileData = VisDoc::parseText( $text, 'java' );
-	my $classData = $fileData->{packages}->[0]->{classes}->[0];
-	my $properties = $classData->{properties};
-	
-#use Data::Dumper;
-#print("classData=" . Dumper($classData));
+    my $fileData   = VisDoc::parseText( $text, 'java' );
+    my $classData  = $fileData->{packages}->[0]->{classes}->[0];
+    my $properties = $classData->{properties};
 
-	{
-		# test package name
-		my $result = $fileData->{packages}->[0]->{name};
-		my $expected = 'points';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class name
-		my $result = $classData->{name};
-		my $expected = 'PointVec';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test property name
-		my $result = $properties->[0]->{name};
-		my $expected = 'vec';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test property type
-		my $result = $properties->[0]->{dataType};
-		my $expected = 'Point[]';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
+    #use Data::Dumper;
+    #print("classData=" . Dumper($classData));
+
+    {
+
+        # test package name
+        my $result   = $fileData->{packages}->[0]->{name};
+        my $expected = 'points';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class name
+        my $result   = $classData->{name};
+        my $expected = 'PointVec';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test property name
+        my $result   = $properties->[0]->{name};
+        my $expected = 'vec';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test property type
+        my $result   = $properties->[0]->{dataType};
+        my $expected = 'Point[]';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
 }
 
 =pod
@@ -1489,7 +1612,7 @@ class PointVec { Point[] vec; }';
 sub test_parseClasses_java_interface {
     my ($this) = @_;
 
-	my $text = 'package it.gotoandplay.smartfoxclient;
+    my $text = 'package it.gotoandplay.smartfoxclient;
 
 /**
  * ISFSEventListener must be implemented by all classes that listen for SmarFoxSever events.
@@ -1522,86 +1645,94 @@ public interface ISFSEventListener
     void printCollection(Collection<?> c);
 }
 ';
-    
-	my $fileData = VisDoc::parseText( $text, 'java' );
-	my $classData = $fileData->{packages}->[0]->{classes}->[0];
-	my $methods = $classData->{methods};
-	
-#use Data::Dumper;
-#print("classData=" . Dumper($classData));
 
-	{
-		# test class name
-		my $result = $classData->{name};
-		my $expected = 'ISFSEventListener';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class type (interface)
-		my $result = $classData->{type};
-		my $expected = $VisDoc::ClassData::TYPE->{'INTERFACE'};
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 0: name
-		my $result = $methods->[0]->{name};
-		my $expected = 'handleEvent';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 0: parameters 0
-		my $parameterData = $methods->[0]->{parameters}->[0];
-		my $name = $parameterData->{name};
-		my $dataType = $parameterData->{dataType};
-		my $value = $parameterData->{value} || '';
-		my $result = "$dataType $name=$value";
-		my $expected = 'SFSEvent event=';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 1: name
-		my $result = $methods->[1]->{name};
-		my $expected = 'run';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 1: returnType
-		my $result = $methods->[1]->{returnType};
-		my $expected = 'void';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 1: exceptionType
-		my $result = $methods->[1]->{exceptionType};
-		my $expected = 'E';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method 3: parameters 0
-		my $parameterData = $methods->[3]->{parameters}->[0];
-		my $name = $parameterData->{name};
-		my $dataType = $parameterData->{dataType};
-		my $value = $parameterData->{value} || '';
-		my $result = "$dataType $name=$value";
-		my $expected = 'Collection<? extends E> c=';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my $fileData  = VisDoc::parseText( $text, 'java' );
+    my $classData = $fileData->{packages}->[0]->{classes}->[0];
+    my $methods   = $classData->{methods};
+
+    #use Data::Dumper;
+    #print("classData=" . Dumper($classData));
+
+    {
+
+        # test class name
+        my $result   = $classData->{name};
+        my $expected = 'ISFSEventListener';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class type (interface)
+        my $result   = $classData->{type};
+        my $expected = $VisDoc::ClassData::TYPE->{'INTERFACE'};
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 0: name
+        my $result   = $methods->[0]->{name};
+        my $expected = 'handleEvent';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 0: parameters 0
+        my $parameterData = $methods->[0]->{parameters}->[0];
+        my $name          = $parameterData->{name};
+        my $dataType      = $parameterData->{dataType};
+        my $value         = $parameterData->{value} || '';
+        my $result        = "$dataType $name=$value";
+        my $expected      = 'SFSEvent event=';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 1: name
+        my $result   = $methods->[1]->{name};
+        my $expected = 'run';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 1: returnType
+        my $result   = $methods->[1]->{returnType};
+        my $expected = 'void';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 1: exceptionType
+        my $result   = $methods->[1]->{exceptionType};
+        my $expected = 'E';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 3: parameters 0
+        my $parameterData = $methods->[3]->{parameters}->[0];
+        my $name          = $parameterData->{name};
+        my $dataType      = $parameterData->{dataType};
+        my $value         = $parameterData->{value} || '';
+        my $result        = "$dataType $name=$value";
+        my $expected      = 'Collection<? extends E> c=';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -1611,21 +1742,20 @@ public interface ISFSEventListener
 sub test_URI_as2_class {
     my ($this) = @_;
 
-	my $text = '	
+    my $text = '	
 	class SpeakingPets  {}';
-	
-	my $fileParser = VisDoc::FileParser->new();
-    my $fileData = $fileParser->parseText($text, 'as2');
-	my $classes = $fileData->{packages}->[0]->{classes};
-    my $classData = $classes->[0];
 
-	my $result = $classData->getUri();
-	my $expected = 'SpeakingPets';
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    my $fileParser = VisDoc::FileParser->new();
+    my $fileData   = $fileParser->parseText( $text, 'as2' );
+    my $classes    = $fileData->{packages}->[0]->{classes};
+    my $classData  = $classes->[0];
+
+    my $result   = $classData->getUri();
+    my $expected = 'SpeakingPets';
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
-
 
 =pod
 
@@ -1634,21 +1764,21 @@ sub test_URI_as2_class {
 sub test_URI_as2_class_with_classpath {
     my ($this) = @_;
 
-	my $text = '	
+    my $text = '	
 	class com.visiblearea.SpeakingPets extends Sprite implements IAnimal, ISprite {
 		//
 	}';
-	
-	my $fileParser = VisDoc::FileParser->new();
-    my $fileData = $fileParser->parseText($text, 'as2');
-	my $classes = $fileData->{packages}->[0]->{classes};
-    my $classData = $classes->[0];
 
-	my $result = $classData->getUri();
-	my $expected = 'com_visiblearea_SpeakingPets';
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    my $fileParser = VisDoc::FileParser->new();
+    my $fileData   = $fileParser->parseText( $text, 'as2' );
+    my $classes    = $fileData->{packages}->[0]->{classes};
+    my $classData  = $classes->[0];
+
+    my $result   = $classData->getUri();
+    my $expected = 'com_visiblearea_SpeakingPets';
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
 
 =pod
@@ -1658,7 +1788,7 @@ sub test_URI_as2_class_with_classpath {
 sub test_URI_as3 {
     my ($this) = @_;
 
-	my $text = '/*
+    my $text = '/*
 this is not
 class TraverseArrayOptions {
 */
@@ -1670,32 +1800,34 @@ package org.asaplibrary.data.array /*ehm*/{
 	public class TraverseArrayOptions {
 	}
 }';
-	
-	my $fileData = VisDoc::parseText($text, 'as3');
 
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as3' );
 
-	{
-		# test package
-		my $packageData = $fileData->{packages}->[0];
-	
-		my $result = $packageData->getUri();
-		my $expected = 'package-org_asaplibrary_data_array';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class
-		my $classData = $fileData->{packages}->[0]->{classes}->[0];
-	
-		my $result = $classData->getUri();
-		my $expected = 'org_asaplibrary_data_array_TraverseArrayOptions';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test package
+        my $packageData = $fileData->{packages}->[0];
+
+        my $result   = $packageData->getUri();
+        my $expected = 'package-org_asaplibrary_data_array';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class
+        my $classData = $fileData->{packages}->[0]->{classes}->[0];
+
+        my $result   = $classData->getUri();
+        my $expected = 'org_asaplibrary_data_array_TraverseArrayOptions';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -1705,7 +1837,7 @@ package org.asaplibrary.data.array /*ehm*/{
 sub test_URI_java {
     my ($this) = @_;
 
-	my $text = 'package treemap;
+    my $text = 'package treemap;
 
 import java.util.Enumeration;
 
@@ -1714,246 +1846,274 @@ public interface TMNode {
     public Enumeration children();
 }';
 
-	my $fileData = VisDoc::parseText($text, 'java');
+    my $fileData = VisDoc::parseText( $text, 'java' );
 
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
 
-	{
-		# test package
-		my $packageData = $fileData->{packages}->[0];
-	
-		my $result = $packageData->getUri();
-		my $expected = 'package-treemap';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class
-		my $classData = $fileData->{packages}->[0]->{classes}->[0];
-	
-		my $result = $classData->getUri();
-		my $expected = 'treemap_TMNode';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    {
+
+        # test package
+        my $packageData = $fileData->{packages}->[0];
+
+        my $result   = $packageData->getUri();
+        my $expected = 'package-treemap';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class
+        my $classData = $fileData->{packages}->[0]->{classes}->[0];
+
+        my $result   = $classData->getUri();
+        my $expected = 'treemap_TMNode';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 sub test_getDescriptionParts_simple {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 Blo
 */
 class A {}
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = 'Blo';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result   = $summaryLine;
+        my $expected = 'Blo';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result   = $rest;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 sub test_getDescriptionParts_simple2 {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 Blo...
 */
 class A {}
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = 'Blo...';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result   = $summaryLine;
+        my $expected = 'Blo...';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result   = $rest;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 sub test_getDescriptionParts_empty {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 */
 class A {}
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result   = $summaryLine;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result   = $rest;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 sub test_getDescriptionParts_1 {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 Bla. blo <pre>xyz</pre> all the rest.
 */
 class A {}
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = 'Bla. ';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = 'blo <code>xyz</code> all the rest.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result   = $summaryLine;
+        my $expected = 'Bla. ';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result   = $rest;
+        my $expected = 'blo <code>xyz</code> all the rest.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 sub test_getDescriptionParts_2 {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 <code>xyz... something else. Line two. </code> All the rest.
 */
 class A {}
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = '<code>xyz... ';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = 'something <span class="codeKeyword">else</span>. Line two.</code> All the rest.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result   = $summaryLine;
+        my $expected = '<code>xyz... ';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result = $rest;
+        my $expected =
+'something <span class="codeKeyword">else</span>. Line two.</code> All the rest.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 sub test_getDescriptionParts_3 {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 <p>xyz
 <pre>
 something else
@@ -1962,38 +2122,43 @@ something else
 class A {}
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '<p>';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = 'xyz';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = '
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '<p>';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result   = $summaryLine;
+        my $expected = 'xyz';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result   = $rest;
+        my $expected = '
 <code>something <span class="codeKeyword">else</span></code> all the rest.</p>';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -2005,43 +2170,48 @@ Test email string.
 sub test_getDescriptionParts_4 {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 first.last@comp.com <b>yo!</b>
 */
 class A {}
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
-	
-#use Data::Dumper;
-#print("fileData=" . Dumper($fileData));
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = 'first.last@comp.com <b>yo!</b>';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    #use Data::Dumper;
+    #print("fileData=" . Dumper($fileData));
+
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result   = $summaryLine;
+        my $expected = 'first.last@comp.com <b>yo!</b>';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result   = $rest;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -2051,7 +2221,7 @@ class A {}
 sub test_getDescriptionParts_5 {
     my ($this) = @_;
 
-	my $text = '/**
+    my $text = '/**
 Testing @see references, see {@link #aFunction a number of @see examples}.
 {@code test code text}
 */
@@ -2060,35 +2230,41 @@ class ABC {
 }
 ';
 
-	my $fileData = VisDoc::parseText($text, 'as2');
-	my $description = $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
-	my ($beforeFirstLineTag, $summaryLine, $rest) = $fileData->getDescriptionParts($description);
+    my $fileData = VisDoc::parseText( $text, 'as2' );
+    my $description =
+      $fileData->{packages}->[0]->{classes}->[0]->{javadoc}->getDescription();
+    my ( $beforeFirstLineTag, $summaryLine, $rest ) =
+      $fileData->getDescriptionParts($description);
 
-	{
-		# test tag before summary line	
-		my $result = $beforeFirstLineTag;
-		my $expected = '';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test summary line	
-		my $result = $summaryLine;
-		my $expected = 'Testing @see references, see <a href="ABC.html#aFunction">a number of @see examples</a>.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test rest	
-		my $result = $rest;
-		my $expected = '
+    {
+
+        # test tag before summary line
+        my $result   = $beforeFirstLineTag;
+        my $expected = '';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test summary line
+        my $result = $summaryLine;
+        my $expected =
+'Testing @see references, see <a href="ABC.html#aFunction">a number of @see examples</a>.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test rest
+        my $result   = $rest;
+        my $expected = '
 <code>test code text</code>';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
- 
+
 1;

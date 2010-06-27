@@ -147,9 +147,10 @@ our $PATTERN_TAG_INHERITDOC = '
    (.*?)			# i1: contents
    }				# close tag
    ';
+
 #our $PATTERN_TAG_INHERITDOC_CONTENT_INDEX = 1;
-our $STUB_TAG_INHERITDOC                  = 'VISDOC_STUB_TAG_INHERITDOC';
-our $STUB_TAG_INHERITDOC_LINK                  = 'VISDOC_STUB_TAG_INHERITDOC_LINK';
+our $STUB_TAG_INHERITDOC      = 'VISDOC_STUB_TAG_INHERITDOC';
+our $STUB_TAG_INHERITDOC_LINK = 'VISDOC_STUB_TAG_INHERITDOC_LINK';
 
 our $PATTERN_CDATA = '
   (					# i1: start of CDATA
@@ -163,10 +164,10 @@ our $PATTERN_CDATA = '
 my $PLACEHOLDER_CDATA_START_TAG = 'PLACEHOLDER_CDATA_START_TAG';
 my $PLACEHOLDER_CDATA_END_TAG   = 'PLACEHOLDER_CDATA_END_TAG';
 
-our $VERBATIM_STUB_QUOTED_STRING   = 'VISDOC_STUB_QUOTED_STRING';
-our $STRINGUTILS_STUB_QUOTED_STRING   = 'VISDOC_STRINGUTILS_STUB_QUOTED_STRING';
-our $VERBATIM_STUB_PROPERTY_OBJECT = 'VISDOC_STUB_PROPERTY_OBJECT';
-our $VERBATIM_STUB_ARRAY           = 'VISDOC_STUB_ARRAY';
+our $VERBATIM_STUB_QUOTED_STRING    = 'VISDOC_STUB_QUOTED_STRING';
+our $STRINGUTILS_STUB_QUOTED_STRING = 'VISDOC_STRINGUTILS_STUB_QUOTED_STRING';
+our $VERBATIM_STUB_PROPERTY_OBJECT  = 'VISDOC_STUB_PROPERTY_OBJECT';
+our $VERBATIM_STUB_ARRAY            = 'VISDOC_STUB_ARRAY';
 
 our $PLACEHOLDER_LINEBREAK = 'VISDOC_PLACEHOLDER_LINEBREAK';
 our $STUB_SPACE            = 'VISDOC_STUB_SPACE';
@@ -530,9 +531,9 @@ sub commaSeparatedListFromCommaSeparatedString {
 
     # retrieve original store
     my $pattern = getStubKeyPattern($STRINGUTILS_STUB_QUOTED_STRING);
-    
+
     foreach my $item (@list) {
-    	while ( $item =~ m/($pattern)/gxs ) {
+        while ( $item =~ m/($pattern)/gxs ) {
             my $key   = $1;
             my $value = $store->{$key};
             $item =~ s/$key/$value/ if $value;

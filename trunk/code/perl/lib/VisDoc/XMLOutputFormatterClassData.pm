@@ -596,9 +596,9 @@ sub _writeParamFields {
             $value = $field->getValue();
         }
         if ($value) {
-           $value = $this->{data}->{fileData}->getContents($value);
-		}
-		
+            $value = $this->{data}->{fileData}->getContents($value);
+        }
+
         $inWriter->startTag('paramfield');
         my $name = $field->{name};
         if ($name) {
@@ -646,35 +646,37 @@ sub _writeMetadataFields {
     my $title = VisDoc::Language::getJavadocTerm($inTitleKey);
     $inWriter->cdataElement( 'title', $title );
 
-	$inWriter->startTag('metadatatags');
-	
+    $inWriter->startTag('metadatatags');
+
     foreach my $field ( @{$inFields} ) {
 
-		$inWriter->startTag('tag');
-		
-		my $name = $field->{'name'};
-		if ($name) {
-			$inWriter->cdataElement( 'title', $name );
-		}
-		
-		if (!$field->{items} || !scalar @{$field->{items}} ) {
-			$inWriter->cdataElement( 'metadatatagattribute', '' );
-		} else {
-			foreach my $item ( @{$field->{items}} ) {
-				$inWriter->startTag('metadatatagattribute');	
-				
-				foreach my $key (keys %{$item}) {
-					my $name = $key eq $VisDoc::MetadataData::NO_KEY ? '' : $key;
-					$inWriter->cdataElement( 'name', $name );
-					my $description = $item->{$key} ? $item->{$key} : '';
-					$inWriter->cdataElement( 'description', $description );
-				}
+        $inWriter->startTag('tag');
 
-				$inWriter->endTag('metadatatagattribute');
-			}
-		}
-		
-		$inWriter->endTag('tag');
+        my $name = $field->{'name'};
+        if ($name) {
+            $inWriter->cdataElement( 'title', $name );
+        }
+
+        if ( !$field->{items} || !scalar @{ $field->{items} } ) {
+            $inWriter->cdataElement( 'metadatatagattribute', '' );
+        }
+        else {
+            foreach my $item ( @{ $field->{items} } ) {
+                $inWriter->startTag('metadatatagattribute');
+
+                foreach my $key ( keys %{$item} ) {
+                    my $name =
+                      $key eq $VisDoc::MetadataData::NO_KEY ? '' : $key;
+                    $inWriter->cdataElement( 'name', $name );
+                    my $description = $item->{$key} ? $item->{$key} : '';
+                    $inWriter->cdataElement( 'description', $description );
+                }
+
+                $inWriter->endTag('metadatatagattribute');
+            }
+        }
+
+        $inWriter->endTag('tag');
     }
     $inWriter->endTag('metadatatags');
     $inWriter->endTag('field');
@@ -726,9 +728,9 @@ sub _writeSummary {
     if ( $summaryData->{hasTypeInfo} ) {
         $inWriter->startTag('showHideTypeInfo');
         $inWriter->cdataElement( 'showTypeInfo',
-            $this->_docTerm( 'summary_showTypeInfo' ) );
+            $this->_docTerm('summary_showTypeInfo') );
         $inWriter->cdataElement( 'hideTypeInfo',
-            $this->_docTerm( 'summary_hideTypeInfo' ) );
+            $this->_docTerm('summary_hideTypeInfo') );
         $inWriter->endTag('showHideTypeInfo');
     }
 
@@ -736,9 +738,9 @@ sub _writeSummary {
     if ( $summaryData->{hasSummary} ) {
         $inWriter->startTag('showHideSummaries');
         $inWriter->cdataElement( 'showSummaries',
-            $this->_docTerm( 'summary_showSummaries' ) );
+            $this->_docTerm('summary_showSummaries') );
         $inWriter->cdataElement( 'hideSummaries',
-            $this->_docTerm( 'summary_hideSummaries' ) );
+            $this->_docTerm('summary_hideSummaries') );
         $inWriter->endTag('showHideSummaries');
     }
 
@@ -774,51 +776,51 @@ sub _writeSummary_forMemberGroup {
         $isPrivatePart = $this->isPartPrivate( $inClassData, $inPartName );
     }
 
-	my $members = $this->_getMembersForPart( $inClassData, $inPartName );
+    my $members = $this->_getMembersForPart( $inClassData, $inPartName );
     return if !$members || !scalar @{$members};
-	
+
     $inWriter->startTag('private') if ($isPrivatePart);
-    
-	$inWriter->startTag('memberSummaryPart');
 
-	if ( $members && scalar @{$members} ) {
+    $inWriter->startTag('memberSummaryPart');
 
-		$inSummaryData->{hasMembers} += 1;
+    if ( $members && scalar @{$members} ) {
 
-		foreach my $member ( @{$members} ) {
+        $inSummaryData->{hasMembers} += 1;
 
-			next if $member->isExcluded();
-			next
-			  if !$this->{preferences}->{listPrivate} && !$member->isPublic();
+        foreach my $member ( @{$members} ) {
 
-			$inWriter->startTag('item');
-			$inWriter->startTag('private') if !$member->isPublic();
+            next if $member->isExcluded();
+            next
+              if !$this->{preferences}->{listPrivate} && !$member->isPublic();
 
-			$inWriter->cdataElement( 'id',    $member->getId() );
-			$inWriter->cdataElement( 'title', $member->{name} );
+            $inWriter->startTag('item');
+            $inWriter->startTag('private') if !$member->isPublic();
 
-			$this->_writeSummary_typeInfo( $inWriter, $member, $inSummaryData );
+            $inWriter->cdataElement( 'id',    $member->getId() );
+            $inWriter->cdataElement( 'title', $member->{name} );
 
-			$inWriter->endTag('private') if !$member->isPublic();
-			$inWriter->endTag('item');
-		}
-	}
+            $this->_writeSummary_typeInfo( $inWriter, $member, $inSummaryData );
 
-	# do this anyhow, even if the current class has no members for this type
-	# we want to show inherited members
-	my $hasInheritedMembers = 0;
-	if ($inMemberType) {
-		$hasInheritedMembers =
-		  $this->_writeInheritedMemberList( $inWriter, $inClassData,
-			$inMemberType );
-	}
+            $inWriter->endTag('private') if !$member->isPublic();
+            $inWriter->endTag('item');
+        }
+    }
 
-	if ( ( $members && scalar @{$members} ) || $hasInheritedMembers ) {
-		$inWriter->cdataElement( 'title', $inTitle );
-	}
+    # do this anyhow, even if the current class has no members for this type
+    # we want to show inherited members
+    my $hasInheritedMembers = 0;
+    if ($inMemberType) {
+        $hasInheritedMembers =
+          $this->_writeInheritedMemberList( $inWriter, $inClassData,
+            $inMemberType );
+    }
 
-	$inWriter->endTag('memberSummaryPart');
-	
+    if ( ( $members && scalar @{$members} ) || $hasInheritedMembers ) {
+        $inWriter->cdataElement( 'title', $inTitle );
+    }
+
+    $inWriter->endTag('memberSummaryPart');
+
     $inWriter->endTag('private') if ($isPrivatePart);
 }
 
@@ -951,9 +953,9 @@ sub _getMembersForPart {
         }
         $members = $publicMembers;
     }
-   
-	#use Data::Dumper;
-	#print "members=" . Dumper($members);
+
+    #use Data::Dumper;
+    #print "members=" . Dumper($members);
 
     return $members;
 }
@@ -1078,7 +1080,7 @@ sub _writeMembers_forMemberGroup {
         @{$members} = sort { $a->{name} cmp $b->{name} } @{$members};
 
         foreach my $member ( @{$members} ) {
-        
+
             $this->_writeMembers_forMemberGroup_memberText( $inWriter,
                 $member );
         }
@@ -1207,11 +1209,11 @@ sub _writeMembers_forMemberGroup_memberText_description {
     my ( $this, $inWriter, $inMember ) = @_;
 
     return if !$inMember->{javadoc};
-		
-	my $fields = $inMember->{javadoc}->fieldsWithName('deprecated');
-	my $description = $inMember->{javadoc}->getDescription();
-	
-	return if !$fields && !$description;
+
+    my $fields      = $inMember->{javadoc}->fieldsWithName('deprecated');
+    my $description = $inMember->{javadoc}->getDescription();
+
+    return if !$fields && !$description;
 
     $inWriter->startTag('description');
 
@@ -1223,7 +1225,7 @@ sub _writeMembers_forMemberGroup_memberText_description {
 
     # description text
     $inWriter->startTag('text');
-    
+
     $description = $this->{data}->{fileData}->getContents($description);
     $this->_writeValueXml( $inWriter, $description );
     $inWriter->endTag('text');
@@ -1279,19 +1281,19 @@ sub _writeMembers_forMemberGroup_memberText_fields {
     my @fieldKeys;
     map { push( @fieldKeys, $_ ) if !( $_ =~ m/($excludePattern)/ ); } @keys;
 
-	my $metadataFields = $inMember->{metadata};
-	
+    my $metadataFields = $inMember->{metadata};
+
 #    return if (!scalar @fieldKeys && (!$metadataFields && !scalar @{$metadataFields}));
 
     $inWriter->startTag('fields');
 
-	# meta fields
+    # meta fields
     $this->_writeMetadataFields( $inWriter, 'metadata', $metadataFields )
       if $metadataFields && scalar @{$metadataFields};
-      
+
     # param fields
     my $paramFields = $inMember->{javadoc}->{params};
-    
+
     $this->_writeParamFields( $inWriter, 'param', $paramFields )
       if $paramFields && scalar @{$paramFields};
 

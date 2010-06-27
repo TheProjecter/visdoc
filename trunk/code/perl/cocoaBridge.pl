@@ -11,12 +11,12 @@ use Pod::Usage;
 
 # Show help
 Getopt::Long::Configure( "no_auto_abbrev", "no_ignore_case" );
-sub usage {
-	pod2usage( { -verbose => 2, -input => \*DATA } );
-	exit;
-}
-usage() if (scalar @ARGV == 0);
 
+sub usage {
+    pod2usage( { -verbose => 2, -input => \*DATA } );
+    exit;
+}
+usage() if ( scalar @ARGV == 0 );
 
 BEGIN {
     my $root = Cwd::abs_path;
@@ -30,8 +30,8 @@ my $extensions      = '';
 my $defaults        = '';
 my $files           = '';
 my $ignorePathNames = '';
-my $help = 0;
-my $feedback = 0;
+my $help            = 0;
+my $feedback        = 0;
 &GetOptions(
     'datapath=s'   => \$dataPath,
     'extensions=s' => \$extensions,
@@ -74,7 +74,7 @@ if ($files) {
         die;
     }
 
-    my $out      = '';
+    my $out = '';
 
     my $argFiles = $files;
 
@@ -86,16 +86,16 @@ if ($files) {
     my $listedFiles = {};
     my $listedDirs  = {};
     foreach my $path (@inputFileList) {
-		
+
         # make sure path does not have a trailing slash
         $path =~ s/^(.*?)\/*$/$1/;
 
         if ( -f $path ) {
-			if (defined $validExtensions) {
-				my @parts = split(/\./, $path);
-				my $extension = pop @parts;
-				next if !($validExtensions->{$extension});
-			}
+            if ( defined $validExtensions ) {
+                my @parts = split( /\./, $path );
+                my $extension = pop @parts;
+                next if !( $validExtensions->{$extension} );
+            }
             if ($doValidate) {
                 my $fileInfo = VisDoc::validateFile($path);
                 $listedFiles->{$path} = $fileInfo->{valid};
@@ -143,12 +143,14 @@ if ($files) {
     }
     if ( scalar keys %{$inValidListedFiles} ) {
         my $invalidListedFilesString =
-          VisDoc::OSX::CocoaUtils::createPropertyListFromData($inValidListedFiles);
+          VisDoc::OSX::CocoaUtils::createPropertyListFromData(
+            $inValidListedFiles);
         $out .= "invalidListedFiles=$invalidListedFilesString;\n";
     }
     if ( scalar keys %{$inValidListedDirs} ) {
         my $invalidListedDirsString =
-          VisDoc::OSX::CocoaUtils::createPropertyListFromData($inValidListedDirs);
+          VisDoc::OSX::CocoaUtils::createPropertyListFromData(
+            $inValidListedDirs);
         $out .= "invalidListedDirs=$invalidListedDirsString;\n";
     }
 
@@ -174,6 +176,7 @@ if ($files) {
 1;
 
 __DATA__
+
 =head1 SYNOPSIS
 
 Get file info on the list of path strings. Returns data as Mac OS X Cocoa dictionary.

@@ -315,19 +315,19 @@ sub _parseMembers {
     ( $text, my $properties ) =
       $this->_parseProperties($text);    # objects of type PropertyData
 
-	@{$methods} = () if !$methods;
-	@{$properties} = () if !$properties;
-	
+    @{$methods}    = () if !$methods;
+    @{$properties} = () if !$properties;
+
     #use Data::Dumper;
     #print( " methods=" . Dumper($methods) . "\n" );
     #print( " properties=" . Dumper($properties) . "\n" );
     #print( " properties count=" . @$properties . "\n" );
     #print(" text=$text\n");
-    
-    $this->_combineGetSetters( $methods );
+
+    $this->_combineGetSetters($methods);
     $this->_setMemberOrder( $text, $methods, $properties );
     $this->_swapPropertyGetSetters( $methods, $properties );
-    $this->_setReadWriteForProperties( $properties );
+    $this->_setReadWriteForProperties($properties);
 
     return ( $methods, $properties, $text );
 }
@@ -341,46 +341,55 @@ Combines get and set methods.
 =cut
 
 sub _combineGetSetters {
-    my ( $this, $inMethods  ) = @_;
-	
- 	my $getters;
- 	my $setters;
- 	
- 	foreach my $method ( @{$inMethods} ) {
-        
-		$getters->{ $method->{name} } = $method if ( $method->{type} && $method->{type} == $VisDoc::MemberData::TYPE->{'READ'} );
-		
-		$setters->{ $method->{name} } = $method if ( $method->{type} && $method->{type} == $VisDoc::MemberData::TYPE->{'WRITE'} );
+    my ( $this, $inMethods ) = @_;
 
-	}
-	
-	while ( my ($name, $method) = each %{$getters} ) {
-	
-		# check if corresponding setter exists
-		my $setter = $setters->{$name};
-		if ($setter) {
-			my $setterParams = $setter->{parameters};
-			if ($setterParams && $setterParams->[0]->{dataType} eq $method->{returnType}) {
-				
-				# change type to both read and write
-				$method->{type} = $VisDoc::MemberData::TYPE->{'READ'} | $VisDoc::MemberData::TYPE->{'WRITE'};
-				
-				# copy return type
-				$method->{dataType} = $setterParams->[0]->{dataType};
-				
-				# merge javadoc
-				if ($setter->{javadoc}) {
-					$method->{javadoc}->merge($setter->{javadoc});
-				}
-				
-				# delete setter
-				undef $setters->{$name};
-				
-				# delete setter in original list
-				@{$inMethods} = grep { $_->{_id} != $setter->{_id} } @{$inMethods};
-			}
-		}	
-	}
+    my $getters;
+    my $setters;
+
+    foreach my $method ( @{$inMethods} ) {
+
+        $getters->{ $method->{name} } = $method
+          if ( $method->{type}
+            && $method->{type} == $VisDoc::MemberData::TYPE->{'READ'} );
+
+        $setters->{ $method->{name} } = $method
+          if ( $method->{type}
+            && $method->{type} == $VisDoc::MemberData::TYPE->{'WRITE'} );
+
+    }
+
+    while ( my ( $name, $method ) = each %{$getters} ) {
+
+        # check if corresponding setter exists
+        my $setter = $setters->{$name};
+        if ($setter) {
+            my $setterParams = $setter->{parameters};
+            if (   $setterParams
+                && $setterParams->[0]->{dataType} eq $method->{returnType} )
+            {
+
+                # change type to both read and write
+                $method->{type} =
+                  $VisDoc::MemberData::TYPE->{'READ'} |
+                  $VisDoc::MemberData::TYPE->{'WRITE'};
+
+                # copy return type
+                $method->{dataType} = $setterParams->[0]->{dataType};
+
+                # merge javadoc
+                if ( $setter->{javadoc} ) {
+                    $method->{javadoc}->merge( $setter->{javadoc} );
+                }
+
+                # delete setter
+                undef $setters->{$name};
+
+                # delete setter in original list
+                @{$inMethods} =
+                  grep { $_->{_id} != $setter->{_id} } @{$inMethods};
+            }
+        }
+    }
 }
 
 =pod
@@ -397,25 +406,30 @@ sub _swapPropertyGetSetters {
     my $count = 0;
     foreach my $method ( @{$inMethods} ) {
 
-        if ( $method->{type} && ($method->{type} & $VisDoc::MemberData::TYPE->{'READ'} || $method->{type} & $VisDoc::MemberData::TYPE->{'WRITE'} )) {
+        if (
+            $method->{type}
+            && (   $method->{type} & $VisDoc::MemberData::TYPE->{'READ'}
+                || $method->{type} & $VisDoc::MemberData::TYPE->{'WRITE'} )
+          )
+        {
 
             # create new property
             my $propertyData = VisDoc::PropertyData->new();
-            $propertyData->{type}        = $method->{type};
-            $propertyData->{memberOrder} = $method->{memberOrder};
-            $propertyData->{name}        = $method->{name};
-            $propertyData->{qualifiedName} = $method->{qualifiedName};
-            $propertyData->{access}      = $method->{access};
-            $propertyData->{isAccessPublic}  = $method->{isAccessPublic};
-            $propertyData->{javadoc}     = $method->{javadoc};
-            $propertyData->{metadata}    = $method->{metadata};
-            $propertyData->{parameters}    = $method->{parameters};
+            $propertyData->{type}           = $method->{type};
+            $propertyData->{memberOrder}    = $method->{memberOrder};
+            $propertyData->{name}           = $method->{name};
+            $propertyData->{qualifiedName}  = $method->{qualifiedName};
+            $propertyData->{access}         = $method->{access};
+            $propertyData->{isAccessPublic} = $method->{isAccessPublic};
+            $propertyData->{javadoc}        = $method->{javadoc};
+            $propertyData->{metadata}       = $method->{metadata};
+            $propertyData->{parameters}     = $method->{parameters};
 
             $propertyData->{dataType} ||= $method->{returnType}
               if ( $method->{type} & $VisDoc::MemberData::TYPE->{'READ'} );
             $propertyData->{dataType} ||= $method->{parameters}->[0]->{dataType}
               if ( $method->{type} & $VisDoc::MemberData::TYPE->{'WRITE'} );
-            $propertyData->{dataType}    ||= $method->{dataType};
+            $propertyData->{dataType} ||= $method->{dataType};
 
             push @{$inProperties}, $propertyData;
             my $deleted = splice( @{$inMethods}, $count, 1 );
@@ -433,9 +447,11 @@ sub _swapPropertyGetSetters {
 
 sub _setReadWriteForProperties {
     my ( $this, $inProperties ) = @_;
-    
+
     foreach my $property ( @{$inProperties} ) {
-    	$property->{type} ||= $VisDoc::MemberData::TYPE->{'READ'} | $VisDoc::MemberData::TYPE->{'WRITE'};
+        $property->{type} ||=
+          $VisDoc::MemberData::TYPE->{'READ'} |
+          $VisDoc::MemberData::TYPE->{'WRITE'};
     }
 }
 
@@ -468,12 +484,12 @@ Checks access list if class or member is public.
 
 sub _isPublic {
     my ( $this, $inAccess ) = @_;
-	
+
     my %access = map { $_ => 1 } @{$inAccess};
     my $isPublic = 1;    # default
-    
+
     $isPublic = 0 if ( $access{private} || $access{protected} );
-    
+
     return $isPublic;
 }
 
@@ -501,9 +517,8 @@ sub _handleMethodMatches {
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
 
         #$data->{javadocStub} = $inMatches->[$i];
-        my $javadoc =
-          $this->{fileParser}->parseJavadoc( $inMatches->[$i] );
-        $data->setJavadoc( $javadoc );
+        my $javadoc = $this->{fileParser}->parseJavadoc( $inMatches->[$i] );
+        $data->setJavadoc($javadoc);
     }
 
     # metadata
@@ -519,11 +534,11 @@ sub _handleMethodMatches {
         my $accessStr = $inMatches->[$i];
         if ($accessStr) {
             my @access = $this->_parseMemberAccess($accessStr);
-            $data->{access} = \@access;
+            $data->{access}         = \@access;
             $data->{isAccessPublic} = $this->_isPublic( $data->{access} );
         }
     }
-    
+
     # type: read or write
     $i = $inPatternMap->{name} - 1;    # beware: type is parsed from name
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
@@ -543,11 +558,11 @@ sub _handleMethodMatches {
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $parametersStr = $inMatches->[$i];
         $data->{parameters} = $this->_parseMethodParameters($parametersStr);
-        
+
         $data->{qualifiedName} = $data->{name} . '(' . $parametersStr . ')';
-		$data->{qualifiedName} =~ s/ //go;
+        $data->{qualifiedName} =~ s/ //go;
     }
-	
+
     # return type
     $i = $inPatternMap->{returnType} - 1;
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
@@ -649,10 +664,12 @@ sub _parseMetadataData {
     my $text         = $this->{fileParser}->getContents($inText);
 
     local $_ = $text;
-        
+
     while (/$this->{PATTERN_METADATA_CONTENTS}/gsx) {
         my ( $name, $contents ) = ( $1, $2 );
-        my @items = VisDoc::StringUtils::commaSeparatedListFromCommaSeparatedString($contents);
+        my @items =
+          VisDoc::StringUtils::commaSeparatedListFromCommaSeparatedString(
+            $contents);
         my @metaContent = ();
         foreach my $item (@items) {
             $item =~ m/$this->{PATTERN_KEY_IS_VALUE}/x;
@@ -837,8 +854,8 @@ sub _handlePropertyMatches {
     $i = $inPatternMap->{javadoc} - 1;
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocStub = $inMatches->[$i];
-        my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
-        $data->setJavadoc( $javadoc );
+        my $javadoc     = $this->{fileParser}->parseJavadoc($javadocStub);
+        $data->setJavadoc($javadoc);
     }
 
     # javadoc side
@@ -846,7 +863,7 @@ sub _handlePropertyMatches {
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocSideStub = $inMatches->[$i];
         my $javadoc = $this->{fileParser}->parseJavadoc($javadocSideStub);
-        $data->setJavadoc( $javadoc );
+        $data->setJavadoc($javadoc);
     }
 
     # metadata
@@ -862,7 +879,7 @@ sub _handlePropertyMatches {
         my $accessStr = $inMatches->[$i];
         if ($accessStr) {
             my @access = $this->_parseMemberAccess($accessStr);
-            $data->{access} = \@access;
+            $data->{access}         = \@access;
             $data->{isAccessPublic} = $this->_isPublic( $data->{access} );
         }
     }

@@ -22,9 +22,9 @@ sub new {
 
     $this->addEventListener( $VisDoc::FindLinksEvent::NAME, \&onFindLinks,
         $this );
-	$this->addEventListener( $VisDoc::SubstituteLinkStubsEvent::NAME, \&onSubstituteLinks,
-        $this );
-        
+    $this->addEventListener( $VisDoc::SubstituteLinkStubsEvent::NAME,
+        \&onSubstituteLinks, $this );
+
     bless $this, $class;
     return $this;
 }

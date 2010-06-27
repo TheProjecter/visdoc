@@ -3,9 +3,9 @@ package VisDoc::Defaults;
 use strict;
 use warnings;
 
-our $FILE_DOCTERMS        = 'templates/lang/docterms.json';
-our $FILE_JAVADOCTERMS    = 'templates/lang/javadocterms.json';
-our $FILE_JS_TEMPLATE_DIR = 'templates/js/';
+our $FILE_DOCTERMS         = 'templates/lang/docterms.json';
+our $FILE_JAVADOCTERMS     = 'templates/lang/javadocterms.json';
+our $FILE_JS_TEMPLATE_DIR  = 'templates/js/';
 our $FILE_CSS_TEMPLATE_DIR = 'templates/css/';
 
 our $FILE_CSS_DESTINATION = 'css/VisDoc.css';
@@ -14,30 +14,30 @@ our $FILE_JS_DESTINATION  = 'js/';
 our $NOT_IMPLEMENTED = 'Not implemented by subclass!';
 
 our $SETTINGS = {
-    copyCSS                           => 1,
-    copyright                         => 0,
-    copyrightText                     => '',
-    docencoding                       => 'utf-8',
-    eventHandlerPrefixes              => 'on,allow',
-    eventHandlers                     => 1,
-    extensions                        => 'as,java',
-    generateIndex                     => 0,
-    giveCredits                       => 1,
-    ignoreClasses                     => '',
-    includeSourceCode                 => 0,
-    indexTitle                        => 'Documentation',
-    listPrivate                       => 0,
-    log                               => '',
-    openInBrowser                     => 0,
-    output                            => '',
-    preserveLinebreaks                => 1,
-    saveXML                           => 0,
-    sidebarWidth                      => '25%',
-    templateCss                       => 'VisDoc.css',
-    templateCssDirectory              => 'templates/css',
-    templateJsDirectory               => 'templates/js',
-    templateXslDirectory              => 'templates/xslt',
-    templateXsl                       => 'VisDoc.xsl',
+    copyCSS              => 1,
+    copyright            => 0,
+    copyrightText        => '',
+    docencoding          => 'utf-8',
+    eventHandlerPrefixes => 'on,allow',
+    eventHandlers        => 1,
+    extensions           => 'as,java',
+    generateIndex        => 0,
+    giveCredits          => 1,
+    ignoreClasses        => '',
+    includeSourceCode    => 0,
+    indexTitle           => 'Documentation',
+    listPrivate          => 0,
+    log                  => '',
+    openInBrowser        => 0,
+    output               => '',
+    preserveLinebreaks   => 1,
+    saveXML              => 0,
+    sidebarWidth         => '25%',
+    templateCss          => 'VisDoc.css',
+    templateCssDirectory => 'templates/css',
+    templateJsDirectory  => 'templates/js',
+    templateXslDirectory => 'templates/xslt',
+    templateXsl          => 'VisDoc.xsl',
 };
 
 1;

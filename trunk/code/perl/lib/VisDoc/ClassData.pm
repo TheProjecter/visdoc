@@ -326,11 +326,13 @@ sub getMemberWithQualifiedName {
     my ( $this, $inQualifiedName ) = @_;
 
     my $methods;
-    @{$methods} = grep { $_->getName() eq $inQualifiedName } @{ $this->{methods} };
+    @{$methods} =
+      grep { $_->getName() eq $inQualifiedName } @{ $this->{methods} };
     return $methods->[0] if scalar @{$methods};
 
     my $properties;
-    @{$properties} = grep { $_->getName() eq $inQualifiedName } @{ $this->{properties} };
+    @{$properties} =
+      grep { $_->getName() eq $inQualifiedName } @{ $this->{properties} };
     return $properties->[0] if scalar @{$properties};
 
     return undef;
@@ -462,7 +464,8 @@ sub getSuperclassChain {
     my ($this) = @_;
 
     my @superclassChain = ();
-    $this->_chainSuperclassesOrInterfaces( \@superclassChain, $this->{superclasses} );
+    $this->_chainSuperclassesOrInterfaces( \@superclassChain,
+        $this->{superclasses} );
     return \@superclassChain;
 }
 
@@ -478,11 +481,11 @@ sub getSuperInterfaceChain {
     my ($this) = @_;
 
     my @superInterfaceChain = ();
-    $this->_chainSuperclassesOrInterfaces( \@superInterfaceChain, $this->{interfaces} );
-    
+    $this->_chainSuperclassesOrInterfaces( \@superInterfaceChain,
+        $this->{interfaces} );
+
     return \@superInterfaceChain;
 }
-
 
 =pod
 
@@ -507,14 +510,14 @@ sub _chainSuperclassesOrInterfaces {
 
 sub setJavadoc {
     my ( $this, $inJavadocData ) = @_;
-    
-    if ($this->{javadoc}) {
-		$this->{javadoc}->merge($inJavadocData);
-	} else {
-		$this->{javadoc} = $inJavadocData;
-	}
-}
 
+    if ( $this->{javadoc} ) {
+        $this->{javadoc}->merge($inJavadocData);
+    }
+    else {
+        $this->{javadoc} = $inJavadocData;
+    }
+}
 
 1;
 

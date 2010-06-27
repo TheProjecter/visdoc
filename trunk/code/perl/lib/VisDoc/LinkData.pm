@@ -53,20 +53,21 @@ sub new {
     $this->{package} = $inPackageName;    # string
     $this->{class}   = $inClassName;      # string
     $this->{member}  = $inMemberName;     # string
-    
-    my $params = $inParams;
-    if ( $params ) {
-		$params =~ s/^\s*\((.*)$/$1/; # remove (
-		$params =~ s/^(.*)\)\s*$/$1/; # remove )
-		$params =~ s/ //go;
-	}
-    $this->{params}  = $params;         # string
-    $this->{qualifiedName}  = $inMemberName; #$params ? "$inMemberName($params)" : $inMemberName;     # string
-    $this->{label}   = $inLabel;          # string
 
-    $this->{isValidRef} = undef;          # bool
-    $this->{isPublic}   = 1;              # bool
-    $this->{uri}        = undef;          # string
+    my $params = $inParams;
+    if ($params) {
+        $params =~ s/^\s*\((.*)$/$1/;     # remove (
+        $params =~ s/^(.*)\)\s*$/$1/;     # remove )
+        $params =~ s/ //go;
+    }
+    $this->{params}        = $params;        # string
+    $this->{qualifiedName} = $inMemberName
+      ;    #$params ? "$inMemberName($params)" : $inMemberName;     # string
+    $this->{label} = $inLabel;    # string
+
+    $this->{isValidRef} = undef;  # bool
+    $this->{isPublic}   = 1;      # bool
+    $this->{uri}        = undef;  # string
 
     # not used in this subclass:
     delete $this->{value};
@@ -95,34 +96,36 @@ Formats data to an inline link: <a href="...">...</a>
 
 sub formatInlineLink {
     my ( $this, $inDocumentType ) = @_;
-	
+
     my $label = $this->{label} || '';
 
     my $classStr = $this->{isPublic} ? '' : " class=\"private\"";
     my $link = '';
 
-	
-	if ( !$this->{isValidRef} ) {
-    	$link = $label;
-    } elsif ( $this->{uri} ) {
+    if ( !$this->{isValidRef} ) {
+        $link = $label;
+    }
+    elsif ( $this->{uri} ) {
         my $type = $inDocumentType || 'html';
 
         # add document type before the anchor link
-        my $url = $this->{uri};        
-        $url =~ s/(.*?)(#\w+|$)/$1.html$2/;        
+        my $url = $this->{uri};
+        $url =~ s/(.*?)(#\w+|$)/$1.html$2/;
         $link = "<a href=\"$url\"$classStr>$label</a>";
     }
     else {
 
         if ( $this->{member} || $this->{class} || $this->{package} ) {
-            $link = "<span class=\"doesNotExist\">$this->{qualifiedName}</span>";
-        } else {
-			$label = "$this->{qualifiedName} $label"  if $this->{qualifiedName};
-	        $label = "$this->{package}.$label" if $this->{package};
-        	$link = $label;
+            $link =
+              "<span class=\"doesNotExist\">$this->{qualifiedName}</span>";
+        }
+        else {
+            $label = "$this->{qualifiedName} $label" if $this->{qualifiedName};
+            $label = "$this->{package}.$label"       if $this->{package};
+            $link  = $label;
         }
     }
-    
+
     return $link;
 }
 
@@ -140,8 +143,9 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'LinkData:';
-    $str .= "\n\t name=$this->{name}"       if $this->{name};
-    $str .= "\n\t qualifiedName=$this->{qualifiedName}"       if $this->{qualifiedName};
+    $str .= "\n\t name=$this->{name}" if $this->{name};
+    $str .= "\n\t qualifiedName=$this->{qualifiedName}"
+      if $this->{qualifiedName};
     $str .= "\n\t uri=$this->{uri}"         if $this->{uri};
     $str .= "\n\t stub=$this->{stub}"       if $this->{stub};
     $str .= "\n\t package=$this->{package}" if $this->{package};

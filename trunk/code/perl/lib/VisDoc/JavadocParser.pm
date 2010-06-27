@@ -187,11 +187,16 @@ sub _processFields {
             $field = $this->_createLinkData( $fieldName, $value );
         }
         else {
-        	if ($isParam) {
-	            $field = VisDoc::FieldData->new( $fieldName, $value, $VisDoc::FieldData::TYPE->{PARAM} );
-	        } else {
-	            $field = VisDoc::FieldData->new( $fieldName, $value, $VisDoc::FieldData::TYPE->{FIELD} );
-	        }
+            if ($isParam) {
+                $field =
+                  VisDoc::FieldData->new( $fieldName, $value,
+                    $VisDoc::FieldData::TYPE->{PARAM} );
+            }
+            else {
+                $field =
+                  VisDoc::FieldData->new( $fieldName, $value,
+                    $VisDoc::FieldData::TYPE->{FIELD} );
+            }
         }
 
         # insert at beginning of array to make up for the reverse running order

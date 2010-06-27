@@ -128,7 +128,7 @@ sub parseFiles {
             VisDoc::Logger::logParsedFile($file);
         }
     }
-    return VisDoc::PostParser::process($collectiveFileData, $inPreferences);
+    return VisDoc::PostParser::process( $collectiveFileData, $inPreferences );
 }
 
 =pod
@@ -177,10 +177,10 @@ sub writeData {
     my $dirInfo = _createWriteDirectories( $inDocDirectory, $inPreferences );
     _copyAssets( $dirInfo, $inPreferences );
 
-    my $baseDir    = $inPreferences->{base};
-    my $xsltDir    = $inPreferences->{templateXslDirectory} || $baseDir;
+    my $baseDir = $inPreferences->{base};
+    my $xsltDir = $inPreferences->{templateXslDirectory} || $baseDir;
     my $xsltRef = _getXslt( $xsltDir, $inPreferences->{templateXsl} );
-    
+
     my $processing = {
         'classes' => {
             XMLs => undef,    # array of hashes with keys 'uri' and 'textRef'
@@ -188,24 +188,12 @@ sub writeData {
         'index' => {
             XMLs => undef,    # array of hashes with keys 'uri' and 'textRef'
         },
-        'overview-tree' => {
-            XMLs    => undef,
-        },
-        'methods' => {
-            XMLs    => undef,
-        },
-        'toc' => {
-            XMLs    => undef,
-        },
-        'constants' => {
-            XMLs    => undef,
-        },
-        'properties' => {
-            XMLs    => undef,
-        },
-        'deprecated' => {
-            XMLs    => undef,
-        },
+        'overview-tree' => { XMLs => undef, },
+        'methods'       => { XMLs => undef, },
+        'toc'           => { XMLs => undef, },
+        'constants'     => { XMLs => undef, },
+        'properties'    => { XMLs => undef, },
+        'deprecated'    => { XMLs => undef, },
     };
 
     # parse data to xml
@@ -213,7 +201,7 @@ sub writeData {
     my @htmlDocFileNames;
     my @htmlSupportingFileNames;
 
-	my $xmlWriter  = new XML::Writer(
+    my $xmlWriter = new XML::Writer(
         ENCODING    => 'utf-8',
         DATA_MODE   => 1,
         DATA_INDENT => 4,
@@ -225,7 +213,8 @@ sub writeData {
 
         # get (potentially multiple) xml texts from each FileData
         my $xmlData =
-          VisDoc::OutputFormatter::formatFileData( $fileData, $inPreferences, $xmlWriter );
+          VisDoc::OutputFormatter::formatFileData( $fileData, $inPreferences,
+            $xmlWriter );
         my $key = 'classes';
 
         # store
@@ -233,12 +222,12 @@ sub writeData {
         map { push( @htmlDocFileNames, $_->{uri} ) } @{$xmlData};
     }
 
-	my $tocXML = '';
-	
+    my $tocXML = '';
+
     if ( $inPreferences->{generateIndex} ) {
 
         my $tocNavigationKeys = {
-            'index'          => undef,
+            'index'         => undef,
             'overview-tree' => undef,
             'classes'       => undef,
             'methods'       => undef,
@@ -252,15 +241,18 @@ sub writeData {
         };
 
         {
+
             # index.html
-            my $xmlData = _createIndexHtmlPageXmlData( $dirInfo->{dir}->{html},
-                $inPreferences, $inCollectiveFileData, $xmlWriter );
+            my $xmlData = _createIndexHtmlPageXmlData(
+                $dirInfo->{dir}->{html}, $inPreferences,
+                $inCollectiveFileData,   $xmlWriter
+            );
             my $key = 'index';
             if ($xmlData) {
-				push( @{ $processing->{$key}->{XMLs} }, $xmlData );
-				push( @htmlSupportingFileNames, $xmlData->{uri} );
-				$indexHtml = $xmlData->{uri};
-			}
+                push( @{ $processing->{$key}->{XMLs} }, $xmlData );
+                push( @htmlSupportingFileNames,         $xmlData->{uri} );
+                $indexHtml = $xmlData->{uri};
+            }
 
             &$addToTocNavigation($key);
         }
@@ -297,49 +289,47 @@ sub writeData {
                 last if $packagesCount > 0;
             }
         }
-		
-		# toc
-		my $formatter =
-		  VisDoc::XMLOutputFormatterToc->new( $inPreferences, undef,
-			$inCollectiveFileData, $tocNavigationKeys );
-		my $xmlData = $formatter->format($xmlWriter);
-		$tocXML = $xmlData;
-		my $key     = 'toc';
-		push( @{ $processing->{$key}->{XMLs} }, $xmlData ) if $xmlData;
-		push( @htmlSupportingFileNames, $xmlData->{uri} ) if $xmlData;
-		
-		# add TOC XML to each class XML
-		if ($tocXML) {
-			while ( my ( $key, $value ) = each %{$processing} ) {
-				foreach my $xml ( @{ $value->{XMLs} } ) {
-					${$xml->{textRef}} .= ${$tocXML->{textRef}};
-				}
-			}
-		}
+
+        # toc
+        my $formatter =
+          VisDoc::XMLOutputFormatterToc->new( $inPreferences, undef,
+            $inCollectiveFileData, $tocNavigationKeys );
+        my $xmlData = $formatter->format($xmlWriter);
+        $tocXML = $xmlData;
+        my $key = 'toc';
+        push( @{ $processing->{$key}->{XMLs} }, $xmlData )        if $xmlData;
+        push( @htmlSupportingFileNames,         $xmlData->{uri} ) if $xmlData;
+
+        # add TOC XML to each class XML
+        if ($tocXML) {
+            while ( my ( $key, $value ) = each %{$processing} ) {
+                foreach my $xml ( @{ $value->{XMLs} } ) {
+                    ${ $xml->{textRef} } .= ${ $tocXML->{textRef} };
+                }
+            }
+        }
     }
-	
+
     # add enclosing tag and XML declaration
 
     while ( my ( $key, $value ) = each %{$processing} ) {
 
         foreach my $xml ( @{ $value->{XMLs} } ) {
 
-			my $xmlText = '<?xml version="1.0" encoding="utf-8"?>
+            my $xmlText = '<?xml version="1.0" encoding="utf-8"?>
 <document>';
-			$xmlText .= ${$xml->{textRef}};
-			$xmlText .= '</document>';
+            $xmlText .= ${ $xml->{textRef} };
+            $xmlText .= '</document>';
 
-    		$xml->{textRef} = \$xmlText;
-		}
-	}
-	
+            $xml->{textRef} = \$xmlText;
+        }
+    }
 
-	
     # write everything to files
     while ( my ( $key, $value ) = each %{$processing} ) {
 
-		next if $key =~ m/^(toc)$/;	# exclude from writing to files
-		
+        next if $key =~ m/^(toc)$/;    # exclude from writing to files
+
         foreach my $xml ( @{ $value->{XMLs} } ) {
 
             # write XML
@@ -347,11 +337,10 @@ sub writeData {
                 "$xml->{uri}.xml", $xml->{textRef} )
               if $inPreferences->{saveXML};
 
-			_writeXsltProcessingAttributes( $xsltRef, $inPreferences );
-			
+            _writeXsltProcessingAttributes( $xsltRef, $inPreferences );
+
             # write HTML
-            my $htmlRef =
-              _transformXmlToHtml( $xml->{textRef}, $xsltRef );
+            my $htmlRef = _transformXmlToHtml( $xml->{textRef}, $xsltRef );
             _cleanupHtml($htmlRef);
             _writeHtmlFile( $dirInfo->{dir}->{html},
                 "$xml->{uri}.html", $htmlRef );
@@ -370,10 +359,11 @@ sub writeData {
 sub _writeXsltProcessingAttributes {
     my ( $inXsltTextRef, $inPreferences ) = @_;
 
-	return if !$inXsltTextRef;
-	
-	# encoding and charset
-	${$inXsltTextRef} =~ s/%VISDOC_ENCODING%/$inPreferences->{docencoding}/g if $inPreferences->{docencoding};
+    return if !$inXsltTextRef;
+
+    # encoding and charset
+    ${$inXsltTextRef} =~ s/%VISDOC_ENCODING%/$inPreferences->{docencoding}/g
+      if $inPreferences->{docencoding};
 }
 
 =pod
@@ -607,9 +597,9 @@ sub _transformXmlToHtml {
 
     my $parser = XML::LibXML->new();
 
-    my $source    = $parser->parse_string(${$inXmlTextRef});    
-    my $style_doc = $parser->parse_string(${$inXsltTextRef});
-    
+    my $source    = $parser->parse_string( ${$inXmlTextRef} );
+    my $style_doc = $parser->parse_string( ${$inXsltTextRef} );
+
     my $xslt       = XML::LibXSLT->new();
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
 
@@ -628,7 +618,8 @@ Creates index.html if it does not exist yet.
 =cut
 
 sub _createIndexHtmlPageXmlData {
-    my ( $inHtmlDirectory, $inPreferences, $inCollectiveFileData, $inXmlWriter ) = @_;
+    my ( $inHtmlDirectory, $inPreferences, $inCollectiveFileData, $inXmlWriter )
+      = @_;
 
     my $file = "$inHtmlDirectory/index.html";
     my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
@@ -641,7 +632,7 @@ sub _createIndexHtmlPageXmlData {
     my $formatter = VisDoc::XMLOutputFormatterIndexPage->new( $inPreferences,
         $inCollectiveFileData );
 
-	return $formatter->format($inXmlWriter);
+    return $formatter->format($inXmlWriter);
 }
 
 sub _cleanupHtml {
@@ -652,7 +643,7 @@ sub _cleanupHtml {
     # remove space before span
     # commented out because this messes up spans inside pre blocks
     #$$htmlRef =~ s/[[:space:]]+(<span)/ $1/go;
-    
+
 }
 
 sub _cleanupSpacesBetweenSpans {
@@ -662,7 +653,6 @@ sub _cleanupSpacesBetweenSpans {
 }
 
 1;
-
 
 # VisDoc - Code documentation generator, http://visdoc.org
 # This software is licensed under the MIT License

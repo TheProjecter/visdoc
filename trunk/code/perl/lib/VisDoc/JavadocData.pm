@@ -112,9 +112,9 @@ Returns the string of all fields with name $inFieldName.
 =cut
 
 sub getCombinedFieldValue {
-    my ($this, $inFieldName) = @_;
+    my ( $this, $inFieldName ) = @_;
 
-	my $values;
+    my $values;
     my $fields = $this->fieldsWithName($inFieldName);
 
     map { push( @{$values}, $_->{value} ); } @{$fields};
@@ -167,17 +167,19 @@ sub getLinkDataFields {
 sub getFields {
     my ($this) = @_;
 
-	my $fields;
+    my $fields;
     map { push( @{$fields}, $_ ) } @{ $this->{fields} };
     map { push( @{$fields}, $_ ) } @{ $this->{params} };
-	return $fields;
+    return $fields;
 }
 
 sub addField {
-    my ($this, $inField) = @_;
+    my ( $this, $inField ) = @_;
 
-    push( @{$this->{params}}, $inField ) if $inField->{type} == $VisDoc::FieldData::TYPE->{PARAM};
-    push( @{$this->{fields}}, $inField ) if $inField->{type} == $VisDoc::FieldData::TYPE->{FIELD};
+    push( @{ $this->{params} }, $inField )
+      if $inField->{type} == $VisDoc::FieldData::TYPE->{PARAM};
+    push( @{ $this->{fields} }, $inField )
+      if $inField->{type} == $VisDoc::FieldData::TYPE->{FIELD};
 }
 
 =pod
@@ -209,8 +211,10 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'JavadocData:';
-    $str .= "\n\t fields=" . join(',', @{$this->{fields}}) . "\n" if $this->{fields} and scalar @{$this->{fields}};
-    $str .= "\n\t params=" . join(',', @{$this->{params}}) . "\n" if $this->{params} and scalar @{$this->{params}};
+    $str .= "\n\t fields=" . join( ',', @{ $this->{fields} } ) . "\n"
+      if $this->{fields} and scalar @{ $this->{fields} };
+    $str .= "\n\t params=" . join( ',', @{ $this->{params} } ) . "\n"
+      if $this->{params} and scalar @{ $this->{params} };
     $str .= "\n";
     return $str;
 }

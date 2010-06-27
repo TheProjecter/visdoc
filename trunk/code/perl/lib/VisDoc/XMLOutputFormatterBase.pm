@@ -40,11 +40,11 @@ format ($classData) -> {uri => $uri, textRef => \$xmlText, hasFormattedData => $
 =cut
 
 sub format {
-    my ($this, $inXmlWriter) = @_;
+    my ( $this, $inXmlWriter ) = @_;
 
     my $xmlText = '';
-	$inXmlWriter->setOutput(\$xmlText);
-	
+    $inXmlWriter->setOutput( \$xmlText );
+
     my $hasFormattedData = $this->_formatData($inXmlWriter);
 
     return {
@@ -273,10 +273,10 @@ sub _writeAttribute {
       if $inAttributes->{isInterface};
     $inWriter->cdataElement( 'class', 'true' ) if $inAttributes->{isClass};
 
-	if (!$inAttributes->{isPublic}) {
-		$inWriter->cdataElement('private', 'true');
-	}
-	
+    if ( !$inAttributes->{isPublic} ) {
+        $inWriter->cdataElement( 'private', 'true' );
+    }
+
 =pod
 	#if ($inAttributes->{type}) {
 	

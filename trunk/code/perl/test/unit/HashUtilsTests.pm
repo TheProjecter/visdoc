@@ -19,29 +19,29 @@ sub new {
 sub test_mergeHashes {
     my ($this) = @_;
 
-	my $A = {
-		'A' => 'abc',
-		'B' => 'boat',
-	};
-	my $B = {
-		'D' => 'dummy',
-		'E' => 'essen',
-	};
-	my $merged = VisDoc::HashUtils::mergeHashes($A, $B);
-	{
-		my $expected = 'abc';
-		my $result = $merged->{'A'};
-		print("result=$result.\n")     if $debug;
-		print("expected=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		my $expected = 'dummy';
-		my $result = $merged->{'D'};
-		print("result=$result.\n")     if $debug;
-		print("expected=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my $A = {
+        'A' => 'abc',
+        'B' => 'boat',
+    };
+    my $B = {
+        'D' => 'dummy',
+        'E' => 'essen',
+    };
+    my $merged = VisDoc::HashUtils::mergeHashes( $A, $B );
+    {
+        my $expected = 'abc';
+        my $result   = $merged->{'A'};
+        print("result=$result.\n")     if $debug;
+        print("expected=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+        my $expected = 'dummy';
+        my $result   = $merged->{'D'};
+        print("result=$result.\n")     if $debug;
+        print("expected=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 1;

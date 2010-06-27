@@ -27,7 +27,7 @@ sub _title {
 
 sub _writeList {
     my ( $this, $inWriter ) = @_;
-    
+
     return 1;
 }
 

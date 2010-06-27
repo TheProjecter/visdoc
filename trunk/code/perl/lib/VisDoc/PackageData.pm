@@ -148,12 +148,13 @@ sub isPublic {
 
 sub setJavadoc {
     my ( $this, $inJavadocData ) = @_;
-    
-    if ($this->{javadoc}) {
-		$this->{javadoc}->merge($inJavadocData);
-	} else {
-		$this->{javadoc} = $inJavadocData;
-	}
+
+    if ( $this->{javadoc} ) {
+        $this->{javadoc}->merge($inJavadocData);
+    }
+    else {
+        $this->{javadoc} = $inJavadocData;
+    }
 }
 
 =pod
@@ -164,8 +165,8 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'PackageData:';
-    $str .= "\n\t name=$this->{name}"                  if $this->{name};
-    $str .= "\n\t anonymous=$this->{anonymous}"                  if $this->{anonymous};
+    $str .= "\n\t name=$this->{name}"           if $this->{name};
+    $str .= "\n\t anonymous=$this->{anonymous}" if $this->{anonymous};
     $str .= "\n";
     return $str;
 }

@@ -35,8 +35,8 @@ sub new {
         type =>
           undef
         ,  # values of $TYPE (bitwise operator); undef if not a getter or setter
-        name   => undef, # string
-        qualifiedName => undef, # string (NOT USED YET)
+        name          => undef,    # string
+        qualifiedName => undef,    # string (NOT USED YET)
         nameId => undef, # string, unique identifier name, created after parsing
         access =>
           undef,  # ref of list of access strings (public, private, static, ...)
@@ -61,10 +61,11 @@ Go through strings to find any references to classes, replace them with link stu
 sub onFindLinks {
     my ( $this, $inEvent, $inLinkFields ) = @_;
 
-	my $callback = $inEvent->{callback};
+    my $callback = $inEvent->{callback};
     foreach my $field ( @{$inLinkFields} ) {
         if ( $this->{$field} ) {
             foreach my $class ( @{ $inEvent->{classes} } ) {
+
                 # replace
                 $this->{$field} =~
                   s/(\b$class->{name}\b)/$inEvent->{source}->$callback($1)/e;
@@ -76,11 +77,13 @@ sub onFindLinks {
 sub onSubstituteLinks {
     my ( $this, $inEvent, $inLinkFields ) = @_;
 
-	my $callback = $inEvent->{callback};
+    my $callback = $inEvent->{callback};
     foreach my $field ( @{$inLinkFields} ) {
         if ( $this->{$field} ) {
+
             #foreach my $class ( @{ $inEvent->{classes} } ) {
-                $this->{$field} = $inEvent->{source}->$callback( $this->{$field} );
+            $this->{$field} = $inEvent->{source}->$callback( $this->{$field} );
+
             #}
         }
     }
@@ -114,8 +117,8 @@ sub getId {
 
 sub getName {
     my ($this) = @_;
-    
-    return $this->{name}; #$this->{qualifiedName} || $this->{name};
+
+    return $this->{name};    #$this->{qualifiedName} || $this->{name};
 }
 
 sub isExcluded {
@@ -124,7 +127,7 @@ sub isExcluded {
     return 1
       if $this->{javadoc}
           && $this->{javadoc}->getSingleFieldWithName('exclude')
-    ;    # overrides class access
+    ;                        # overrides class access
 
     return 0;
 }
@@ -137,12 +140,13 @@ sub setNameId {
 
 sub setJavadoc {
     my ( $this, $inJavadocData ) = @_;
-        
-    if ($this->{javadoc}) {
-		$this->{javadoc}->merge($inJavadocData);
-	} else {
-		$this->{javadoc} = $inJavadocData;
-	}
+
+    if ( $this->{javadoc} ) {
+        $this->{javadoc}->merge($inJavadocData);
+    }
+    else {
+        $this->{javadoc} = $inJavadocData;
+    }
 }
 
 =pod
@@ -190,8 +194,8 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'MemberData:';
-    $str .= "\n\t name=$this->{name}"     if $this->{name};
-    $str .= "\n\t nameId=$this->{nameId}" if $this->{nameId};
+    $str .= "\n\t name=$this->{name}"                  if $this->{name};
+    $str .= "\n\t nameId=$this->{nameId}"              if $this->{nameId};
     $str .= "\n\t type=" . typeString( $this->{type} ) if $this->{type};
     $str .= "\n\t access=" . join( ',', @{ $this->{access} } )
       if $this->{access};

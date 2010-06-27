@@ -19,8 +19,8 @@ sub new {
 
 sub set_up {
     my ($this) = @_;
-	
-	VisDoc::FileData::initLinkDataRefs();
+
+    VisDoc::FileData::initLinkDataRefs();
 }
 
 =pod
@@ -41,7 +41,7 @@ sub test_readFile {
 END OF TESTFILE';
 
     chomp $expected;
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 
@@ -64,33 +64,38 @@ sub test_parseText_as2 {
 		broadcastMessage("onChanged", changedTextField);
 	}
 }';
-	my @texts;
-	push @texts, $text;
-	my $fileData = VisDoc::parseTexts( \@texts );
-	my $classData = $fileData->[0]->{packages}->[0]->{classes}->[0];
-	
-	#use Data::Dumper;
-	#print("classData=" . Dumper($classData));
-	
-	{
-		# test class name
-		my $result = $classData->{name};
-		my $expected = 'EventHandlersExample';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-	{
-		# test sends entry
-		my $result = $classData->{methods}->[0]->{javadoc}->fieldsWithName('sends')->[0]->{label};
-		my $expected = 'onChanged (when the selection is changed by the program)';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my @texts;
+    push @texts, $text;
+    my $fileData  = VisDoc::parseTexts( \@texts );
+    my $classData = $fileData->[0]->{packages}->[0]->{classes}->[0];
+
+    #use Data::Dumper;
+    #print("classData=" . Dumper($classData));
+
+    {
+
+        # test class name
+        my $result   = $classData->{name};
+        my $expected = 'EventHandlersExample';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+    {
+
+        # test sends entry
+        my $result =
+          $classData->{methods}->[0]->{javadoc}->fieldsWithName('sends')->[0]
+          ->{label};
+        my $expected =
+          'onChanged (when the selection is changed by the program)';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 
 }
 
@@ -203,57 +208,65 @@ function command(pet:Pet):void
 {
 	pet.speak();
 }';
-	my $fileData = VisDoc::parseText( $text );
-	my $packageData = $fileData->{packages}->[0];
-	
-	#use Data::Dumper;
-	#print(Dumper($packageData));
-	
-	{
-		# test package name
-		my $result = $fileData->{packages}->[0]->{name};
-		my $expected = 'blo';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test package javadoc
-		my $result = $fileData->{packages}->[0]->{javadoc}->getDescription();
-		my $expected = 'Information about this "package".';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class name
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{name};
-		my $expected = 'SpeakingPets';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method name 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
-		my $expected = 'SpeakingPets';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc comment 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}->getDescription();
-		my $expected = 'Some comment.';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my $fileData    = VisDoc::parseText($text);
+    my $packageData = $fileData->{packages}->[0];
+
+    #use Data::Dumper;
+    #print(Dumper($packageData));
+
+    {
+
+        # test package name
+        my $result   = $fileData->{packages}->[0]->{name};
+        my $expected = 'blo';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test package javadoc
+        my $result   = $fileData->{packages}->[0]->{javadoc}->getDescription();
+        my $expected = 'Information about this "package".';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class name
+        my $result   = $fileData->{packages}->[0]->{classes}->[0]->{name};
+        my $expected = 'SpeakingPets';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method name 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
+        my $expected = 'SpeakingPets';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc comment 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}
+          ->getDescription();
+        my $expected = 'Some comment.';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -263,59 +276,67 @@ function command(pet:Pet):void
 sub test_parseFile_as3 {
     my ($this) = @_;
 
-    my $here          = Cwd::abs_path . '/testfiles';
-    my $path          = "$here/test_parse_as3.as";
-     
-    my ($fileData, $fileParser) = VisDoc::parseFile( $path );
-	
-	#use Data::Dumper;
-	#print(Dumper($fileData));
-	
-	{
-		# test package name
-		my $result = $fileData->{packages}->[0]->{name};
-		my $expected = 'blo';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test package javadoc
-		my $result = $fileData->{packages}->[0]->{javadoc}->getDescription();
-		my $expected = 'Information about this "package".';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class name
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{name};
-		my $expected = 'SpeakingPets';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method name 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
-		my $expected = 'SpeakingPets';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc comment 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}->getDescription();
-		my $expected = 'Some comment.';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my $here = Cwd::abs_path . '/testfiles';
+    my $path = "$here/test_parse_as3.as";
+
+    my ( $fileData, $fileParser ) = VisDoc::parseFile($path);
+
+    #use Data::Dumper;
+    #print(Dumper($fileData));
+
+    {
+
+        # test package name
+        my $result   = $fileData->{packages}->[0]->{name};
+        my $expected = 'blo';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test package javadoc
+        my $result   = $fileData->{packages}->[0]->{javadoc}->getDescription();
+        my $expected = 'Information about this "package".';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class name
+        my $result   = $fileData->{packages}->[0]->{classes}->[0]->{name};
+        my $expected = 'SpeakingPets';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method name 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
+        my $expected = 'SpeakingPets';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc comment 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}
+          ->getDescription();
+        my $expected = 'Some comment.';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -325,50 +346,57 @@ sub test_parseFile_as3 {
 sub test_parseFile_as2 {
     my ($this) = @_;
 
-    my $here          = Cwd::abs_path . '/testfiles';
-    my $path          = "$here/test_parse_as2.as";
-     
-    my ($fileData, $fileParser) = VisDoc::parseFile( $path );
-	
-	#use Data::Dumper;
-	#print(Dumper($fileData));
-	
-	{
-		# test package name
-		my $result = $fileData->{packages}->[0]->{name};
-		my $expected = '';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class name
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{name};
-		my $expected = 'FlickrBlogs';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method name 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
-		my $expected = 'FlickrBlogs';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc comment 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}->getDescription();
-		my $expected = 'Some comment.';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my $here = Cwd::abs_path . '/testfiles';
+    my $path = "$here/test_parse_as2.as";
+
+    my ( $fileData, $fileParser ) = VisDoc::parseFile($path);
+
+    #use Data::Dumper;
+    #print(Dumper($fileData));
+
+    {
+
+        # test package name
+        my $result   = $fileData->{packages}->[0]->{name};
+        my $expected = '';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class name
+        my $result   = $fileData->{packages}->[0]->{classes}->[0]->{name};
+        my $expected = 'FlickrBlogs';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method name 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
+        my $expected = 'FlickrBlogs';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc comment 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}
+          ->getDescription();
+        my $expected = 'Some comment.';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -378,99 +406,114 @@ sub test_parseFile_as2 {
 sub test_parseFile_java {
     my ($this) = @_;
 
-    my $here          = Cwd::abs_path . '/testfiles';
-    my $path          = "$here/test_parse_java.java";
-     
-    my ($fileData, $fileParser) = VisDoc::parseFile( $path );
-	
-	#use Data::Dumper;
-	#print(Dumper($fileData));
-	
-	{
-		# test package name
-		my $result = $fileData->{packages}->[0]->{name};
-		my $expected = 'treemap';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test package javadoc
-		my $result = $fileData->{packages}->[0]->{javadoc}->getDescription();
-		my $expected = 'Information about this package.';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class 0: name
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{name};
-		my $expected = 'TMView';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test inner class
-		my $outerClass = $fileData->{packages}->[0]->{classes}->[0]; # TMView
-		
-		my $result = join(",", map { $_->{name} } @{$outerClass->{innerClasses}});
-		my $expected = 'PaintMethod,EmptyPaintMethod,FullPaintMethod';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test enclosingClass
-		# which should be the same result as testing for inner class
-		my $outerClass = $fileData->{packages}->[0]->{classes}->[0]; # TMView
-		my @enclosingClasses;
-		foreach my $class (@{$fileData->{packages}->[0]->{classes}}) {
-			my $enclosingClass = $class->{enclosingClass};
-			if ($enclosingClass) {
-				push @enclosingClasses, $class->{name} if (refaddr($enclosingClass) == refaddr($outerClass));
-			}
-		}
-		my $result = join(",", @enclosingClasses);
-		my $expected = 'PaintMethod,EmptyPaintMethod,FullPaintMethod';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test method name 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
-		my $expected = 'paint';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc comment 0
-		my $result = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}->getDescription();
-		my $expected = 'Paint method.';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test javadoc param 0
-		my $paramField = $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}->{params}->[0];
-		my $name = $paramField->{name};
-		my $value = $paramField->{value};
-		my $result = "$name=$value";
-		my $expected = 'g=the Graphics2D context';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my $here = Cwd::abs_path . '/testfiles';
+    my $path = "$here/test_parse_java.java";
+
+    my ( $fileData, $fileParser ) = VisDoc::parseFile($path);
+
+    #use Data::Dumper;
+    #print(Dumper($fileData));
+
+    {
+
+        # test package name
+        my $result   = $fileData->{packages}->[0]->{name};
+        my $expected = 'treemap';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test package javadoc
+        my $result   = $fileData->{packages}->[0]->{javadoc}->getDescription();
+        my $expected = 'Information about this package.';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class 0: name
+        my $result   = $fileData->{packages}->[0]->{classes}->[0]->{name};
+        my $expected = 'TMView';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test inner class
+        my $outerClass = $fileData->{packages}->[0]->{classes}->[0];    # TMView
+
+        my $result =
+          join( ",", map { $_->{name} } @{ $outerClass->{innerClasses} } );
+        my $expected = 'PaintMethod,EmptyPaintMethod,FullPaintMethod';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test enclosingClass
+        # which should be the same result as testing for inner class
+        my $outerClass = $fileData->{packages}->[0]->{classes}->[0];    # TMView
+        my @enclosingClasses;
+        foreach my $class ( @{ $fileData->{packages}->[0]->{classes} } ) {
+            my $enclosingClass = $class->{enclosingClass};
+            if ($enclosingClass) {
+                push @enclosingClasses, $class->{name}
+                  if ( refaddr($enclosingClass) == refaddr($outerClass) );
+            }
+        }
+        my $result = join( ",", @enclosingClasses );
+        my $expected = 'PaintMethod,EmptyPaintMethod,FullPaintMethod';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method name 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{name};
+        my $expected = 'paint';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc comment 0
+        my $result =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}
+          ->getDescription();
+        my $expected = 'Paint method.';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test javadoc param 0
+        my $paramField =
+          $fileData->{packages}->[0]->{classes}->[0]->{methods}->[0]->{javadoc}
+          ->{params}->[0];
+        my $name     = $paramField->{name};
+        my $value    = $paramField->{value};
+        my $result   = "$name=$value";
+        my $expected = 'g=the Graphics2D context';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -502,7 +545,7 @@ function howl () : void {
 }
 ';
 
-	my $text2 = '/*
+    my $text2 = '/*
 /**
 More information about this package.
 */
@@ -519,61 +562,69 @@ package animals
 function growl () : void {}
 ';
 
-	my @texts = ($text1, $text2);
-	my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
-	
-	my $preferences;
-	$preferences->{saveXML} = 1;
-	#VisDoc::writeData('VisDoc_tests/docs', $fileData, $preferences);
-	
-#use Data::Dumper;
-#print(Dumper($fileData));
-	
-	{
-		# test package javadoc
-		my $result = $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
-		my $expected = 'Information about this "package". More information about this package.';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class name 0
-		my $result = $fileData->[0]->{packages}->[0]->{classes}->[0]->{name};
-		my $expected = 'SpeakingPets';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test class name 1
-		my $result = $fileData->[0]->{packages}->[0]->{classes}->[1]->{name};
-		my $expected = 'Cat';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test function name 0
-		my $result = $fileData->[0]->{packages}->[0]->{functions}->[0]->{name};
-		my $expected = 'howl';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# test function name 1
-		my $result = $fileData->[0]->{packages}->[0]->{functions}->[1]->{name};
-		my $expected = 'growl';
-	
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+    my @texts = ( $text1, $text2 );
+    my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
+
+    my $preferences;
+    $preferences->{saveXML} = 1;
+
+    #VisDoc::writeData('VisDoc_tests/docs', $fileData, $preferences);
+
+    #use Data::Dumper;
+    #print(Dumper($fileData));
+
+    {
+
+        # test package javadoc
+        my $result =
+          $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
+        my $expected =
+'Information about this "package". More information about this package.';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class name 0
+        my $result   = $fileData->[0]->{packages}->[0]->{classes}->[0]->{name};
+        my $expected = 'SpeakingPets';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test class name 1
+        my $result   = $fileData->[0]->{packages}->[0]->{classes}->[1]->{name};
+        my $expected = 'Cat';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test function name 0
+        my $result = $fileData->[0]->{packages}->[0]->{functions}->[0]->{name};
+        my $expected = 'howl';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test function name 1
+        my $result = $fileData->[0]->{packages}->[0]->{functions}->[1]->{name};
+        my $expected = 'growl';
+
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -584,8 +635,8 @@ Test merging of 2 package javadocs, where both javadocs exist.
 
 sub test_mergeJavadocs_a_and_b {
     my ($this) = @_;
-  
-	my $text_a = '/*
+
+    my $text_a = '/*
 /**
 Information about this "package".
 */
@@ -595,7 +646,7 @@ package a
 }
 ';
 
-	my $text_b = '/*
+    my $text_b = '/*
 /**
 More information about this package.
 */
@@ -604,19 +655,20 @@ package a
 	class B {}
 }
 ';
-	my @texts = ($text_a, $text_b);
-	my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
+    my @texts = ( $text_a, $text_b );
+    my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
 
-#use Data::Dumper;
-#print(Dumper($fileData));
+    #use Data::Dumper;
+    #print(Dumper($fileData));
 
-	# test package javadoc
-	my $result = $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
-	my $expected = 'Information about this "package". More information about this package.';
+    # test package javadoc
+    my $result = $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
+    my $expected =
+      'Information about this "package". More information about this package.';
 
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
 
 =pod
@@ -627,8 +679,8 @@ Test merging of 2 package javadocs, where only javadoc a exists.
 
 sub test_mergeJavadocs_a {
     my ($this) = @_;
-  
-	my $text_a = '/*
+
+    my $text_a = '/*
 /**
 Information about this "package".
 */
@@ -638,25 +690,25 @@ package a
 }
 ';
 
-	my $text_b = '
+    my $text_b = '
 package a
 {
 	class B {}
 }
 ';
-	my @texts = ($text_a, $text_b);
-	my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
+    my @texts = ( $text_a, $text_b );
+    my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
 
-#use Data::Dumper;
-#print(Dumper($fileData));
+    #use Data::Dumper;
+    #print(Dumper($fileData));
 
-	# test package javadoc
-	my $result = $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
-	my $expected = 'Information about this "package".';
+    # test package javadoc
+    my $result   = $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
+    my $expected = 'Information about this "package".';
 
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
 
 =pod
@@ -667,14 +719,14 @@ Test merging of 2 package javadocs, where only javadoc b exists.
 
 sub test_mergeJavadocs_b {
     my ($this) = @_;
-  
-	my $text_a = 'package a
+
+    my $text_a = 'package a
 {
 	class A {}
 }
 ';
 
-	my $text_b = '/*
+    my $text_b = '/*
 /**
 More information about this package.
 */
@@ -683,19 +735,19 @@ package a
 	class B {}
 }
 ';
-	my @texts = ($text_a, $text_b);
-	my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
+    my @texts = ( $text_a, $text_b );
+    my $fileData = VisDoc::parseTexts( \@texts, 'as3' );
 
-#use Data::Dumper;
-#print(Dumper($fileData));
+    #use Data::Dumper;
+    #print(Dumper($fileData));
 
-	# test package javadoc
-	my $result = $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
-	my $expected = 'More information about this package.';
+    # test package javadoc
+    my $result   = $fileData->[0]->{packages}->[0]->{javadoc}->getDescription();
+    my $expected = 'More information about this package.';
 
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
 
 1;

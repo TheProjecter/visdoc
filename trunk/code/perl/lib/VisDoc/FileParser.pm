@@ -77,9 +77,7 @@ sub _getFileInfo {
 
 sub new {
     my ($class) = @_;
-    my $this = {
-    	data => VisDoc::FileData->new()
-    };
+    my $this = { data => VisDoc::FileData->new() };
     bless $this, $class;
     return $this;
 }
@@ -105,7 +103,7 @@ sub getFileData {
     $fileData->{language}         = $languageId;
     $fileData->{path}             = $inPath;
     $fileData->{modificationDate} = $modificationDate;
-	
+
     return ( $fileData, $fileText );
 }
 
@@ -557,7 +555,7 @@ sub _stubJavadocSideComments {
 
     my $merged = $_[0]->{data}->mergeData( 'javadocComments', $blocks );
     $_[0]->{data}->{javadocComments} = $merged;
-	
+
     return $newText;
 }
 
@@ -680,10 +678,7 @@ sub _replaceQuotedStringsByStubs {
     my $quotedPattern = RE_quoted( -keep );
 
     return VisDoc::StringUtils::replacePatternMatchWithStub(
-        \$inText,
-        $quotedPattern,
-        1,
-        1,
+        \$inText, $quotedPattern, 1, 1,
         $VisDoc::StringUtils::VERBATIM_STUB_QUOTED_STRING,
         $this->{data}->getStubCounterRef()
     );

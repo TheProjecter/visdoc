@@ -30,9 +30,9 @@ sub new {
 sub getAccessString {
     my ( $this, $inElement, $inMember ) = @_;
 
-	my @access = @{ $inMember->{access} };
-	@access = grep { $_ ne 'public' } @access; # do not show 'public'
-    my $value = join( " ",  @access);
+    my @access = @{ $inMember->{access} };
+    @access = grep { $_ ne 'public' } @access;    # do not show 'public'
+    my $value = join( " ", @access );
     return $this->getDataString( $inElement, $value, 'ACCESS', undef );
 }
 
@@ -45,10 +45,10 @@ sub getPropertyTypeString {
 
     my $outText = '';
     if ( $inElement =~ m/\bPROPERTYTYPE\b/ ) {
-        my $type = ''; # do not write 'var' for AS2
+        my $type = '';    # do not write 'var' for AS2
         $inElement =~ s/\bPROPERTYTYPE\b/$type/;
         $outText .= $inElement;
-    }   
+    }
     return $outText;
 }
 

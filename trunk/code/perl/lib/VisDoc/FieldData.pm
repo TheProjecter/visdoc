@@ -13,8 +13,8 @@ Used for:
 =cut
 
 our $TYPE = {
-    FIELD    => ( 1 << 1 ),
-    PARAM    => ( 1 << 2 ),
+    FIELD => ( 1 << 1 ),
+    PARAM => ( 1 << 2 ),
 };
 
 =pod
@@ -25,9 +25,10 @@ sub new {
     my ( $class, $inName, $inValue, $inType ) = @_;
     my $this = {
         name  => $inName,
-        value => $inValue || '',    # value string
-        type  => $inType  || $TYPE->{FIELD},
-       #overridden        => 0,       # NEEDED?
+        value => $inValue || '',              # value string
+        type  => $inType || $TYPE->{FIELD},
+
+        #overridden        => 0,       # NEEDED?
         didCopyInheritDoc => 0,
     };
     bless $this, $class;
@@ -53,8 +54,9 @@ Creates a copy.
 sub copy {
     my ($this) = @_;
 
-	my $newField = VisDoc::FieldData->new( $this->{name}, $this->{value}, $this->{type} );
-	return $newField;
+    my $newField =
+      VisDoc::FieldData->new( $this->{name}, $this->{value}, $this->{type} );
+    return $newField;
 }
 
 =pod
@@ -65,11 +67,11 @@ sub as_string {
     my ($this) = @_;
 
     my $str = 'FieldData:';
-    $str .= "\n\t name=$this->{name}"   if $this->{name};
-    $str .= "\n\t value=$this->{value}" if $this->{value};
+    $str .= "\n\t name=$this->{name}"                  if $this->{name};
+    $str .= "\n\t value=$this->{value}"                if $this->{value};
     $str .= "\n\t type=" . typeString( $this->{type} ) if $this->{type};
     $str .= "\n";
-    
+
     return $str;
 }
 

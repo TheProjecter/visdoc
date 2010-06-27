@@ -119,9 +119,9 @@ sub _writeSummary {
     if ( $summaryData->{hasTypeInfo} ) {
         $inWriter->startTag('showHideTypeInfo');
         $inWriter->cdataElement( 'showTypeInfo',
-            $this->_docTerm( 'summary_showTypeInfo' ) );
+            $this->_docTerm('summary_showTypeInfo') );
         $inWriter->cdataElement( 'hideTypeInfo',
-            $this->_docTerm( 'summary_hideTypeInfo' ) );
+            $this->_docTerm('summary_hideTypeInfo') );
         $inWriter->endTag('showHideTypeInfo');
     }
 
@@ -129,9 +129,9 @@ sub _writeSummary {
     if ( $summaryData->{hasSummary} ) {
         $inWriter->startTag('showHideSummaries');
         $inWriter->cdataElement( 'showSummaries',
-            $this->_docTerm( 'summary_showSummaries' ) );
+            $this->_docTerm('summary_showSummaries') );
         $inWriter->cdataElement( 'hideSummaries',
-            $this->_docTerm( 'summary_hideSummaries' ) );
+            $this->_docTerm('summary_hideSummaries') );
         $inWriter->endTag('showHideSummaries');
     }
 

@@ -6,7 +6,7 @@ package StringUtilsTests;
 use base qw(Test::Unit::TestCase);
 
 use VisDoc::StringUtils;
-use VisDoc::ClassData; 
+use VisDoc::ClassData;
 
 my $debug = 0;
 
@@ -28,7 +28,7 @@ sub test_stripSingleLineComments_simple {
     VisDoc::StringUtils::stripSingleLineComments($text);
     my $result   = $text;
     my $expected = 'public static const NONE:uint = 0;';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -56,7 +56,7 @@ public class TraverseArrayOptions {
 
     $result   =~ s/^\s*(.*)\s*$/$1/gos;
     $expected =~ s/^\s*(.*)\s*$/$1/gos;
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -72,7 +72,7 @@ sub test_stripSingleLineComments_empty {
     VisDoc::StringUtils::stripSingleLineComments($text);
     my $result   = $text;
     my $expected = '';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -88,7 +88,7 @@ sub test_stripEmptyMultilineComments {
     VisDoc::StringUtils::stripEmptyMultilineComments($text);
     my $result   = $text;
     my $expected = 'abcdef';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -104,7 +104,7 @@ sub test_stripEmptyMultilineComments_empty {
     VisDoc::StringUtils::stripEmptyMultilineComments($text);
     my $result   = $text;
     my $expected = '';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -168,7 +168,7 @@ package org.asaplibrary.data.array /*ehm*/{
 
     $result   =~ s/^\s*(.*)\s*$/$1/gos;
     $expected =~ s/^\s*(.*)\s*$/$1/gos;
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -184,7 +184,7 @@ sub test_stripMultilineComments_empty {
     VisDoc::StringUtils::stripMultilineComments($text);
     my $result   = $text;
     my $expected = '';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -232,7 +232,7 @@ package org.asaplibrary.data.array /*ehm*/{
 	}
 }';
     VisDoc::StringUtils::stripAllComments($text);
-    
+
     my $result   = $text;
     my $expected = 'package org.asaplibrary.data.array {
 	public class TraverseArrayOptions {
@@ -245,7 +245,7 @@ package org.asaplibrary.data.array /*ehm*/{
 
     $result   =~ s/^\s*(.*)\s*$/$1/gos;
     $expected =~ s/^\s*(.*)\s*$/$1/gos;
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -261,7 +261,7 @@ sub test_stripAllComments_empty {
     VisDoc::StringUtils::stripAllComments($text);
     my $result   = $text;
     my $expected = '';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -282,7 +282,7 @@ AFTER';
     my $result   = $text;
     my $expected = 'BEFORE
 AFTER';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -294,15 +294,15 @@ AFTER';
 sub test_replaceNewlinesBySpaces {
     my ($this) = @_;
 
-	my $text = 'a
+    my $text = 'a
 b
 c
 d';
-	
-	VisDoc::StringUtils::replaceNewlinesBySpaces($text);
+
+    VisDoc::StringUtils::replaceNewlinesBySpaces($text);
     my $result   = $text;
     my $expected = 'a b c d';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -313,12 +313,12 @@ d';
 
 sub test_stripHtml {
     my ($this) = @_;
-    
+
     my $text = '<code><br />text</code>';
     VisDoc::StringUtils::stripHtml($text);
-    my $result = $text;
+    my $result   = $text;
     my $expected = 'text';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -334,15 +334,15 @@ sub test_stripJavadocComments_empty {
     VisDoc::StringUtils::stripJavadocComments($text);
     my $result   = $text;
     my $expected = '';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
 
 sub test_stripToPrepareReadingLanguageId {
     my ($this) = @_;
-	
-	my $text = '/**
+
+    my $text = '/**
 * FlickrBlogs
 * class com.zuardi.flickr.FlickrBlogs
 {
@@ -365,7 +365,7 @@ class com.zuardi.flickr.FlickrBlogs
 	}
 };
 ';
-	my $result = $text;
+    my $result = $text;
     VisDoc::StringUtils::stripToPrepareReadingLanguageId($result);
     my $expected = ';
 class com.zuardi.flickr.FlickrBlogs
@@ -380,11 +380,10 @@ var example:String = REMOVED_STRING;
 }
 };
 ';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
-
 
 =pod
 
@@ -393,15 +392,14 @@ var example:String = REMOVED_STRING;
 sub test_trimSpaces {
     my ($this) = @_;
 
-    my $text   = '
+    my $text = '
 "abc"
 def ghi   ';
     my $result = $text;
     VisDoc::StringUtils::trimSpaces($result);
-    my $expected =
-      '"abc"
+    my $expected = '"abc"
 def ghi';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -413,69 +411,74 @@ def ghi';
 sub test_deletePathExtension {
     my ($this) = @_;
 
-	{
-		# '/tmp/scratch.tiff'
-		my $text   = '/tmp/scratch.tiff';
-		my $result = $text;
-		VisDoc::StringUtils::deletePathExtension($result);
-		my $expected = '/tmp/scratch';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# '/tmp/'
-		my $text   = '/tmp/';
-		my $result = $text;
-		VisDoc::StringUtils::deletePathExtension($result);
-		my $expected = '/tmp';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# 'scratch.bundle/'
-		my $text   = 'scratch.bundle/';
-		my $result = $text;
-		VisDoc::StringUtils::deletePathExtension($result);
-		my $expected = 'scratch';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# 'scratch..tiff'
-		my $text   = 'scratch..tiff';
-		my $result = $text;
-		VisDoc::StringUtils::deletePathExtension($result);
-		my $expected = 'scratch.';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}	
-	{
-		# '.tiff'
-		my $text   = '.tiff';
-		my $result = $text;
-		VisDoc::StringUtils::deletePathExtension($result);
-		my $expected = '.tiff';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-		# '/'
-		my $text   = '/';
-		my $result = $text;
-		VisDoc::StringUtils::deletePathExtension($result);
-		my $expected = '/';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}	
+    {
+
+        # '/tmp/scratch.tiff'
+        my $text   = '/tmp/scratch.tiff';
+        my $result = $text;
+        VisDoc::StringUtils::deletePathExtension($result);
+        my $expected = '/tmp/scratch';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # '/tmp/'
+        my $text   = '/tmp/';
+        my $result = $text;
+        VisDoc::StringUtils::deletePathExtension($result);
+        my $expected = '/tmp';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # 'scratch.bundle/'
+        my $text   = 'scratch.bundle/';
+        my $result = $text;
+        VisDoc::StringUtils::deletePathExtension($result);
+        my $expected = 'scratch';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # 'scratch..tiff'
+        my $text   = 'scratch..tiff';
+        my $result = $text;
+        VisDoc::StringUtils::deletePathExtension($result);
+        my $expected = 'scratch.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # '.tiff'
+        my $text   = '.tiff';
+        my $result = $text;
+        VisDoc::StringUtils::deletePathExtension($result);
+        my $expected = '.tiff';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # '/'
+        my $text   = '/';
+        my $result = $text;
+        VisDoc::StringUtils::deletePathExtension($result);
+        my $expected = '/';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 
 }
-
 
 =pod
 
@@ -484,62 +487,64 @@ sub test_deletePathExtension {
 sub test_commaSeparatedListFromCommaSeparatedString {
     my ($this) = @_;
 
-    my $text   = 'abc,def, ghi, aaa"ABC,DEF"bbb,  aaa\'ABC,DEF\'bbb, inKey:String = ",."';
-    my @list = VisDoc::StringUtils::commaSeparatedListFromCommaSeparatedString($text);
+    my $text =
+      'abc,def, ghi, aaa"ABC,DEF"bbb,  aaa\'ABC,DEF\'bbb, inKey:String = ",."';
+    my @list =
+      VisDoc::StringUtils::commaSeparatedListFromCommaSeparatedString($text);
     {
-    	# item 1
-    	my $result = $list[0];
-		my $expected =
-		  'abc';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-    	# item 2
-    	my $result = $list[1];
-		my $expected =
-		  'def';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-    	# item 3
-    	my $result = $list[2];
-		my $expected =
-		  'ghi';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-    	# item 4
-    	my $result = $list[3];
-		my $expected =
-		  'aaa"ABC,DEF"bbb';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-    	# item 5
-    	my $result = $list[4];
-		my $expected =
-		  'aaa\'ABC,DEF\'bbb';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-    	# item 6
-    	my $result = $list[5];
-		my $expected =
-		  'inKey:String = ",."';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
+
+        # item 1
+        my $result   = $list[0];
+        my $expected = 'abc';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # item 2
+        my $result   = $list[1];
+        my $expected = 'def';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # item 3
+        my $result   = $list[2];
+        my $expected = 'ghi';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # item 4
+        my $result   = $list[3];
+        my $expected = 'aaa"ABC,DEF"bbb';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # item 5
+        my $result   = $list[4];
+        my $expected = 'aaa\'ABC,DEF\'bbb';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # item 6
+        my $result   = $list[5];
+        my $expected = 'inKey:String = ",."';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -549,28 +554,29 @@ sub test_commaSeparatedListFromCommaSeparatedString {
 sub test_commaSeparatedListFromSpaceSeparatedString {
     my ($this) = @_;
 
-    my $text   = 'a  b  c  d  "A B C" e';
-    my @list = VisDoc::StringUtils::commaSeparatedListFromSpaceSeparatedString($text);
+    my $text = 'a  b  c  d  "A B C" e';
+    my @list =
+      VisDoc::StringUtils::commaSeparatedListFromSpaceSeparatedString($text);
     {
-    	# item 5
-    	my $result = $list[4];
-		my $expected =
-		  '"A B C"';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	{
-    	# item 6
-    	my $result = $list[5];
-		my $expected =
-		  'e';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}
-	
-}	
+
+        # item 5
+        my $result   = $list[4];
+        my $expected = '"A B C"';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # item 6
+        my $result   = $list[5];
+        my $expected = 'e';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+
+}
 
 =pod
 
@@ -583,8 +589,8 @@ sub test_replaceCDATATags {
     my $result = $text;
     VisDoc::StringUtils::replaceCDATATags($result);
     my $expected =
-      'aaaaaaaaaPLACEHOLDER_CDATA_START_TAGbbbPLACEHOLDER_CDATA_END_TAGccccccccccc';
-    print("RES=$result.\n")     if $debug;
+'aaaaaaaaaPLACEHOLDER_CDATA_START_TAGbbbPLACEHOLDER_CDATA_END_TAGccccccccccc';
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -596,12 +602,12 @@ sub test_replaceCDATATags {
 sub test_restoreCDATATags {
     my ($this) = @_;
 
-    my $text   = 'aaaPLACEHOLDER_CDATA_START_TAGCDATA CONTENTSPLACEHOLDER_CDATA_END_TAGbbb';
+    my $text =
+'aaaPLACEHOLDER_CDATA_START_TAGCDATA CONTENTSPLACEHOLDER_CDATA_END_TAGbbb';
     my $result = $text;
     VisDoc::StringUtils::restoreCDATATags($result);
-    my $expected =
-      'aaa<![CDATA[CDATA CONTENTS]]>bbb';
-    print("RES=$result.\n")     if $debug;
+    my $expected = 'aaa<![CDATA[CDATA CONTENTS]]>bbb';
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -613,7 +619,7 @@ sub test_restoreCDATATags {
 sub test_removeStarsInJavadoc {
     my ($this) = @_;
 
-    my $text   = '* About speaking pets.
+    my $text = '* About speaking pets.
 	* Usage:
 	* <code>
 	* new SpeakingPets();
@@ -622,8 +628,7 @@ sub test_removeStarsInJavadoc {
 	* {@code new SpeakingPets();}';
     my $result = $text;
     VisDoc::StringUtils::removeStarsInJavadoc($result);
-    my $expected =
-      '
+    my $expected = '
 About speaking pets.
 Usage:
 <code>
@@ -631,7 +636,7 @@ new SpeakingPets();
 </code>
 or
 {@code new SpeakingPets();}';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -656,7 +661,7 @@ bbb';
     my $expected = 'aaa
 
 bbb';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -680,7 +685,7 @@ bbb';
     VisDoc::StringUtils::reduceNewlinesToSingle($result);
     my $expected = 'aaa
 bbb';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -761,7 +766,7 @@ sub test_stripCommentsFromRegex {
     my $result = VisDoc::StringUtils::stripCommentsFromRegex($pattern);
     my $expected =
 '(\b(public|static|private|final|dynamic|intrinsic|internal|protected)*\b[[:space:]]*(\bclass\b|\binterface\b)+)[[:space:]]*[[:alnum:]_\$.]+[[:space:]]*(\bextends\b|\bimplements\b)*[[:space:]]*[[:alnum:][:punct:]]*[[:space:]]*(\bextends\b|\bimplements\b)*[[:space:]]*[[:alnum:][:punct:]]*[[:space:]]*{';
-    print("RES=$result.\n")     if $debug;
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -773,7 +778,7 @@ sub test_stripCommentsFromRegex {
 sub test_stripCommentsFromRegex_escape_hash {
     my ($this) = @_;
 
-	my $pattern = '
+    my $pattern = '
   ^
   ((([[:alnum:]_\$\.]+)\.)*
   ([[:alnum:]_\$]+))*
@@ -783,10 +788,11 @@ sub test_stripCommentsFromRegex_escape_hash {
   [[:space:]]*
   (.*?)
   $';
-  	
-	my $result = VisDoc::StringUtils::stripCommentsFromRegex($pattern);
-	my $expected = '^((([[:alnum:]_\$\.]+)\.)*([[:alnum:]_\$]+))*#?([[:alnum:]_\$]+)*[[:space:]]*(\(.*?\))*[[:space:]]*(.*?)$';
-	print("RES=$result.\n")     if $debug;
+
+    my $result = VisDoc::StringUtils::stripCommentsFromRegex($pattern);
+    my $expected =
+'^((([[:alnum:]_\$\.]+)\.)*([[:alnum:]_\$]+))*#?([[:alnum:]_\$]+)*[[:space:]]*(\(.*?\))*[[:space:]]*(.*?)$';
+    print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;
     $this->assert( $result eq $expected );
 }
@@ -798,29 +804,35 @@ sub test_stripCommentsFromRegex_escape_hash {
 sub test_listFromKeywordWithCommaDelimitedString {
     my ($this) = @_;
 
-	my $text = 'extends Hello implements Paintable, java.io.Serializable, Collection<String>';
-	my @list = VisDoc::StringUtils::listFromKeywordWithCommaDelimitedString($text, 'implements');
-	{
-		# item 1
-		my $result = $list[0];
-		my $expected = 'Paintable';
-		print("RES=$result.\n")     if $debug;
+    my $text =
+'extends Hello implements Paintable, java.io.Serializable, Collection<String>';
+    my @list =
+      VisDoc::StringUtils::listFromKeywordWithCommaDelimitedString( $text,
+        'implements' );
+    {
+
+        # item 1
+        my $result   = $list[0];
+        my $expected = 'Paintable';
+        print("RES=$result.\n")   if $debug;
         print("EXP=$expected.\n") if $debug;
         $this->assert( $result eq $expected );
     }
     {
-		# item 2
-		my $result = $list[1];
-		my $expected = 'java.io.Serializable';
-		print("RES=$result.\n")     if $debug;
+
+        # item 2
+        my $result   = $list[1];
+        my $expected = 'java.io.Serializable';
+        print("RES=$result.\n")   if $debug;
         print("EXP=$expected.\n") if $debug;
         $this->assert( $result eq $expected );
     }
     {
-		# item 3
-		my $result = $list[2];
-		my $expected = 'Collection<String>';
-		print("RES=$result.\n")     if $debug;
+
+        # item 3
+        my $result   = $list[2];
+        my $expected = 'Collection<String>';
+        print("RES=$result.\n")   if $debug;
         print("EXP=$expected.\n") if $debug;
         $this->assert( $result eq $expected );
     }
@@ -833,18 +845,18 @@ sub test_listFromKeywordWithCommaDelimitedString {
 sub test_handleStarsInCodeText_preserveLineBreaks {
     my ($this) = @_;
 
-	my $text = '	* new SpeakingPets();
+    my $text = '	* new SpeakingPets();
 	* 
 	* ABC';
-	
-	VisDoc::StringUtils::handleStarsInCodeText($text, 1);
-	my $result = $text;
-	my $expected = 'new SpeakingPets();
+
+    VisDoc::StringUtils::handleStarsInCodeText( $text, 1 );
+    my $result   = $text;
+    my $expected = 'new SpeakingPets();
 
 ABC';
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
 
 =pod
@@ -854,17 +866,17 @@ ABC';
 sub test_handleStarsInCodeText_not_preserveLineBreaks {
     my ($this) = @_;
 
-	my $text = '	* new SpeakingPets();
+    my $text = '	* new SpeakingPets();
 	* 
 	* ABC * DEF';
-	
-	VisDoc::StringUtils::handleStarsInCodeText($text);
-	my $result = $text;
-	my $expected = 'new SpeakingPets();
+
+    VisDoc::StringUtils::handleStarsInCodeText($text);
+    my $result   = $text;
+    my $expected = 'new SpeakingPets();
 ABC * DEF';
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
 
 =pod
@@ -872,18 +884,20 @@ ABC * DEF';
 =cut
 
 sub test_replacePatternMatchWithStub_1 {
-	my ($this) = @_;
-	
-	my $text = 'a = [1,2,3]';
-	my $pattern = '\s*\=\s*(\[.*?\])';
-	my $stub = 'STUB';
-	my $counter = 0;
-	my ($result, $storage) = VisDoc::StringUtils::replacePatternMatchWithStub(\$text, $pattern, 1, 0, $stub, \$counter);
-	
-	my $expected = 'a = %STUB_1%';
-	print("RES=$result.\n")     if $debug;
-	print("EXP=$expected.\n") if $debug;
-	$this->assert( $result eq $expected );
+    my ($this) = @_;
+
+    my $text    = 'a = [1,2,3]';
+    my $pattern = '\s*\=\s*(\[.*?\])';
+    my $stub    = 'STUB';
+    my $counter = 0;
+    my ( $result, $storage ) =
+      VisDoc::StringUtils::replacePatternMatchWithStub( \$text, $pattern, 1, 0,
+        $stub, \$counter );
+
+    my $expected = 'a = %STUB_1%';
+    print("RES=$result.\n")   if $debug;
+    print("EXP=$expected.\n") if $debug;
+    $this->assert( $result eq $expected );
 }
 
 =pod
@@ -893,20 +907,23 @@ sub test_replacePatternMatchWithStub_1 {
 sub test_replacePatternMatchWithStub_2 {
     my ($this) = @_;
 
-	my $text = '= AB';
-	my $stub = 'STUB';
-	my $pattern = '\=\s*(A)';
-	my $counter = 0;
-	my ($newText, $storage) = VisDoc::StringUtils::replacePatternMatchWithStub( \$text, $pattern, 1, 1, $stub, \$counter);
-	
-	{
-		# test text
-		my $result = $newText;
-		my $expected = '= %STUB_1%B';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}	
+    my $text    = '= AB';
+    my $stub    = 'STUB';
+    my $pattern = '\=\s*(A)';
+    my $counter = 0;
+    my ( $newText, $storage ) =
+      VisDoc::StringUtils::replacePatternMatchWithStub( \$text, $pattern, 1, 1,
+        $stub, \$counter );
+
+    {
+
+        # test text
+        my $result   = $newText;
+        my $expected = '= %STUB_1%B';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 =pod
@@ -916,21 +933,24 @@ sub test_replacePatternMatchWithStub_2 {
 sub test_replacePatternMatchWithStub_3 {
     my ($this) = @_;
 
-	my $text = '/* comment */ /** hello comment */ ;';
-	my $stub = $VisDoc::StringUtils::STUB_JAVADOC_COMMENT;
-	my $pattern = "$VisDoc::StringUtils::PATTERN_JAVADOC_COMMENT";
-	
-	my $counter = 0;
-	my ($newText, $storage) = VisDoc::StringUtils::replacePatternMatchWithStub( \$text, $pattern, 0, 1, $stub, \$counter);
-	
-	{
-		# test text
-		my $result = $newText;
-		my $expected = '/* comment */%VISDOC_STUB_JAVADOC_COMMENT_1% ;';
-		print("RES=$result.\n")     if $debug;
-		print("EXP=$expected.\n") if $debug;
-		$this->assert( $result eq $expected );
-	}	
+    my $text    = '/* comment */ /** hello comment */ ;';
+    my $stub    = $VisDoc::StringUtils::STUB_JAVADOC_COMMENT;
+    my $pattern = "$VisDoc::StringUtils::PATTERN_JAVADOC_COMMENT";
+
+    my $counter = 0;
+    my ( $newText, $storage ) =
+      VisDoc::StringUtils::replacePatternMatchWithStub( \$text, $pattern, 0, 1,
+        $stub, \$counter );
+
+    {
+
+        # test text
+        my $result   = $newText;
+        my $expected = '/* comment */%VISDOC_STUB_JAVADOC_COMMENT_1% ;';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
 }
 
 1;

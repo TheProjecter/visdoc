@@ -133,7 +133,7 @@ sub parsePackage {
         my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
         $packageData->{javadoc} = $javadoc;
     }
-    
+
     my $packageName = $this->retrievePackageName($inText);
 
     $packageData->{name} = $packageName;
@@ -242,7 +242,7 @@ sub _parseClassData {
           $this->_handleClassMatches( \@matches, $classes, $patternMap );
 
         # enclosingClass
-        if ( $inOuterClass ) {
+        if ($inOuterClass) {
             $data->{enclosingClass} = $inOuterClass;
             $data->{isInnerClass}   = 1;
 
@@ -270,16 +270,17 @@ sub _parseClassData {
                   $this->_getClasspathFromImports( $_->{name}, $inText );
             } @{ $data->{superclasses} };
         }
-        
+
         # interfaces classpaths
-		if ( $data->{interfaces} ) {
-			map {
-				if (!( $_->{classpath})) {
-					$_->{classpath} =
-						$this->_getClasspathFromImports( $_->{name}, $inText );
-				}
-			} @{ $data->{interfaces} };
-		}
+        if ( $data->{interfaces} ) {
+            map {
+                if ( !( $_->{classpath} ) )
+                {
+                    $_->{classpath} =
+                      $this->_getClasspathFromImports( $_->{name}, $inText );
+                }
+            } @{ $data->{interfaces} };
+        }
 
         # prepare the fetching and removal of class contents
         my $startLoc = $-[0];

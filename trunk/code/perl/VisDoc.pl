@@ -22,7 +22,7 @@ BEGIN {
     my $here = Cwd::abs_path;
     my $root = $here;
     push @INC, "$root/lib/CPAN/lib";
-	push @INC, "$root/lib";
+    push @INC, "$root/lib";
 }
 
 # check if we can read the right modules
@@ -59,24 +59,21 @@ $preferences->{'output'}      = \$out;
 $preferences->{'doc-sources'} = \$process;
 
 &GetOptions(
-    $preferences,                          'output=s',
-    'docencoding:s',                       'giveCredits=i',
-    'doc-sources=s',                       'copyCSS:i',
-    'copyright:i',                         'copyrightText|footer:s',
-    'extensions:s',                        'eventHandlerPrefixes:s',
-    'eventHandlers:i',                     'generateIndex:i',
-    'ignoreClasses:i',                     'includeSourceCode:i',
-    'indexTitle|main-title:s',             'listPrivate:i',
-    'preserveLinebreaks:i',                'saveXML:i',
-    'sidebarWidth:s',                      'datapath:s',
-    'templateCssDirectory:s',              'templateCss:s',
-    'templateJsDirectory:s',
-    'templateXslDirectory:s',              'templateXsl:s',
-    'feedback:i',
-    'openInBrowser:i',
-    'help'
+    $preferences,              'output=s',
+    'docencoding:s',           'giveCredits=i',
+    'doc-sources=s',           'copyCSS:i',
+    'copyright:i',             'copyrightText|footer:s',
+    'extensions:s',            'eventHandlerPrefixes:s',
+    'eventHandlers:i',         'generateIndex:i',
+    'ignoreClasses:i',         'includeSourceCode:i',
+    'indexTitle|main-title:s', 'listPrivate:i',
+    'preserveLinebreaks:i',    'saveXML:i',
+    'sidebarWidth:s',          'datapath:s',
+    'templateCssDirectory:s',  'templateCss:s',
+    'templateJsDirectory:s',   'templateXslDirectory:s',
+    'templateXsl:s',           'feedback:i',
+    'openInBrowser:i',         'help'
 );
-
 
 usage() if $preferences->{help};
 
@@ -176,14 +173,15 @@ if ($collectiveFileData) {
             $result .= "supporting=$htmlSupportingFileNamesString;\n";
         }
     }
-    if ($preferences->{'openInBrowser'}) {
-    	if ($indexHtml) {
-	    	system(qq(open "$htmlDir/$indexHtml.html"));
-	    } else {
-	    	my $doc = $htmlDocFileNames->[0];
-	    	system(qq(open "$htmlDir/$doc.html")) if $htmlDir && $doc;
-	    }
-	}
+    if ( $preferences->{'openInBrowser'} ) {
+        if ($indexHtml) {
+            system(qq(open "$htmlDir/$indexHtml.html"));
+        }
+        else {
+            my $doc = $htmlDocFileNames->[0];
+            system(qq(open "$htmlDir/$doc.html")) if $htmlDir && $doc;
+        }
+    }
 }
 
 if ($error) {

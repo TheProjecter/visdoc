@@ -43,13 +43,13 @@ package B
 sub _writeList {
     my ( $this, $inWriter ) = @_;
 
-    my ($packages, $languages) = $this->_getPackages();
+    my ( $packages, $languages ) = $this->_getPackages();
     return 0 if !scalar @{$packages};
-    
+
     $inWriter->startTag('tocList');
-	$this->_writePackages($inWriter, $packages, $languages);
+    $this->_writePackages( $inWriter, $packages, $languages );
     $inWriter->endTag('tocList');
-    
+
     return 1;
 }
 
@@ -58,9 +58,9 @@ sub _writeList {
 =cut
 
 sub _getPackages {
-    my ( $this ) = @_;
+    my ($this) = @_;
 
-	my $packages;
+    my $packages;
     my $languages
       ; # store the language of each class to pass with the class attributes later on
     foreach my $fileData ( @{ $this->{data} } ) {
@@ -76,8 +76,8 @@ sub _getPackages {
 
     # sort packages by name
     @{$packages} = sort { $a->{name} cmp $b->{name} } @{$packages};
-    
-    return ($packages, $languages);
+
+    return ( $packages, $languages );
 }
 
 =pod
@@ -86,21 +86,21 @@ sub _getPackages {
 
 sub _writePackages {
     my ( $this, $inWriter, $inPackages, $inLanguages ) = @_;
-    
+
     foreach my $package ( sort @{$inPackages} ) {
 
-		$inWriter->startTag('listGroup');
-		
-		if ( $package->{name} ) {
-			$inWriter->startTag('listGroupTitle');
+        $inWriter->startTag('listGroup');
+
+        if ( $package->{name} ) {
+            $inWriter->startTag('listGroupTitle');
             $this->_writeLinkXml( $inWriter, $package->{name},
                 $package->getUri() );
             $inWriter->cdataElement( 'package', 'true' );
-			$inWriter->endTag('listGroupTitle');
-			$inWriter->startTag('item');
-			$inWriter->startTag('listGroup');
+            $inWriter->endTag('listGroupTitle');
+            $inWriter->startTag('item');
+            $inWriter->startTag('listGroup');
         }
-		
+
         my $classes = $package->{classes};
 
         # sort classes
@@ -129,15 +129,15 @@ sub _writePackages {
             $this->_writeClassItem( $inWriter, $class->{name}, $class->getUri(),
                 $attributes );
         }
-        
+
         if ( $package->{name} ) {
-			$inWriter->endTag('listGroup');
-			$inWriter->endTag('item');
-		}
+            $inWriter->endTag('listGroup');
+            $inWriter->endTag('item');
+        }
         $inWriter->endTag('listGroup');
     }
 }
-    
+
 1;
 
 # VisDoc - Code documentation generator, http://visdoc.org

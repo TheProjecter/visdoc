@@ -24,7 +24,7 @@ sub getPropertyTypeString {
 
     my $outText = '';
     if ( $inElement =~ m/\bPROPERTYTYPE\b/ ) {
-        my $type = ''; # do not write 'var' for AS2
+        my $type = '';    # do not write 'var' for AS2
         if ( $inMember->{type} ) {
             $type = 'const'
               if ( $inMember->{type} & $VisDoc::MemberData::TYPE->{CONST} );

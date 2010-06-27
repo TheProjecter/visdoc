@@ -32,35 +32,38 @@ _formatData ($xmlWriter, $classData) -> $bool
 sub _formatData {
     my ( $this, $inWriter ) = @_;
 
-	$inWriter->startTag('navigation');
+    $inWriter->startTag('navigation');
     $inWriter->startTag('tocList');
-	$this->_writeDocTitle($inWriter);
-	
-    $inWriter->startTag('listGroup');
-    $inWriter->cdataElement( 'id',     'treemenu' );
+    $this->_writeDocTitle($inWriter);
 
-    my ($packages, $languages) = $this->_getPackages();
-    
+    $inWriter->startTag('listGroup');
+    $inWriter->cdataElement( 'id', 'treemenu' );
+
+    my ( $packages, $languages ) = $this->_getPackages();
+
     my $title;
-    if (scalar @{$packages}) {
-    	$title = VisDoc::Language::getDocTerm( 'all_packages_simple_title',
-        $this->{language} );
-    } else {
-    	$title = VisDoc::Language::getDocTerm( 'all_classes_simple_title',
-        $this->{language} );
+    if ( scalar @{$packages} ) {
+        $title =
+          VisDoc::Language::getDocTerm( 'all_packages_simple_title',
+            $this->{language} );
     }
-	$inWriter->cdataElement( 'listGroupTitle', $title );
-	$inWriter->startTag('item');
-	
-	$this->_writePackages($inWriter, $packages, $languages);
-	$inWriter->endTag('item');
-	$inWriter->endTag('listGroup');
+    else {
+        $title =
+          VisDoc::Language::getDocTerm( 'all_classes_simple_title',
+            $this->{language} );
+    }
+    $inWriter->cdataElement( 'listGroupTitle', $title );
+    $inWriter->startTag('item');
+
+    $this->_writePackages( $inWriter, $packages, $languages );
+    $inWriter->endTag('item');
+    $inWriter->endTag('listGroup');
     $inWriter->endTag('tocList');
 
     $this->_writeTocNavigation($inWriter);
-    
-	$inWriter->endTag('navigation');
-	
+
+    $inWriter->endTag('navigation');
+
     return 1;
 }
 
@@ -78,17 +81,17 @@ sub _formatData {
 sub _writeDocTitle {
     my ( $this, $inWriter ) = @_;
 
-	$inWriter->startTag('listGroup');
-	$inWriter->startTag('item');
-	$inWriter->startTag('link');
-	
-	$inWriter->cdataElement( 'name',     $this->{preferences}->{indexTitle} || 'Documentation' );
-	$inWriter->cdataElement( 'uri', 'index' ); 
-	$inWriter->endTag('link');
-	$inWriter->endTag('item');
-	$inWriter->endTag('listGroup');
-}
+    $inWriter->startTag('listGroup');
+    $inWriter->startTag('item');
+    $inWriter->startTag('link');
 
+    $inWriter->cdataElement( 'name',
+        $this->{preferences}->{indexTitle} || 'Documentation' );
+    $inWriter->cdataElement( 'uri', 'index' );
+    $inWriter->endTag('link');
+    $inWriter->endTag('item');
+    $inWriter->endTag('listGroup');
+}
 
 =pod
 
@@ -113,8 +116,8 @@ sub _writeTocNavigation {
     return if !$this->{tocNavigationKeys};
 
     $inWriter->startTag('globalNav');
-	$inWriter->startTag('items');
-	
+    $inWriter->startTag('items');
+
     my $callToWriteLink = sub {
         my ( $inTitleKey, $inUri ) = @_;
 
@@ -181,7 +184,7 @@ sub _writeTocNavigation {
         &$callToWriteName('all_deprecated_link');
     }
 
-	$inWriter->endTag('items');
+    $inWriter->endTag('items');
     $inWriter->endTag('globalNav');
 }
 

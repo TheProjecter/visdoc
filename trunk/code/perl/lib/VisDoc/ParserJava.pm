@@ -237,9 +237,8 @@ sub _handleMethodMatches {
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
 
         #$data->{javadocStub} = $inMatches->[$i];
-        my $javadoc =
-          $this->{fileParser}->parseJavadoc( $inMatches->[$i] );
-        $data->setJavadoc( $javadoc );
+        my $javadoc = $this->{fileParser}->parseJavadoc( $inMatches->[$i] );
+        $data->setJavadoc($javadoc);
     }
 
     # access
@@ -272,11 +271,11 @@ sub _handleMethodMatches {
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $parametersStr = $inMatches->[$i];
         $data->{parameters} = $this->_parseMethodParameters($parametersStr);
-        
+
         $data->{qualifiedName} = $data->{name} . '(' . $parametersStr . ')';
-		$data->{qualifiedName} =~ s/ //go;
+        $data->{qualifiedName} =~ s/ //go;
     }
-	
+
     # exception type
     $i = $inPatternMap->{exceptionType} - 1;
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
@@ -448,16 +447,16 @@ sub _handlePropertyMatches {
     $i = $inPatternMap->{javadoc} - 1;
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocStub = $inMatches->[$i];
-        my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
-        $data->setJavadoc( $javadoc );
+        my $javadoc     = $this->{fileParser}->parseJavadoc($javadocStub);
+        $data->setJavadoc($javadoc);
     }
 
     # javadoc side
     $i = $inPatternMap->{javadocSide} - 1;
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $javadocStub = $inMatches->[$i];
-        my $javadoc = $this->{fileParser}->parseJavadoc($javadocStub);
-        $data->setJavadoc( $javadoc );
+        my $javadoc     = $this->{fileParser}->parseJavadoc($javadocStub);
+        $data->setJavadoc($javadoc);
     }
 
     # access
@@ -475,7 +474,8 @@ sub _handlePropertyMatches {
     $i = $inPatternMap->{name} - 1;
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $nameStr = $inMatches->[$i];
-        $data->{name} = $data->{qualifiedName} = $this->_parsePropertyName($nameStr);
+        $data->{name} = $data->{qualifiedName} =
+          $this->_parsePropertyName($nameStr);
     }
 
     # value

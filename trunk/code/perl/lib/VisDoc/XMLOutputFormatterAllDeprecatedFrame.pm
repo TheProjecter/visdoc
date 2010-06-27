@@ -130,9 +130,7 @@ sub _deprecatedClassesOrInterfaces {
                 next if !$deprecatedFields;
                 next
                   if !(
-                          $class->{type} &
-                          $VisDoc::ClassData::TYPE->{$inClassType}
-                  );
+                    $class->{type} & $VisDoc::ClassData::TYPE->{$inClassType} );
                 push @{$deprecated},
                   {
                     obj      => $class,

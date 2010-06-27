@@ -66,7 +66,7 @@ sub _writeList {
 
         my $summary =
           $this->getSummaryLine( $class->{javadoc}, $class->{fileData} );
-	
+
         my $attributes = {
             isPublic => $class->isPublic(),
             isClass  => ( $class->{type} & $VisDoc::ClassData::TYPE->{CLASS} ),
