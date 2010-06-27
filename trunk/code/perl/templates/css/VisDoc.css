@@ -224,9 +224,38 @@ table {
 th {
 	text-align:left;
 }
+th,
+td {
+	vertical-align:top;
+	padding:.25em 1em;
+}
 img {
 	margin:.5em;
 }
+
+.code {
+	white-space:pre;
+}
+
+code,
+pre,
+.code,
+tt,
+textarea {
+	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
+}
+
+pre {
+	margin-top:1em;
+	margin-bottom:1em;
+	color:brown;
+	padding-bottom:1.5em;
+}
+
+html>body pre {
+	padding-bottom:.15em;
+}
+
 
 /* END BASE HTML */
 
@@ -386,7 +415,6 @@ img {
 	color:#bbb;
 }
 
-
 .title {
 	display:block;
 	font-weight:700;
@@ -405,29 +433,6 @@ img {
 }
 
 .doesNotExist {}
-
-.code {
-	white-space:pre;
-}
-
-code,
-pre,
-.code,
-tt,
-textarea {
-	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
-}
-
-pre {
-	margin-top:1em;
-	margin-bottom:1em;
-	color:brown;
-	padding-bottom:1.5em;
-}
-
-html>body pre {
-	padding-bottom:.15em;
-}
 
 .docNav {
 	color:#9399af;
@@ -501,20 +506,6 @@ html>body pre {
 	margin:0;
 	padding:0;
 }
-
-/*
-.clearfix:after {
-	content:".";
-	display:block;
-	height:0;
-	clear:both;
-	visibility:hidden;
-}
-
-* html .clearfix {
-	height:1%;
-}
-*/
 
 .boxWithBorder {
 	margin-top:1em;
@@ -639,8 +630,8 @@ td {
 .memberSection .member,
 .memberSection .class {
 	height:1%;
-	margin:-1px -15px 0 -15px;
-	padding:1em 15px 1.5em;
+	margin:-1px -10px 0 -10px;
+	padding:1em 10px 1.5em;
 }
 
 .memberSection h2 {
@@ -715,26 +706,6 @@ td {
 #main .list .interface .attribute {
 	font-style:italic;
 }
-
-/*
-#overview .listGroup {
-	border-bottom:1px solid #dbdee1;
-	margin:2em 0 0;
-}
-
-#overview .listing .listGroup ul li {
-	border-top:1px solid #dbdee1;
-	padding:.2em 0;
-}
-
-#overview .listing .listGroup ul li ul li {
-	border:none;
-	padding:0;
-}
-.listGroup h2 {
-	margin-bottom:.5em;
-}
-*/
 .private h3 {
 	color:#9399AF;
 }
@@ -778,8 +749,6 @@ textarea#source {
 	padding:.25em;
 }
 
-th,
-td,
 .boxWithBorder .boxedElem .contentHolder .item table th,
 .boxWithBorder .boxedElem .contentHolder .item table td {
 	vertical-align:top;
