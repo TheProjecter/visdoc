@@ -75,8 +75,10 @@ sub _getPackages {
     return 0 if ( !$packages || !scalar @{$packages} );
 
     # sort packages by name
-    @{$packages} = sort { $a->{name} cmp $b->{name} } @{$packages};
-
+    if (scalar @{$packages} > 1) {
+    	@{$packages} = sort { $a->{name} cmp $b->{name} } @{$packages};
+	}
+	
     return ( $packages, $languages );
 }
 
@@ -87,7 +89,7 @@ sub _getPackages {
 sub _writePackages {
     my ( $this, $inWriter, $inPackages, $inLanguages ) = @_;
 
-    foreach my $package ( sort @{$inPackages} ) {
+    foreach my $package ( @{$inPackages} ) {
 
         $inWriter->startTag('listGroup');
 
@@ -102,14 +104,16 @@ sub _writePackages {
         }
 
         my $classes = $package->{classes};
-
-        # sort classes
-        @{$classes} =
-          sort {
-            lc( $a->getClasspathWithoutName()   || $a->{name} ) cmp
-              lc( $b->getClasspathWithoutName() || $b->{name} )
-          } @{$classes};
-
+	
+		if (scalar @{$classes} > 1) {
+			# sort classes
+			@{$classes} =
+			  sort {
+				lc( $a->getClasspathWithoutName()   || $a->{name} ) cmp
+				  lc( $b->getClasspathWithoutName() || $b->{name} )
+			  } @{$classes};
+		}
+		
         foreach my $class ( @{$classes} ) {
             next if $class->isExcluded();
             next if !$this->{preferences}->{listPrivate} && !$class->isPublic();

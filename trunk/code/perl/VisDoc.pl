@@ -300,18 +300,6 @@ To write...
 
 To write...
 
-=item B<-templateXslForIndexFrameset>
-
-To write...
-
-=item B<-templateXslForPackagesFrameset>
-
-To write...
-
-=item B<-templateXslForPackagesTocFrameset>
-
-To write...
-
 =item B<-feedback>
 
 Whether to write out processing feedback.

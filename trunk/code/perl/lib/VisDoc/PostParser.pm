@@ -775,16 +775,18 @@ sub _validateLinks {
         # parse inline links stored in FileData {linkDataRefs}
         # skip LinkData object that have been validated just before
 
-        while ( my ( $key, $linkDataRef ) =
-            each %{ $fileData->getLinkDataRefs() } )
-        {
-            my $linkData = $$linkDataRef;
-            if ( !$validatedLinks->{$linkData} ) {
-                _validateLinkData( $inCollectiveFileData, $linkData, $inClasses,
-                    undef, undef, undef, $inPreferences );
-            }
-        }
-
+		my $linkDataRefs = $fileData->getLinkDataRefs();
+		if ($linkDataRefs) {
+			while ( my ( $key, $linkDataRef ) =
+				each %{ $linkDataRefs } )
+			{
+				my $linkData = $$linkDataRef;
+				if ( !$validatedLinks->{$linkData} ) {
+					_validateLinkData( $inCollectiveFileData, $linkData, $inClasses,
+						undef, undef, undef, $inPreferences );
+				}
+			}
+		}
     }
 }
 

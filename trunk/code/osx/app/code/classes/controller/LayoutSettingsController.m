@@ -23,7 +23,7 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	return 8;
+	return 5;
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn
@@ -35,19 +35,13 @@
 		if (rowIndex == 2) return @"js template file";
 		if (rowIndex == 3) return @"xsl template directory";
 		if (rowIndex == 4) return @"xsl template for classes";
-		if (rowIndex == 5) return @"xsl template for index-frameset";
-		if (rowIndex == 6) return @"xsl template for packages-frameset";
-		if (rowIndex == 7) return @"xsl template for packages-toc-frameset";
 	}
 	if ([[aTableColumn identifier] isEqualToString:@"value"]) {
 		if (rowIndex == 0) return [[delegate settings] objectForKey:@"templateCssDirectory"];
 		if (rowIndex == 1) return [[delegate settings] objectForKey:@"templateCss"];
 		if (rowIndex == 2) return [[delegate settings] objectForKey:@"templateJsDirectory"];
 		if (rowIndex == 3) return [[delegate settings] objectForKey:@"templateXslDirectory"];
-		if (rowIndex == 4) return [[delegate settings] objectForKey:@"templateXslForClasses"];
-		if (rowIndex == 5) return [[delegate settings] objectForKey:@"templateXslForIndexFrameset"];
-		if (rowIndex == 6) return [[delegate settings] objectForKey:@"templateXslForPackagesFrameset"];
-		if (rowIndex == 7) return [[delegate settings] objectForKey:@"templateXslForPackagesTocFrameset"];
+		if (rowIndex == 4) return [[delegate settings] objectForKey:@"templateXsl"];
 	}
 	return nil;
 }
@@ -60,10 +54,7 @@
 		if (rowIndex == 1) key = @"templateCss";
 		if (rowIndex == 2) key = @"templateJsDirectory";
 		if (rowIndex == 3) key = @"templateXslDirectory";
-		if (rowIndex == 4) key = @"templateXslForClasses";
-		if (rowIndex == 5) key = @"templateXslForIndexFrameset";
-		if (rowIndex == 6) key = @"templateXslForPackagesFrameset";
-		if (rowIndex == 7) key = @"templateXslForPackagesTocFrameset";
+		if (rowIndex == 4) key = @"templateXsl";
 		[[delegate settings] setObject:anObject forKey:key];
 	}
 }
@@ -79,10 +70,7 @@
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateCss"] forKey:@"templateCss"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateJsDirectory"] forKey:@"templateJsDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslDirectory"] forKey:@"templateXslDirectory"];
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslForClasses"] forKey:@"templateXslForClasses"];
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslForIndexFrameset"] forKey:@"templateXslForIndexFrameset"];
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslForPackagesFrameset"] forKey:@"templateXslForPackagesFrameset"];
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslForPackagesTocFrameset"] forKey:@"templateXslForPackagesTocFrameset"];
+	[[delegate settings] setObject:[dictionary objectForKey:@"templateXsl"] forKey:@"templateXsl"];
 	[oSettingsTable reloadData];
 }
 
@@ -140,10 +128,7 @@
 		[[delegate settings] objectForKey:@"templateCss"], @"templateCss",
 		[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
 		[[delegate settings] objectForKey:@"templateXslDirectory"], @"templateXslDirectory",
-		[[delegate settings] objectForKey:@"templateXslForClasses"], @"templateXslForClasses",
-		[[delegate settings] objectForKey:@"templateXslForIndexFrameset"], @"templateXslForIndexFrameset",
-		[[delegate settings] objectForKey:@"templateXslForPackagesFrameset"], @"templateXslForPackagesFrameset",
-		[[delegate settings] objectForKey:@"templateXslForPackagesTocFrameset"], @"templateXslForPackagesTocFrameset",
+		[[delegate settings] objectForKey:@"templateXsl"], @"templateXsl",
 			nil];
 }
 
@@ -153,10 +138,7 @@
 	if (![self compareCurrentWithDefault:@"templateCss"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateJsDirectory"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateXslDirectory"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateXslForClasses"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateXslForIndexFrameset"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateXslForPackagesFrameset"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateXslForPackagesTocFrameset"]) return NO;
+	if (![self compareCurrentWithDefault:@"templateXsl"]) return NO;
 	return YES;
 }
 

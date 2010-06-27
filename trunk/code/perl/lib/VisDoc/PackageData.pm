@@ -41,7 +41,7 @@ sub new {
     my ($class) = @_;
     my $this = {
         fileData  => undef,    # ref of FileData object; set by FileParser
-        name      => undef,
+        name      => '',
         anonymous => 0,        # is anonymous package: true (1) or false (0)
         access    => undef,    # ref of list of access, not used
         classes   => undef,

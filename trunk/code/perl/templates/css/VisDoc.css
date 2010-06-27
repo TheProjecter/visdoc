@@ -234,6 +234,12 @@ img {
 
 /* WIDTH OF LEFT BAR */
 
+#sidebar {
+	display:none;
+}
+.isShowingNavigation #sidebar {
+	display:inline;
+}
 .isShowingNavigation #outer {
 	margin-left:250px;
 }
@@ -587,10 +593,13 @@ td {
 	background-color:#fff;
 }
 
-.classDescription h2 {
-	font-size:1.5em;
-	margin:0;
-	padding:0;
+.classDescription h1,
+.classDescription h2,
+.classDescription h3,
+.classDescription h4,
+.classDescription h5,
+.classDescription h6 {
+	margin-top:1em;
 }
 
 .classDescription .fields {
