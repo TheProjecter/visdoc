@@ -68,7 +68,7 @@ $preferences->{'doc-sources'} = \$process;
     'ignoreClasses:i',         'includeSourceCode:i',
     'indexTitle|main-title:s', 'listPrivate:i',
     'preserveLinebreaks:i',    'saveXML:i',
-    'sidebarWidth:s',          'datapath:s',
+    'datapath:s',
     'templateCssDirectory:s',  'templateCss:s',
     'templateJsDirectory:s',   'templateXslDirectory:s',
     'templateXsl:s',           'feedback:i',
@@ -271,12 +271,6 @@ Default: none, no frameset
 
 Whether to give VisDoc credits in the footer.
 Default: 1
-
-=item B<-sidebarWidth>
-
-Width of left bar in percentage or pixels.
-Value: a number appended with px or %
-Default: "22%"
 
 =item B<-listPrivate>
 

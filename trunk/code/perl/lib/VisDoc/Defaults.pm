@@ -32,7 +32,6 @@ our $SETTINGS = {
     output               => '',
     preserveLinebreaks   => 1,
     saveXML              => 0,
-    sidebarWidth         => '25%',
     templateCss          => 'VisDoc.css',
     templateCssDirectory => 'templates/css',
     templateJsDirectory  => 'templates/js',
