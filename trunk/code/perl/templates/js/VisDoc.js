@@ -45,10 +45,10 @@
 			hideSourceCode();
 			$.cookie('isShowingSourceCode', 'false', { expires: 365 });
 		} else {
-			if ($.cookie('isShowingSourceCode') == 'false') {
-				hideSourceCode();
-			} else {
+			if ($.cookie('isShowingSourceCode') == 'true') {
 				showSourceCode();
+			} else {
+				hideSourceCode();
 			}
 		}
 	};
