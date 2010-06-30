@@ -769,15 +769,11 @@ sub _writeSummary_forMemberGroup {
         $inSummaryData )
       = @_;
 
-    my $inheritedMembers = '';
-
-    my $isPrivatePart = 0;
-    if ($inheritedMembers) {
-        $isPrivatePart = $this->isPartPrivate( $inClassData, $inPartName );
-    }
 
     my $members = $this->_getMembersForPart( $inClassData, $inPartName );
     return if !$members || !scalar @{$members};
+
+    my $isPrivatePart = $this->_isPartPrivate( $members );
 
     $inWriter->startTag('private') if ($isPrivatePart);
 
@@ -891,25 +887,20 @@ sub _writeSummary_typeInfo {
 
 =pod
 
-_isPartPrivate( $classData, $partName ) -> $text
+_isPartPrivate( \@memberData ) -> $text
 
-Get the number of private members in this part.
+Returns false if one of the members is not private.
 
 =cut
 
 sub _isPartPrivate {
-    my ( $this, $inClassData, $inPartName ) = @_;
+    my ( $this, $inMemberData ) = @_;
 
-=pod
-NSNumber* privateMemberCount = [inClassData valueForKeyPath:[NSString stringWithFormat:@"%@.@sum.isPrivate", inPartName]];
-	NSNumber* publicMemberCount = [inClassData valueForKeyPath:[NSString stringWithFormat:@"%@.@sum.isPublic", inPartName]];
-	if ([publicMemberCount boolValue] == NO && [privateMemberCount boolValue] != NO) {
-		return YES;
+	foreach my $member ( @{$inMemberData} ) {
+		return 0 if $member->isPublic();
 	}
-	return NO;
-=cut
-
-    return 0;
+	
+    return 1;
 }
 
 =pod
@@ -1069,6 +1060,9 @@ sub _writeMembers_forMemberGroup {
 
     if ( $members && scalar @{$members} ) {
 
+		my $isPrivatePart = $this->_isPartPrivate( $members );	
+		$inWriter->startTag('private') if ($isPrivatePart);
+		
         $inWriter->startTag('memberSection');
 
         my $title = $this->_docTerm($inTitleKey);
@@ -1085,8 +1079,8 @@ sub _writeMembers_forMemberGroup {
                 $member );
         }
 
-        #private
         $inWriter->endTag('memberSection');
+		$inWriter->endTag('private') if ($isPrivatePart);
     }
 }
 

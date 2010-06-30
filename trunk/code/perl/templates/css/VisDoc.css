@@ -309,7 +309,7 @@ html>body pre {
 	padding:0;
 }
 #sidebarContent {
-	margin:2em;
+	margin:23px;
 }
 #sidebar li,
 #sidebar div div {
@@ -320,14 +320,14 @@ html>body pre {
 	margin-left:14px;
 }
 #mainContent {
-	margin:2em 3em 2em 2em;
+	margin:2em 3em 2em 23px;
 }
 #footer {
 	border-top:1px solid #566d85;
 }
 #footerContent {
 	height:1.8em;
-	padding:.5em 2em;
+	padding:.5em 23px;
 }
 #footerContent ul {
 	margin:0;
@@ -346,29 +346,42 @@ html>body pre {
 }
 #headerButtons li {
 	float:left;
-	border-right:1px solid #c1cfe2;
 	height:30px;
+}
+#headerButtons a:link,
+#headerButtons a:visited {
+	display:block;
+	margin:6px 23px;
+	color:#9399af;
+	text-decoration:none;
+}
+#headerButtons a:hover .label {
+	text-decoration:underline;
+}
+#toggleTocButton {
+	border-right:1px solid #c1cfe2;
 }
 .isShowingNavigation #toggleTocButton a:link,
 .isShowingNavigation #toggleTocButton a:visited {
 	background:#e3eaf3;
 }
-#headerButtons a:link,
-#headerButtons a:visited {
+#toggleTocButton a:link,
+#toggleTocButton a:visited {
 	height:30px;
 	display:block;
-	padding:6px 2em;
+	margin:0;
+	padding:6px 23px;
 	color:#999;
 	text-decoration:none;
 }
-#headerButtons a:hover {
+#toggleTocButton a:hover {
 	color:#000;
 }
 #toggleTocButton a:link,
 #toggleTocButton a:visited {
 	color:#333;
 }
-#headerButtons li a:hover {
+#toggleTocButton li a:hover {
 	background:#f2f2f2;
 }
 .isShowingNavigation #toggleTocButton a:hover {
@@ -388,8 +401,7 @@ html>body pre {
 	display:inline;
 }
 .closure,
-.disclosure,
-#headerButtons .icon {
+.disclosure {
 	color:inherit;
 	float:left;
 	margin-left:-14px;
@@ -410,8 +422,8 @@ html>body pre {
 }
 #sidebar .globalNav {
 	border-top:1px solid #C1CFE2;
-	margin:1em -2em 0 -2em;
-	padding:.5em 2em;
+	margin:1em -23px 0 -23px;
+	padding:.5em 23px;
 	color:#bbb;
 }
 
@@ -458,7 +470,7 @@ html>body pre {
 }
 
 .icon {
-	font-size:100%;
+	font-size:95%;
 	color:#9399af;
 	margin:0 .35em 0 0;
 }
@@ -555,7 +567,7 @@ html>body pre {
 	margin:0;
 }
 .classProperties {
-	margin:2em 0 0 2em;
+	margin:2em 0 0 4em;
 }
 
 .classProperties table {
@@ -607,7 +619,7 @@ td {
 }
 
 .toc {
-	margin-top:4em;
+	margin-top:3em;
 }
 
 .toc .boxWithBorder {
@@ -669,10 +681,6 @@ td {
 	text-decoration:underline;
 }
 
-.sourceCodeView a {
-	margin-right:.5em;
-}
-
 .twistyTrigger {
 	margin:0 0 .25em;
 }
@@ -680,13 +688,6 @@ td {
 .twistyTrigger a:link,
 .twistyTrigger a:visited {
 	text-decoration:none;
-}
-
-.sourceCodeView .icon {
-	font-size: 0.8333333333333334em;
-	line-height: 1.8em;
-	margin-bottom: 1.8em;
-	display:none;
 }
 
 .list ul a:hover .attribute,
@@ -706,17 +707,113 @@ td {
 #main .list .interface .attribute {
 	font-style:italic;
 }
+
+/* private toggle controls */
+.privateHide {
+	display:inline;
+}
+.isHidingPrivate .privateHide {
+	display:none;
+}
+.privateShow {
+	display:none;
+}
+.isHidingPrivate .privateShow {
+	display:inline;
+}
+/* private content */
+.private {
+	display:;
+}
+.isHidingPrivate .private {
+	display:none;
+}
 .private h3 {
-	color:#9399AF;
+	color:#9399af;
 }
 li.private a:link,
 li.private a:visited,
 a:link.private,
 a:visited.private {
-	color:#9399AF;
+	color:#9399af;
 }
 .privateColor {
-	color:#9399AF;
+	color:#9399af;
+}
+
+/* source code toggle controls */
+.sourceCodeShow {
+	display:inline;
+}
+.isShowingSourceCode .sourceCodeShow {
+	display:none;
+}
+.sourceCodeHide {
+	display:none;
+}
+.isShowingSourceCode .sourceCodeHide {
+	display:inline;
+}
+/* sourceCode content */
+textarea#source {
+	display:none;
+}
+.isShowingSourceCode textarea#source {
+	display:block;
+}
+.sourceCode .closure,
+.sourceCode .disclosure {
+	margin-left:0;
+	margin-right:4px;
+}
+.sourceCode a:hover {
+	text-decoration:none;
+	color:#000;
+}
+.sourceCode {
+	margin-bottom:1em;
+}
+
+/* typeInfo toggle controls */
+.typeInfoHide {
+	display:inline;
+}
+.isHidingTypeInfo .typeInfoHide {
+	display:none;
+}
+.typeInfoShow {
+	display:none;
+}
+.isHidingTypeInfo .typeInfoShow {
+	display:inline;
+}
+/* typeInfo content */
+.typeInfo {
+	display:;
+}
+.isHidingTypeInfo .typeInfo {
+	display:none;
+}
+
+/* summaries toggle controls */
+.summariesHide {
+	display:inline;
+}
+.isHidingSummaries .summariesHide {
+	display:none;
+}
+.summariesShow {
+	display:none;
+}
+.isHidingSummaries .summariesShow {
+	display:inline;
+}
+/* summaries content */
+.memberSummaryPart ul.summary li {
+	display:list-item;
+}
+.isHidingSummaries .memberSummaryPart ul.summary li {
+	display:none;
 }
 
 .memberSection .member:target,
@@ -823,15 +920,13 @@ a:hover.private {
 }
 
 .boxWithBorder .boxedElem .contentHolder .item ul,
-.classProperties ul,
-.sourceCodeView ul {
+.classProperties ul {
 	margin:0;
 	padding:0;
 }
 
 .boxWithBorder .boxedElem .contentHolder .item ul li,
-.classProperties ul li,
-.sourceCodeView ul li {
+.classProperties ul li {
 	margin:0;
 	padding:0;
 }
@@ -843,9 +938,7 @@ a:hover.private {
 	background-color:#fff;
 }
 
-.classDescription,
-.sourceCode,
-.sourceCodeView {
+.classDescription {
 	margin-bottom:1em;
 }
 

@@ -53,10 +53,9 @@ sub _formatData {
             $this->{language} );
     }
     $inWriter->cdataElement( 'listGroupTitle', $title );
-    $inWriter->startTag('item');
 
     $this->_writePackages( $inWriter, $packages, $languages );
-    $inWriter->endTag('item');
+
     $inWriter->endTag('listGroup');
     $inWriter->endTag('tocList');
 

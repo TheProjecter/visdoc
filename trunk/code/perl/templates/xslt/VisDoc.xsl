@@ -302,6 +302,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
         <title><xsl:value-of select="title" /></title>
         <link rel="stylesheet" type="text/css"><xsl:attribute name="href">../<xsl:value-of select="cssFile" /></xsl:attribute></link>
 		<script src="../js/jquery.js" type="text/javascript"><xsl:text>//</xsl:text></script>
+		<script src="../js/jquery.cookie.js" type="text/javascript"><xsl:text>//</xsl:text></script>
 		<script src="../js/jquery.simpletreeview.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
 		<script src="../js/VisDoc.js" type="text/javascript"><xsl:text>//</xsl:text></script>
     </head>
@@ -363,12 +364,12 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <xsl:template name="showHidePrivate">
 	<xsl:if test="./meta/showPrivate">
 		<li id="togglePrivateButton">
-			<span id="twistyPrivate_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
-			  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="./meta/hidePrivate" /></a>
+			<span class="privateHide">
+			  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><span class="label"><xsl:value-of select="./meta/hidePrivate" /></span></a>
 			</span>
-			<span id="twistyPrivate_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
-			  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="./meta/showPrivate" /></a>
-			</span><span id="twistyPrivate_toggle" class="twistyContent"><xsl:comment/></span>
+			<span class="privateShow">
+			  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><span class="label"><xsl:value-of select="./meta/showPrivate" /></span></a>
+			</span>
 		</li>
 	</xsl:if>
 </xsl:template>
@@ -377,12 +378,12 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <!-- ... showHideTypeInfo ... -->
 <xsl:template match="showHideTypeInfo">
 	<li>
-		<div id="twistyTypeInfo_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+		<span class="typeInfoHide">
 		  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="hideTypeInfo" /></a>
-		</div>
-		<div id="twistyTypeInfo_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+		</span>
+		<span class="typeInfoShow">
 		  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="showTypeInfo" /></a>
-		</div><span id="twistyTypeInfo_toggle" class="twistyContent"><xsl:comment/></span>
+		</span>
 	</li>
 </xsl:template>
 
@@ -390,29 +391,31 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <!-- ... showHideSummaries ... -->
 <xsl:template match="showHideSummaries">
 	<li>
-		<div id="twistySummaries_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+		<span class="summariesHide">
 		  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="hideSummaries" /></a>
-		</div>
-		<div id="twistySummaries_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+		</span>
+		<span class="summariesShow">
 		  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="showSummaries" /></a>
-		</div><span id="twistySummaries_toggle" class="twistyContent"><xsl:comment/></span>
+		</span>
 	</li>
 </xsl:template>
 
 
 <!-- ... sortSummaries ... -->
+<!--
 <xsl:template match="sortSummaries">
 	<li>
-		<div id="twistySort_show" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+		<span class="sortHide">
 		  <a href="#"><span class="icon"><xsl:text>&times;</xsl:text></span><xsl:value-of select="sortSourceOrder" /></a>
-		</div>
-		<div id="twistySort_hide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting">
+		</span>
+		<span class="sortShow">
 		  <a href="#"><span class="icon"><xsl:text disable-output-escaping="yes"><![CDATA[+]]></xsl:text></span><xsl:value-of select="sortAlphabetically" /></a>
-		</div><span id="twistySort_toggle" class="twistyContent"><xsl:comment/></span>
+		</span>
 	</li>
 </xsl:template>
-
-					
+-->
+	
+	
 <!-- ... classData ... -->
 <xsl:template match="classData">
 	<div class="classProperties">
@@ -620,18 +623,16 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 	</xsl:if>
 </xsl:template>
 
-			
+
 <!-- ... sourceCode ... -->
 <xsl:template match="sourceCode">
 	<xsl:if test="node()">
-		<div id="sourceCodeTop" class="sourceCodeView">
+		<div class="sourceCode">
 			<xsl:if test="viewSourceButton!=''">
-				<div id="twistyViewSourceshow" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">&#9658;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="viewSourceButton" /></span></a></div><div id="twistyViewSourcehide" class="twistyTrigger visdocUnvisited visdocMakeVisible twistyInited twistyRememberSetting twistyAnimate"><a href="#"><span class="icon">&#9660;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="hideSourceButton" /></span></a></div>
+				<span class="sourceCodeShow"><a href="#"><span class="closure">&#9658;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="viewSourceButton" /></span></a></span><span class="sourceCodeHide"><a href="#"><span class="disclosure">&#9660;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="hideSourceButton" /></span></a></span>
 			</xsl:if>
-			<div id="twistyViewSourcetoggle" class="twistyContent twistyMakeHidden twistyRememberSetting">
-			<div class="sourceCode"><textarea rows="10" cols="10" id="source"><xsl:attribute name="readonly">readonly</xsl:attribute><xsl:value-of select="sourceCodeText" /></textarea></div><!-- /sourceCode-->
-			</div><!--/#twistyViewSourcetoggle-->
-		</div><!-- /#sourceCodeTop-->
+			<textarea rows="10" cols="10" id="source"><xsl:attribute name="readonly">readonly</xsl:attribute><xsl:value-of select="sourceCodeText" /></textarea>
+		</div>
 	</xsl:if>
 </xsl:template>
 
@@ -647,9 +648,11 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			<ul>
 				<xsl:if test="(memberList/showHideTypeInfo!='')"><xsl:apply-templates select="memberList/showHideTypeInfo" /></xsl:if>
 				<xsl:if test="(memberList/showHideSummaries!='')"><xsl:apply-templates select="memberList/showHideSummaries" /></xsl:if>
+				<!--
 				<xsl:apply-templates select="memberList/sortSummaries" />
+				-->
 			</ul>
-			<br class="clear" />
+			<div class="clear"></div>
 		</div>
 		<div class="memberList">
 			<xsl:apply-templates select="memberList" />
@@ -1073,14 +1076,20 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <xsl:template name="listGroupItem">
 	<xsl:if test="node()">
 		<li>
+<!--
 			<xsl:if test="(link/name) and (not(member))">
 				<xsl:attribute name="id">
 					<xsl:choose>
-						<xsl:when test="link/uri!=''"><xsl:value-of select="link/uri" /></xsl:when>
-						<xsl:otherwise><xsl:value-of select="link/name" /></xsl:otherwise>
+						<xsl:when test="link/uri!=''">
+							<xsl:value-of select="link/uri" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="link/name" />
+						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:attribute>
 			</xsl:if>
+-->
 			<xsl:if test="(package!='') or (interface!='') or (private!='')">
 				<xsl:attribute name="class">
 					<xsl:if test="package='true'">package </xsl:if>
@@ -1088,6 +1097,9 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 					<xsl:if test="private='true'">private </xsl:if>
 				</xsl:attribute>
 			</xsl:if>
+			<xsl:for-each select="listGroup">
+				<xsl:call-template name="tocListGroup" />
+			</xsl:for-each>
 			<xsl:if test="link/uri!=''">
 				<a>
 					<xsl:choose>
@@ -1117,7 +1129,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 				</a>
 			</xsl:if>
 			<xsl:if test="not(link/uri)">
-				<xsl:attribute name="class">name</xsl:attribute><xsl:value-of select="link/name" />
+				<xsl:value-of select="link/name" />
 			</xsl:if>
 			<xsl:if test="summary!=''">
 				<ul>
@@ -1155,17 +1167,26 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 		<xsl:if test="id">
 			<xsl:attribute name="id"><xsl:value-of select="id" /></xsl:attribute>
 		</xsl:if>
-		<li>
-			<xsl:for-each select="listGroupTitle">
-				<xsl:call-template name="link" />
-			</xsl:for-each>
-			<xsl:for-each select="item">
+		<xsl:choose>
+  			<xsl:when test="listGroupTitle">
+				<li>
+					<xsl:for-each select="listGroupTitle">
+						<xsl:call-template name="link" />
+					</xsl:for-each>
+					<xsl:for-each select="listGroup">
+						<xsl:call-template name="tocListGroup" />
+					</xsl:for-each>
+				</li>
+			</xsl:when>
+			<xsl:otherwise>
 				<xsl:for-each select="listGroup">
 					<xsl:call-template name="tocListGroup" />
 				</xsl:for-each>
-				<xsl:call-template name="listGroupItem" />
-			</xsl:for-each>
-		</li>							
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:for-each select="item">
+			<xsl:call-template name="listGroupItem" />
+		</xsl:for-each>
 	</ul>
 </xsl:template>
 
@@ -1204,8 +1225,8 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
-					<xsl:when test="name!=''">
-						<xsl:value-of select="name" />
+					<xsl:when test="link/name!=''">
+						<xsl:value-of select="link/name" />
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="." />

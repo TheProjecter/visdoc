@@ -99,7 +99,6 @@ sub _writePackages {
                 $package->getUri() );
             $inWriter->cdataElement( 'package', 'true' );
             $inWriter->endTag('listGroupTitle');
-            $inWriter->startTag('item');
             $inWriter->startTag('listGroup');
         }
 
@@ -136,7 +135,6 @@ sub _writePackages {
 
         if ( $package->{name} ) {
             $inWriter->endTag('listGroup');
-            $inWriter->endTag('item');
         }
         $inWriter->endTag('listGroup');
     }
