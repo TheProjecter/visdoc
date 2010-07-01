@@ -135,7 +135,7 @@ sub _writeTocNavigation {
 
     my $keys = $this->{tocNavigationKeys};
 
-    if ( $keys->{'overview-tree'} ) {
+    if ( $keys->{'all-packages'} ) {
         &$callToWriteLink( 'tree_link',
             $VisDoc::XMLOutputFormatterOverviewTree::URI );
     }

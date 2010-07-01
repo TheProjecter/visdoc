@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use XML::Writer;
 
-our $URI = 'allproperties-frame';
+our $URI = 'all-properties';
 
 =pod
 

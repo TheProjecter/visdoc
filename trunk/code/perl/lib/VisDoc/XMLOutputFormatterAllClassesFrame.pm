@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use XML::Writer;
 
-our $URI = 'allclasses-frame';
+our $URI = 'all-classes';
 
 =pod
 

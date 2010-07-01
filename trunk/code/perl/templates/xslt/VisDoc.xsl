@@ -1072,31 +1072,37 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 </xsl:template>
 
 
+<!-- ... linkAsId ... -->
+<xsl:template name="linkAsId">
+	<xsl:if test="(link/name) and (not(member))">
+		<xsl:attribute name="id">
+			<xsl:choose>
+				<xsl:when test="link/uri!=''">
+					<xsl:value-of select="link/uri" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="link/name" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:attribute>
+	</xsl:if>
+</xsl:template>		
+
+
+<!-- ... listItemType ... -->
+<xsl:template name="listItemType">
+	<xsl:if test="(package!='') or (interface!='') or (private!='')">
+		<xsl:attribute name="class">
+			<xsl:if test="package='true'">package </xsl:if>			<xsl:if test="interface='true'">interface </xsl:if>
+			<xsl:if test="private='true'">private </xsl:if>
+		</xsl:attribute>
+	</xsl:if>
+</xsl:template>
+
+
 <!-- ... listGroupItem ... -->
 <xsl:template name="listGroupItem">
 	<xsl:if test="node()">
-		<li>
-<!--
-			<xsl:if test="(link/name) and (not(member))">
-				<xsl:attribute name="id">
-					<xsl:choose>
-						<xsl:when test="link/uri!=''">
-							<xsl:value-of select="link/uri" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="link/name" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:attribute>
-			</xsl:if>
--->
-			<xsl:if test="(package!='') or (interface!='') or (private!='')">
-				<xsl:attribute name="class">
-					<xsl:if test="package='true'">package </xsl:if>
-					<xsl:if test="interface='true'">interface </xsl:if>
-					<xsl:if test="private='true'">private </xsl:if>
-				</xsl:attribute>
-			</xsl:if>
 			<xsl:for-each select="listGroup">
 				<xsl:call-template name="tocListGroup" />
 			</xsl:for-each>
@@ -1141,7 +1147,6 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 					</li>
 				</ul>
 			</xsl:if>
-		</li>
 	</xsl:if>
 </xsl:template>
 
@@ -1170,9 +1175,18 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 		<xsl:choose>
   			<xsl:when test="listGroupTitle">
 				<li>
-					<xsl:for-each select="listGroupTitle">
-						<xsl:call-template name="link" />
-					</xsl:for-each>
+					<xsl:choose>
+						<xsl:when test="listGroupTitle/item">		
+							<xsl:for-each select="listGroupTitle/item">
+								<xsl:call-template name="linkAsId" />
+								<xsl:call-template name="listItemType" />
+								<xsl:call-template name="listGroupItem" />
+							</xsl:for-each>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="listGroupTitle" />
+						</xsl:otherwise>
+					</xsl:choose>
 					<xsl:for-each select="listGroup">
 						<xsl:call-template name="tocListGroup" />
 					</xsl:for-each>
@@ -1185,7 +1199,11 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:for-each select="item">
-			<xsl:call-template name="listGroupItem" />
+			<li>
+				<xsl:call-template name="linkAsId" />
+				<xsl:call-template name="listItemType" />
+				<xsl:call-template name="listGroupItem" />
+			</li>
 		</xsl:for-each>
 	</ul>
 </xsl:template>
@@ -1206,7 +1224,9 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 		<xsl:if test="items!=''">
 			<ul>
 				<xsl:for-each select="items/item">
-					<li><xsl:attribute name="class">item</xsl:attribute>
+					<li>
+						<xsl:call-template name="linkAsId" />
+						<xsl:attribute name="class">item</xsl:attribute>
 						<xsl:call-template name="link" />
 					</li>
 				</xsl:for-each>

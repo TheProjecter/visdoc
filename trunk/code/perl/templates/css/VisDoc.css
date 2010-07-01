@@ -223,11 +223,15 @@ table {
 }
 th {
 	text-align:left;
+	padding:.4em 1em;
 }
 th,
 td {
 	vertical-align:top;
-	padding:.25em 1em;
+}
+td {
+	border-left:0;
+	padding:.4em 1em;
 }
 img {
 	margin:.5em;
@@ -301,7 +305,7 @@ html>body pre {
 	min-height:500px;
 }
 #header {
-	background:#fafafa;
+	background:#f2f4f5;
 	border-bottom:1px solid #566d85;
 }
 .isShowingNavigation #sidebar {
@@ -309,18 +313,26 @@ html>body pre {
 	padding:0;
 }
 #sidebarContent {
-	margin:23px;
+	margin:23px 10px 10px 23px;
 }
 #sidebar li,
 #sidebar div div {
-	margin:.5em 0;
-	padding:0;
+	margin:.4em 0 .4em -4px;
+	padding:0 4px;
 }
 #sidebar ul ul {
 	margin-left:14px;
 }
+#sidebar #selected,
+#sidebar #selected a:link,
+#sidebar #selected a:visited {
+	color:#000;
+	font-weight:bold;
+}
+
+
 #mainContent {
-	margin:2em 3em 2em 23px;
+	margin:23px 3em 2em 23px;
 }
 #footer {
 	border-top:1px solid #566d85;
@@ -352,7 +364,7 @@ html>body pre {
 #headerButtons a:visited {
 	display:block;
 	margin:6px 23px;
-	color:#9399af;
+	color:#666;
 	text-decoration:none;
 }
 #headerButtons a:hover .label {
@@ -582,15 +594,6 @@ html>body pre {
 	border-top:1px solid #e3e9ec;
 }
 
-th {
-	padding:.4em 1em;
-}
-
-td {
-	border-left:0;
-	padding:.4em 1em;
-}
-
 .classProperties td.classDetails,
 .classProperties th.classDetails {
 	background-color:#fff;
@@ -679,15 +682,6 @@ td {
 
 .memberSection .description .field a:hover {
 	text-decoration:underline;
-}
-
-.twistyTrigger {
-	margin:0 0 .25em;
-}
-
-.twistyTrigger a:link,
-.twistyTrigger a:visited {
-	text-decoration:none;
 }
 
 .list ul a:hover .attribute,
@@ -834,10 +828,6 @@ h2:target {
 	border-color:#dbdee1;
 }
 
-.framed .activeWhenFramed {
-	display:block;
-}
-
 textarea#source {
 	width:100%;
 	height:300px;
@@ -956,10 +946,6 @@ a:hover.private {
 }
 
 .list .repeatSign,
-.framed .activeWhenNotFramed,
-.activeWhenFramed,
-.twistyHidden,
-.twistyMakeVisible,
 .visdocMakeVisible,
 .visdocMakeVisibleInline,
 .visdocMakeVisibleBlock {

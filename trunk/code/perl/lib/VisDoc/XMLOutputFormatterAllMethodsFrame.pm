@@ -8,7 +8,7 @@ use warnings;
 use warnings;
 use XML::Writer;
 
-our $URI = 'allmethods-frame';
+our $URI = 'all-methods';
 
 =pod
 

@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use XML::Writer;
 
-our $URI = 'overview-tree';
+our $URI = 'all-packages';
 
 =pod
 
@@ -95,9 +95,11 @@ sub _writePackages {
 
         if ( $package->{name} ) {
             $inWriter->startTag('listGroupTitle');
+            $inWriter->startTag('item');
             $this->_writeLinkXml( $inWriter, $package->{name},
                 $package->getUri() );
             $inWriter->cdataElement( 'package', 'true' );
+            $inWriter->endTag('item');
             $inWriter->endTag('listGroupTitle');
             $inWriter->startTag('listGroup');
         }

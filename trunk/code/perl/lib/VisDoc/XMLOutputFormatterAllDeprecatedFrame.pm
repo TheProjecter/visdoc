@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use XML::Writer;
 
-our $URI = 'alldeprecated-frame';
+our $URI = 'all-deprecated';
 
 =pod
 

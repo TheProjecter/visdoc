@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use XML::Writer;
 
-our $URI = 'allconstants-frame';
+our $URI = 'all-constants';
 
 =pod
 

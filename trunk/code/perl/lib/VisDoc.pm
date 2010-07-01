@@ -188,7 +188,7 @@ sub writeData {
         'index' => {
             XMLs => undef,    # array of hashes with keys 'uri' and 'textRef'
         },
-        'overview-tree' => { XMLs => undef, },
+        'all-packages'  => { XMLs => undef, },
         'methods'       => { XMLs => undef, },
         'toc'           => { XMLs => undef, },
         'constants'     => { XMLs => undef, },
@@ -228,7 +228,7 @@ sub writeData {
 
         my $tocNavigationKeys = {
             'index'         => undef,
-            'overview-tree' => undef,
+            'all-packages'  => undef,
             'classes'       => undef,
             'methods'       => undef,
             'constants'     => undef,
@@ -270,7 +270,7 @@ sub writeData {
 
         # process overview pages
         &$processOverviewPage( 'VisDoc::XMLOutputFormatterOverviewTree',
-            'overview-tree' );
+            'all-packages' );
         &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllClassesFrame',
             'classes' );
         &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllMethodsFrame',
