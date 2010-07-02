@@ -24,7 +24,7 @@ Creates a safe filename string derived from $name.
 sub createUriForPackage {
     my ($inName) = @_;
 
-    my $uri = "package-$inName";
+    my $uri = "package_$inName";
     VisDoc::StringUtils::trimSpaces($uri);
 
     # change dots and spaces to underscores

@@ -1078,10 +1078,10 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 		<xsl:attribute name="id">
 			<xsl:choose>
 				<xsl:when test="link/uri!=''">
-					menu_<xsl:value-of select="link/uri" />
+					<xsl:text disable-output-escaping="yes"><![CDATA[menu_]]></xsl:text><xsl:value-of select="link/uri" />
 				</xsl:when>
 				<xsl:otherwise>
-					menu_<xsl:value-of select="link/name" />
+					<xsl:text disable-output-escaping="yes"><![CDATA[menu_]]></xsl:text><xsl:value-of select="link/name" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:attribute>
