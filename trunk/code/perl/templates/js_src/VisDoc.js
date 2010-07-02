@@ -256,7 +256,7 @@
 	
 	$(document).ready(function() {
 		var pageId = $("body").attr("id").replace(/^page_/, '');
-		var pageIdQuery = "#" + pageId;
+		var pageIdQuery = "#" + "menu_" + pageId;
 		highlightMenuItem(pageIdQuery);
 		initTreeMenu(pageIdQuery);
 		updateNavigation();

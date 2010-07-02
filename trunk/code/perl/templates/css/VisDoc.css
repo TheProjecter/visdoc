@@ -716,8 +716,11 @@ html>body pre {
 	display:inline;
 }
 /* private content */
-.private {
-	display:;
+div.private {
+	display:block;
+}
+span.private {
+	display:inline;
 }
 .isHidingPrivate .private {
 	display:none;
@@ -782,8 +785,11 @@ textarea#source {
 	display:inline;
 }
 /* typeInfo content */
-.typeInfo {
-	display:;
+span.typeInfo {
+	display:inline;
+}
+div.typeInfo {
+	display:block;
 }
 .isHidingTypeInfo .typeInfo {
 	display:none;

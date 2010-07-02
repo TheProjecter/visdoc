@@ -302,9 +302,9 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
         <title><xsl:value-of select="title" /></title>
         <link rel="stylesheet" type="text/css"><xsl:attribute name="href">../<xsl:value-of select="cssFile" /></xsl:attribute></link>
 		<script src="../js/jquery.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/jquery.cookie.js" type="text/javascript"><xsl:text>//</xsl:text></script>
+		<script src="../js/jquery.cookie.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
 		<script src="../js/jquery.simpletreeview.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/VisDoc.js" type="text/javascript"><xsl:text>//</xsl:text></script>
+		<script src="../js/VisDoc.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
     </head>
     <body>
     	<xsl:if test="navigation!=''">
@@ -1078,10 +1078,10 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 		<xsl:attribute name="id">
 			<xsl:choose>
 				<xsl:when test="link/uri!=''">
-					<xsl:value-of select="link/uri" />
+					menu_<xsl:value-of select="link/uri" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="link/name" />
+					menu_<xsl:value-of select="link/name" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:attribute>
