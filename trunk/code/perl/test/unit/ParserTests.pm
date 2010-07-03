@@ -1812,7 +1812,7 @@ package org.asaplibrary.data.array /*ehm*/{
         my $packageData = $fileData->{packages}->[0];
 
         my $result   = $packageData->getUri();
-        my $expected = 'package-org_asaplibrary_data_array';
+        my $expected = 'package_org_asaplibrary_data_array';
         print("RES=$result.\n")   if $debug;
         print("EXP=$expected.\n") if $debug;
         $this->assert( $result eq $expected );
@@ -1857,7 +1857,7 @@ public interface TMNode {
         my $packageData = $fileData->{packages}->[0];
 
         my $result   = $packageData->getUri();
-        my $expected = 'package-treemap';
+        my $expected = 'package_treemap';
         print("RES=$result.\n")   if $debug;
         print("EXP=$expected.\n") if $debug;
         $this->assert( $result eq $expected );
