@@ -61,7 +61,7 @@ $preferences->{'doc-sources'} = \$process;
 &GetOptions(
     $preferences,              'output=s',
     'docencoding:s',           'giveCredits=i',
-    'doc-sources=s',           'copyCSS:i',
+    'doc-sources=s',
     'copyright:i',             'copyrightText|footer:s',
     'extensions:s',            'eventHandlerPrefixes:s',
     'eventHandlers:i',         'generateIndex:i',
@@ -227,12 +227,6 @@ Value: string
 
 Directory path to write documentation files in. In the directory the subdirectories 'css', 'html', 'js' and optionally 'xml' will be created.
 Value: string
-
-=item B<-copyCSS>
-
-Whether to copy the default CSS file to the output directory.
-Values: 1 or 0
-Default: 1 (file is copied)
 
 =item B<-footer>
 

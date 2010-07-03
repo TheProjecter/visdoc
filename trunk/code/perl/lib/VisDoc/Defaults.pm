@@ -15,7 +15,6 @@ our $DESTINATION_XML  = 'xml';
 our $NOT_IMPLEMENTED = 'Not implemented by subclass!';
 
 our $SETTINGS = {
-    copyCSS              => 1,
     copyright            => 0,
     copyrightText        => '',
     docencoding          => 'utf-8',
