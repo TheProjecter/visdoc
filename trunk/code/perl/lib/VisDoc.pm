@@ -494,10 +494,8 @@ Copies javascript files from the template directory to $destinationDir.
 sub _copyJs {
     my ( $inDestinationDir, $inPreferences ) = @_;
 
-    my $dir;
-    if (-d $inPreferences->{templateJsDirectory}) {
-    	$dir = $inPreferences->{templateJsDirectory};
-    } else {
+    my $dir = File::Spec->abs2rel( $inPreferences->{templateJsDirectory} ) ;
+    if (-d $dir) {
     	$dir = File::Spec->rel2abs($inPreferences->{templateJsDirectory}, $inPreferences->{base});
     }
 
@@ -515,15 +513,19 @@ sub _copyJs {
         $dir
     );
 
+	my @outFiles;
     foreach my $file (@files) {
         my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
         my $result = File::Copy::copy( $path, $inDestinationDir );
         if ( !$result ) {
             print("Could not copy $path to $inDestinationDir: $!\n");
+        } else {
+        	my $localPath = '../' . $VisDoc::Defaults::DESTINATION_JS . '/' . VisDoc::StringUtils::getLastPathComponent( $file );
+        	push @outFiles, $localPath;
         }
     }
     
-    return \@files;
+    return \@outFiles;
 }
 
 =pod
