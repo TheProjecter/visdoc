@@ -1,45 +1,38 @@
-package VisDoc::Defaults;
+#! /usr/bin/perl -w
+#
+# See bottom of file for license and copyright information
 
 use strict;
 use warnings;
+use Cwd 'getcwd';
+use CSS::Minifier qw(minify);
 
-our $FILE_DOCTERMS         = 'templates/lang/docterms.json';
-our $FILE_JAVADOCTERMS     = 'templates/lang/javadocterms.json';
-our $FILE_JS_TEMPLATE_DIR  = 'templates/js/';
-our $FILE_CSS_TEMPLATE_DIR = 'templates/css/';
+BEGIN {
+    my $here = Cwd::abs_path;
+    my $root = $here;
+    push @INC, "$root/lib";
+}
 
-our $FILE_CSS_DESTINATION = 'css/VisDoc.min.css';
-our $FILE_JS_DESTINATION  = 'js/';
+sub minifyFile {
+	my ($inSourceDir, $inSourceFile, $inOutputDir) = @_;
+	
+	my $inputFile = "$inSourceDir$inSourceFile";
+	my $outputFile = "$inOutputDir$inSourceFile";
+	$outputFile =~ s/^(.*?)(\.css)$/$1.min$2/;
 
-our $NOT_IMPLEMENTED = 'Not implemented by subclass!';
+	open(INFILE, $inputFile) or die;
+	open(OUTFILE, '>' . $outputFile) or die;
+	minify(input => *INFILE, outfile => *OUTFILE);
+	close(INFILE);
+	close(OUTFILE);
+}
 
-our $SETTINGS = {
-    copyCSS              => 1,
-    copyright            => 0,
-    copyrightText        => '',
-    docencoding          => 'utf-8',
-    eventHandlerPrefixes => 'on,allow',
-    eventHandlers        => 1,
-    extensions           => 'as,java',
-    generateIndex        => 0,
-    giveCredits          => 1,
-    ignoreClasses        => '',
-    includeSourceCode    => 0,
-    indexTitle           => 'Documentation',
-    listPrivate          => 0,
-    log                  => '',
-    openInBrowser        => 0,
-    output               => '',
-    preserveLinebreaks   => 1,
-    saveXML              => 0,
-    templateCss          => 'VisDoc.min.css',
-    templateCssDirectory => 'templates/css',
-    templateJsDirectory  => 'templates/js',
-    templateXslDirectory => 'templates/xslt',
-    templateXsl          => 'VisDoc.xsl',
-};
+my $SOURCE_DIR = '../templates/css_src/';
+my $OUTPUT_DIR = '../templates/css/';
 
-1;
+minifyFile($SOURCE_DIR, 'VisDoc.css', $OUTPUT_DIR);
+
+
 
 # VisDoc - Code documentation generator, http://visdoc.org
 # This software is licensed under the MIT License
@@ -54,10 +47,10 @@ our $SETTINGS = {
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-#
+# 
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-#
+# 
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
