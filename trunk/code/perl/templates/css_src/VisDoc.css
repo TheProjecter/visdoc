@@ -94,7 +94,7 @@ from esc tab hack moz min-height solution ***/
 }
 #sidebarContent {
 	position:relative;
-	word-wrap:break-word;
+	/*word-wrap:break-word;*/
 }
 #main {
 	width:100%;
