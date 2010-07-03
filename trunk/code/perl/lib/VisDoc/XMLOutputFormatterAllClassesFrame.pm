@@ -61,7 +61,7 @@ sub _writeList {
     $inWriter->startTag('tocList');
     $inWriter->startTag('listGroup');
 
-    foreach my $classHash ( sort @{$classes} ) {
+    foreach my $classHash ( @{$classes} ) {
         my $class = $classHash->{class};
 
         my $summary =
