@@ -1257,7 +1257,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 													<object class="NSScroller" id="74027725">
 														<reference key="NSNextResponder" ref="1009223196"/>
 														<int key="NSvFlags">-2147483392</int>
-														<string key="NSFrame">{{-100, -100}, {15, 223}}</string>
+														<string key="NSFrame">{{500, 1}, {15, 341}}</string>
 														<reference key="NSSuperview" ref="1009223196"/>
 														<reference key="NSTarget" ref="1009223196"/>
 														<string key="NSAction">_doScroller:</string>
@@ -1279,7 +1279,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 												<string key="NSFrame">{{17, 49}, {516, 343}}</string>
 												<reference key="NSSuperview" ref="445465714"/>
 												<reference key="NSNextKeyView" ref="93465056"/>
-												<int key="NSsFlags">514</int>
+												<int key="NSsFlags">530</int>
 												<reference key="NSVScroller" ref="74027725"/>
 												<reference key="NSHScroller" ref="974750090"/>
 												<reference key="NSContentView" ref="93465056"/>

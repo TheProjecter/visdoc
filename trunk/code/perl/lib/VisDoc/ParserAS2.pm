@@ -378,7 +378,11 @@ sub _combineGetSetters {
 
                 # merge javadoc
                 if ( $setter->{javadoc} ) {
-                    $method->{javadoc}->merge( $setter->{javadoc} );
+					if ( $method->{javadoc} ) {
+	                    $method->{javadoc}->merge( $setter->{javadoc} );
+	                } else {
+	                    $method->{javadoc} = $setter->{javadoc};
+	                }
                 }
 
                 # delete setter
