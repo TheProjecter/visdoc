@@ -25,7 +25,6 @@
 		8E11655F10A4DD4F00B12764 /* cancel button pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E11655E10A4DD4F00B12764 /* cancel button pressed.png */; };
 		8E11696910A6008400B12764 /* in_progress.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E11696810A6008400B12764 /* in_progress.png */; };
 		8E92439A10ED0788006492BC /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E92439910ED0788006492BC /* Sparkle.framework */; };
-		8EA616EB10EC10CE00DCDDD5 /* perl in Resources */ = {isa = PBXBuildFile; fileRef = 8EA6156E10EC10CD00DCDDD5 /* perl */; };
 		8EB0772D10A7487F00085D2E /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0770B10A7487E00085D2E /* MyDocument.m */; };
 		8EB0772F10A7487F00085D2E /* PathInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0771010A7487E00085D2E /* PathInfo.m */; };
 		8EB0773010A7487F00085D2E /* SimplePerlBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0771310A7487E00085D2E /* SimplePerlBridge.m */; };
@@ -47,6 +46,7 @@
 		8EBA161210551A4900E51387 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* MyDocument.xib */; };
 		8EBA161310551A4900E51387 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
 		8EBA161810551A4900E51387 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		8EF7387511DFB07200BD122B /* perl in Resources */ = {isa = PBXBuildFile; fileRef = 8EF7375A11DFB07200BD122B /* perl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -93,7 +93,6 @@
 		8E11696810A6008400B12764 /* in_progress.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = in_progress.png; sourceTree = "<group>"; };
 		8E92439910ED0788006492BC /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = /Library/Frameworks/Sparkle.framework; sourceTree = "<absolute>"; };
 		8E9243E010ED4B6B006492BC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		8EA6156E10EC10CD00DCDDD5 /* perl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = perl; path = ../../perl; sourceTree = SOURCE_ROOT; };
 		8EB0770A10A7487E00085D2E /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
 		8EB0770B10A7487E00085D2E /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		8EB0770F10A7487E00085D2E /* PathInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathInfo.h; sourceTree = "<group>"; };
@@ -127,6 +126,7 @@
 		8EBA161D10551A4900E51387 /* VisDoc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisDoc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBA161F10551A4900E51387 /* VisDoc-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisDoc-Info.plist"; sourceTree = "<group>"; };
 		8EC9027E1097C6000081A658 /* VisDoc 10.6-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisDoc 10.6-Info.plist"; sourceTree = "<group>"; };
+		8EF7375A11DFB07200BD122B /* perl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = perl; path = ../../perl; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,7 +189,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8EA6156E10EC10CD00DCDDD5 /* perl */,
+				8EF7375A11DFB07200BD122B /* perl */,
 				8E05A85510B1AD560035FCC1 /* updating */,
 				8EB607F911B12BBA00118909 /* VisDoc Tools Installer.mpkg */,
 				8E11612110A0A77500B12764 /* img */,
@@ -389,8 +389,8 @@
 				8E05A85910B1AD560035FCC1 /* dsa_pub.pem in Resources */,
 				8E05A8BB10B1DECE0035FCC1 /* _visdoc.icns in Resources */,
 				8E05A96C10B1F4F10035FCC1 /* _visdoc-document.icns in Resources */,
-				8EA616EB10EC10CE00DCDDD5 /* perl in Resources */,
 				8EB607FA11B12BBA00118909 /* VisDoc Tools Installer.mpkg in Resources */,
+				8EF7387511DFB07200BD122B /* perl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
