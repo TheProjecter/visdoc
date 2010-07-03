@@ -1,6 +1,6 @@
 # See bottom of file for license and copyright information
 
-package VisDoc::XMLOutputFormatterAllPropertiesFrame;
+package VisDoc::XMLOutputFormatterAllProperties;
 use base 'VisDoc::XMLOutputFormatterListingBase';
 
 use strict;

@@ -1,7 +1,7 @@
 # See bottom of file for license and copyright information
 
 package VisDoc::XMLOutputFormatterToc;
-use base 'VisDoc::XMLOutputFormatterOverviewTree';
+use base 'VisDoc::XMLOutputFormatterAllPackages';
 
 use strict;
 use warnings;
@@ -137,7 +137,7 @@ sub _writeTocNavigation {
 
     if ( $keys->{'all-packages'} ) {
         &$callToWriteLink( 'tree_link',
-            $VisDoc::XMLOutputFormatterOverviewTree::URI );
+            $VisDoc::XMLOutputFormatterAllPackages::URI );
     }
     else {
         &$callToWriteName('tree_link');
@@ -145,7 +145,7 @@ sub _writeTocNavigation {
 
     if ( $keys->{'classes'} ) {
         &$callToWriteLink( 'all_classes_link',
-            $VisDoc::XMLOutputFormatterAllClassesFrame::URI );
+            $VisDoc::XMLOutputFormatterAllClasses::URI );
     }
     else {
         &$callToWriteName('all_classes_link');
@@ -153,7 +153,7 @@ sub _writeTocNavigation {
 
     if ( $keys->{'methods'} ) {
         &$callToWriteLink( 'all_methods_link',
-            $VisDoc::XMLOutputFormatterAllMethodsFrame::URI );
+            $VisDoc::XMLOutputFormatterAllMethods::URI );
     }
     else {
         &$callToWriteName('all_methods_link');
@@ -161,7 +161,7 @@ sub _writeTocNavigation {
 
     if ( $keys->{'constants'} ) {
         &$callToWriteLink( 'all_constants_link',
-            $VisDoc::XMLOutputFormatterAllConstantsFrame::URI );
+            $VisDoc::XMLOutputFormatterAllConstants::URI );
     }
     else {
         &$callToWriteName('all_constants_link');
@@ -169,7 +169,7 @@ sub _writeTocNavigation {
 
     if ( $keys->{'properties'} ) {
         &$callToWriteLink( 'all_properties_link',
-            $VisDoc::XMLOutputFormatterAllPropertiesFrame::URI );
+            $VisDoc::XMLOutputFormatterAllProperties::URI );
     }
     else {
         &$callToWriteName('all_properties_link');
@@ -177,7 +177,7 @@ sub _writeTocNavigation {
 
     if ( $keys->{'deprecated'} ) {
         &$callToWriteLink( 'all_deprecated_link',
-            $VisDoc::XMLOutputFormatterAllDeprecatedFrame::URI );
+            $VisDoc::XMLOutputFormatterAllDeprecated::URI );
     }
     else {
         &$callToWriteName('all_deprecated_link');

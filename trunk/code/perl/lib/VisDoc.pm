@@ -19,12 +19,12 @@ use VisDoc::FileData;
 use VisDoc::OutputFormatter;
 use VisDoc::XMLOutputFormatterIndexPage;
 use VisDoc::XMLOutputFormatterToc;
-use VisDoc::XMLOutputFormatterOverviewTree;
-use VisDoc::XMLOutputFormatterAllClassesFrame;
-use VisDoc::XMLOutputFormatterAllMethodsFrame;
-use VisDoc::XMLOutputFormatterAllConstantsFrame;
-use VisDoc::XMLOutputFormatterAllPropertiesFrame;
-use VisDoc::XMLOutputFormatterAllDeprecatedFrame;
+use VisDoc::XMLOutputFormatterAllPackages;
+use VisDoc::XMLOutputFormatterAllClasses;
+use VisDoc::XMLOutputFormatterAllMethods;
+use VisDoc::XMLOutputFormatterAllConstants;
+use VisDoc::XMLOutputFormatterAllProperties;
+use VisDoc::XMLOutputFormatterAllDeprecated;
 use VisDoc::Defaults;
 use VisDoc::HashUtils;
 use VisDoc::PostParser;
@@ -268,17 +268,17 @@ sub writeData {
         };
 
         # process overview pages
-        &$processOverviewPage( 'VisDoc::XMLOutputFormatterOverviewTree',
+        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllPackages',
             'all-packages' );
-        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllClassesFrame',
+        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllClasses',
             'classes' );
-        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllMethodsFrame',
+        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllMethods',
             'methods' );
-        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllConstantsFrame',
+        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllConstants',
             'constants' );
-        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllPropertiesFrame',
+        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllProperties',
             'properties' );
-        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllDeprecatedFrame',
+        &$processOverviewPage( 'VisDoc::XMLOutputFormatterAllDeprecated',
             'deprecated' );
 
         my $packagesCount = 0;

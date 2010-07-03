@@ -1,7 +1,7 @@
 # See bottom of file for license and copyright information
 
-package VisDoc::XMLOutputFormatterAllConstantsFrame;
-use base 'VisDoc::XMLOutputFormatterAllPropertiesFrame';
+package VisDoc::XMLOutputFormatterAllConstants;
+use base 'VisDoc::XMLOutputFormatterAllProperties';
 
 use strict;
 use warnings;
