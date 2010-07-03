@@ -1,0 +1,21 @@
+--- /trunk/code/perl/templates/js_src/jquery.simpletreeview.org.js	2010-07-03 13:24:36.000000000 +0200
++++ /trunk/code/perl/templates/js_src/jquery.simpletreeview.js	2010-07-03 13:25:52.000000000 +0200
+@@ -40,10 +40,16 @@
+ 		this.expand = function(node) {
+ 
+ 			// Find all ul nodes in the object's path to expand...
+-			var $nodes = this.getNode(node).parents('ul').reverse().andSelf();
++			var $node = this.getNode(node);
++			var $nodes = $node.parents('ul').reverse().andSelf();
+ 			$nodes.shift(); // ... except the root node
+-	
+ 			expandNode($nodes);
++			
++			// expand sibings
++			var $siblings = $node.parents('ul').siblings();
++			if ($siblings) {
++				expandNode($siblings);
++			}
+ 		}
+ 
+ 		// Recursive method which expands the specified nodes

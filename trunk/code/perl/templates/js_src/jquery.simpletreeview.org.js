@@ -40,16 +40,10 @@
 		this.expand = function(node) {
 
 			// Find all ul nodes in the object's path to expand...
-			var $node = this.getNode(node);
-			var $nodes = $node.parents('ul').reverse().andSelf();
+			var $nodes = this.getNode(node).parents('ul').reverse().andSelf();
 			$nodes.shift(); // ... except the root node
+	
 			expandNode($nodes);
-			
-			// expand sibings
-			var $siblings = $node.parents('ul').siblings();
-			if ($siblings) {
-				expandNode($siblings);
-			}
 		}
 
 		// Recursive method which expands the specified nodes
