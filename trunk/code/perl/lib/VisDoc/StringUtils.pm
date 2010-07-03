@@ -629,7 +629,6 @@ Class method that returns the last path component. For example:
 	
 =cut
 
-=pod
 sub getLastPathComponent {
     my ( $inPath ) = @_;
 
@@ -639,7 +638,6 @@ sub getLastPathComponent {
     $name =~ s/^(.*?)\.$/$1/;    # strip remaining dot (why is it there?)
     return $name;
 }
-=cut
 
 =pod
 

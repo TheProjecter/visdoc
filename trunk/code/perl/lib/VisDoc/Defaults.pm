@@ -6,10 +6,11 @@ use warnings;
 our $FILE_DOCTERMS         = 'templates/lang/docterms.json';
 our $FILE_JAVADOCTERMS     = 'templates/lang/javadocterms.json';
 our $FILE_JS_TEMPLATE_DIR  = 'templates/js/';
-our $FILE_CSS_TEMPLATE_DIR = 'templates/css/';
-
-our $FILE_CSS_DESTINATION = 'css/VisDoc.min.css';
-our $FILE_JS_DESTINATION  = 'js/';
+our $DESTINATION_JS  = 'js';
+our $DESTINATION_CSS  = 'css';
+our $DESTINATION_HTML  = 'html';
+our $DESTINATION_XML  = 'xml';
+#our $DESTINATION_IMG  = 'img';
 
 our $NOT_IMPLEMENTED = 'Not implemented by subclass!';
 
@@ -32,11 +33,9 @@ our $SETTINGS = {
     output               => '',
     preserveLinebreaks   => 1,
     saveXML              => 0,
-    templateCss          => 'VisDoc.min.css',
-    templateCssDirectory => 'templates/css',
+    templateCss          => 'templates/css/VisDoc.min.css',
     templateJsDirectory  => 'templates/js',
-    templateXslDirectory => 'templates/xslt',
-    templateXsl          => 'VisDoc.xsl',
+    templateXsl          => 'templates/xslt/VisDoc.xsl',
 };
 
 1;

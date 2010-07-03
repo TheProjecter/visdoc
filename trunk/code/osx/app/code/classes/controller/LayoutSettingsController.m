@@ -30,18 +30,14 @@
             row:(int)rowIndex
 {	
 	if ([[aTableColumn identifier] isEqualToString:@"key"]) {
-		if (rowIndex == 0) return @"css template directory";
-		if (rowIndex == 1) return @"css template";
-		if (rowIndex == 2) return @"js template file";
-		if (rowIndex == 3) return @"xsl template directory";
-		if (rowIndex == 4) return @"xsl template for classes";
+		if (rowIndex == 0) return @"css template file";
+		if (rowIndex == 1) return @"js template file";
+		if (rowIndex == 2) return @"xslt template file";
 	}
 	if ([[aTableColumn identifier] isEqualToString:@"value"]) {
-		if (rowIndex == 0) return [[delegate settings] objectForKey:@"templateCssDirectory"];
-		if (rowIndex == 1) return [[delegate settings] objectForKey:@"templateCss"];
-		if (rowIndex == 2) return [[delegate settings] objectForKey:@"templateJsDirectory"];
-		if (rowIndex == 3) return [[delegate settings] objectForKey:@"templateXslDirectory"];
-		if (rowIndex == 4) return [[delegate settings] objectForKey:@"templateXsl"];
+		if (rowIndex == 0) return [[delegate settings] objectForKey:@"templateCss"];
+		if (rowIndex == 1) return [[delegate settings] objectForKey:@"templateJsDirectory"];
+		if (rowIndex == 2) return [[delegate settings] objectForKey:@"templateXsl"];
 	}
 	return nil;
 }
@@ -50,11 +46,9 @@
 {
 	if ([[aTableColumn identifier] isEqualToString:@"value"]) {
 		NSString* key;
-		if (rowIndex == 0) key = @"templateCssDirectory";
-		if (rowIndex == 1) key = @"templateCss";
-		if (rowIndex == 2) key = @"templateJsDirectory";
-		if (rowIndex == 3) key = @"templateXslDirectory";
-		if (rowIndex == 4) key = @"templateXsl";
+		if (rowIndex == 0) key = @"templateCss";
+		if (rowIndex == 1) key = @"templateJsDirectory";
+		if (rowIndex == 2) key = @"templateXsl";
 		[[delegate settings] setObject:anObject forKey:key];
 	}
 }
@@ -66,10 +60,8 @@
 
 - (void)setToValues:(NSDictionary*)dictionary
 {
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateCssDirectory"] forKey:@"templateCssDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateCss"] forKey:@"templateCss"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateJsDirectory"] forKey:@"templateJsDirectory"];
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateXslDirectory"] forKey:@"templateXslDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateXsl"] forKey:@"templateXsl"];
 	[oSettingsTable reloadData];
 }
@@ -124,20 +116,16 @@
 - (NSDictionary*)settings
 {
 	return [NSDictionary dictionaryWithObjectsAndKeys:
-		[[delegate settings] objectForKey:@"templateCssDirectory"], @"templateCssDirectory",
 		[[delegate settings] objectForKey:@"templateCss"], @"templateCss",
 		[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
-		[[delegate settings] objectForKey:@"templateXslDirectory"], @"templateXslDirectory",
 		[[delegate settings] objectForKey:@"templateXsl"], @"templateXsl",
 			nil];
 }
 
 - (BOOL)hasDefaultSettings
 {
-	if (![self compareCurrentWithDefault:@"templateCssDirectory"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateCss"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateJsDirectory"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateXslDirectory"]) return NO;
 	if (![self compareCurrentWithDefault:@"templateXsl"]) return NO;
 	return YES;
 }

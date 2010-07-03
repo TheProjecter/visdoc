@@ -178,8 +178,7 @@ sub writeData {
     _copyAssets( $dirInfo, $inPreferences );
 
     my $baseDir = $inPreferences->{base};
-    my $xsltDir = $inPreferences->{templateXslDirectory} || $baseDir;
-    my $xsltRef = _getXslt( $xsltDir, $inPreferences->{templateXsl} );
+    my $xsltRef = _getXslt( $inPreferences->{templateXsl} );
 
     my $processing = {
         'classes' => {
@@ -383,25 +382,25 @@ sub _createWriteDirectories {
     $info->{base} = $base;
 
     if ( $inPreferences->{saveXML} ) {
-        $dir = _createSubDirectory( $inDocDirectory, $base, 'xml' );
+        $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_XML );
         $isValidDir = defined stat($dir) ? 1 : 0;
         $info->{dir}->{xml}     = $dir;
         $info->{xml}->{isValid} = $isValidDir;
     }
 
-    $dir = _createSubDirectory( $inDocDirectory, $base, 'html' );
+    $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_HTML );
     $info->{dir}->{html} = $dir;
 
-    $dir = _createSubDirectory( $inDocDirectory, $base, 'css' )
+    $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_CSS )
       if $inPreferences->{copyCSS};
     $info->{dir}->{css} = $dir;
 
-    $dir = _createSubDirectory( $inDocDirectory, $base, 'js' );
+    $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_JS );
     $info->{dir}->{js} = $dir;
 
 =pod
 	$dir = '';
-    $dir = _createSubDirectory( $inDocDirectory, $base, 'img' );
+    $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_IMG );
     $info->{img} = $dir;
 =cut
 
@@ -483,37 +482,20 @@ sub _writeHtmlFile {
 
 StaticMethod _copyCss ( $destinationDir, \%preferences )
 
-Uses template css from %preferences (property 'cssFile'), otherwise uses default $VisDoc::Defaults::FILE_CSS_TEMPLATE.
+Uses template css from %preferences (property 'templateCss').
 
 =cut
 
 sub _copyCss {
     my ( $inDestinationDir, $inPreferences ) = @_;
 
-    my $dir = File::Spec->rel2abs( $VisDoc::Defaults::FILE_CSS_TEMPLATE_DIR,
-        $inPreferences->{base} );
-
-    # get all .js files from that directory
-    my @files;
-    File::Find::find(
-        {
-            wanted => sub {
-
-                # check if file is css file
-                push @files, $File::Find::name
-                  if ( $File::Find::name =~ /(\.css)$/ );
-            },
-        },
-        $dir
-    );
-
-    foreach my $file (@files) {
-        my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
-        my $result = File::Copy::copy( $path, $inDestinationDir );
-        if ( !$result ) {
-            print("Could not copy $path to $inDestinationDir: $!\n");
-        }
-    }
+	my $file = $inPreferences->{templateCss};
+	my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
+	
+	my $result = File::Copy::copy( $path, $inDestinationDir );
+	if ( !$result ) {
+		print("Could not copy $path to $inDestinationDir: $!\n");
+	}
 }
 
 =pod
@@ -555,24 +537,16 @@ sub _copyJs {
 
 =pod
 
-StaticMethod _getXslt( $xsltDir, $xsltFile ) -> $textRef
+StaticMethod _getXslt( $xsltFile ) -> $textRef
 
 Reads XSLT text from file.
 
 =cut
 
 sub _getXslt {
-    my ( $inXsltDir, $inXsltFile ) = @_;
+    my ( $inXsltFile ) = @_;
 
-    my $xsltFile;
-    if ($inXsltFile) {
-        $xsltFile = $inXsltFile;
-    }
-    else {
-        $xsltFile = $VisDoc::Defaults::SETTINGS->{'templateXsl'};
-    }
-
-    my $xsltPath = File::Spec->rel2abs( $xsltFile, $inXsltDir );
+    my $xsltPath = File::Spec->rel2abs( $inXsltFile );
 
     die "No such file $xsltPath" unless -e $xsltPath;
 
@@ -626,11 +600,11 @@ sub _createIndexHtmlPageXmlData {
 
     use File::stat;
     my $st = stat($path);
-    return if $st;
+    my $exists = $st ? 1 : 0;
 
     # does not exist yet
     my $formatter = VisDoc::XMLOutputFormatterIndexPage->new( $inPreferences,
-        $inCollectiveFileData );
+        $inCollectiveFileData, $exists );
 
     return $formatter->format($inXmlWriter);
 }

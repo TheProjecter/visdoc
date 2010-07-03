@@ -8,6 +8,23 @@ use warnings;
 use XML::Writer;
 
 our $URI = 'index';
+our $ALT_URI = '_index';
+
+=pod
+
+=cut
+
+sub new {
+    my ( $class, $inPreferences, $inData, $inDoesExist ) = @_;
+
+    my VisDoc::XMLOutputFormatterListingBase $this =
+      $class->SUPER::new( $inPreferences, undef, $inData );
+
+	$this->{doesExist} = $inDoesExist;
+	
+    bless $this, $class;
+    return $this;
+}
 
 =pod
 
@@ -16,7 +33,8 @@ our $URI = 'index';
 sub _uri {
     my ($this) = @_;
 
-    return $URI;
+	my $uri = $this->{doesExist} ? $ALT_URI : $URI;
+    return $uri;
 }
 
 sub _title {

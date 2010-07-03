@@ -160,16 +160,13 @@ sub _formatData {
 
 =pod
 
-Called by subclasses.
-
 =cut
 
 sub _writeCSSLocation {
     my ( $this, $inWriter ) = @_;
 
-    my $cssLocation = $this->{preferences}->{cssFile}
-      || $VisDoc::Defaults::FILE_CSS_DESTINATION;
-
+	my $cssLocation = $VisDoc::Defaults::DESTINATION_CSS . '/' . VisDoc::StringUtils::getLastPathComponent( $this->{preferences}->{templateCss} );
+	
     $inWriter->startTag('cssFile');
     $inWriter->cdata($cssLocation);
     $inWriter->endTag('cssFile');

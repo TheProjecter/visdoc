@@ -68,9 +68,8 @@ $preferences->{'doc-sources'} = \$process;
     'ignoreClasses:i',         'includeSourceCode:i',
     'indexTitle|main-title:s', 'listPrivate:i',
     'preserveLinebreaks:i',    'saveXML:i',
-    'datapath:s',
-    'templateCssDirectory:s',  'templateCss:s',
-    'templateJsDirectory:s',   'templateXslDirectory:s',
+    'datapath:s',  'templateCss:s',
+    'templateJsDirectory:s',
     'templateXsl:s',           'feedback:i',
     'openInBrowser:i',         'help'
 );
@@ -288,15 +287,7 @@ Default: 0
 
 To write...
 
-=item B<-templateCssDirectory>
-
-To write...
-
 =item B<-templateCss>
-
-To write...
-
-=item B<-templateXslDirectory>
 
 To write...
 

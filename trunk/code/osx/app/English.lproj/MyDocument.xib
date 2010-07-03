@@ -11,8 +11,8 @@
 			<string key="NS.object.0">762</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="100059"/>
 			<integer value="100836"/>
+			<integer value="100059"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1507,7 +1507,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 			<object class="NSWindowTemplate" id="462385753">
 				<int key="NSWindowStyleMask">3</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{162, 322}, {527, 157}}</string>
+				<string key="NSWindowRect">{{162, 358}, {527, 121}}</string>
 				<int key="NSWTFlags">-461896704</int>
 				<string key="NSWindowTitle">Layout settings</string>
 				<string key="NSWindowClass">NSPanel</string>
@@ -1529,7 +1529,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 										<object class="NSTableView" id="595323734">
 											<reference key="NSNextResponder" ref="1062331190"/>
 											<int key="NSvFlags">256</int>
-											<string key="NSFrameSize">{485, 90}</string>
+											<string key="NSFrameSize">{485, 54}</string>
 											<reference key="NSSuperview" ref="1062331190"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="_NSCornerView" key="NSCornerView">
@@ -1624,7 +1624,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 											<int key="NSTableViewDraggingDestinationStyle">0</int>
 										</object>
 									</array>
-									<string key="NSFrame">{{1, 1}, {485, 90}}</string>
+									<string key="NSFrame">{{1, 1}, {485, 54}}</string>
 									<reference key="NSSuperview" ref="297989279"/>
 									<reference key="NSNextKeyView" ref="595323734"/>
 									<reference key="NSDocView" ref="595323734"/>
@@ -1651,7 +1651,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 									<double key="NSPercent">0.99381443298969074</double>
 								</object>
 							</array>
-							<string key="NSFrame">{{20, 45}, {487, 92}}</string>
+							<string key="NSFrame">{{20, 45}, {487, 56}}</string>
 							<reference key="NSSuperview" ref="282854918"/>
 							<reference key="NSNextKeyView" ref="1062331190"/>
 							<int key="NSsFlags">562</int>
@@ -1724,7 +1724,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 							</object>
 						</object>
 					</array>
-					<string key="NSFrameSize">{527, 157}</string>
+					<string key="NSFrameSize">{527, 121}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
@@ -3404,9 +3404,9 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 				<string key="100656.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100657.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100658.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100836.IBEditorWindowLastContentRect">{{133, 307}, {527, 157}}</string>
+				<string key="100836.IBEditorWindowLastContentRect">{{133, 343}, {527, 121}}</string>
 				<string key="100836.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100836.IBWindowTemplateEditedContentRect">{{133, 307}, {527, 157}}</string>
+				<string key="100836.IBWindowTemplateEditedContentRect">{{133, 343}, {527, 121}}</string>
 				<boolean value="NO" key="100836.NSWindowTemplate.visibleAtLaunch"/>
 				<boolean value="YES" key="100836.windowTemplate.hasMaxSize"/>
 				<boolean value="YES" key="100836.windowTemplate.hasMinSize"/>
