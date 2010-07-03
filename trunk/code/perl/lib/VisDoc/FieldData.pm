@@ -27,9 +27,6 @@ sub new {
         name  => $inName,
         value => $inValue || '',              # value string
         type  => $inType || $TYPE->{FIELD},
-
-        #overridden        => 0,       # NEEDED?
-        didCopyInheritDoc => 0,
     };
     bless $this, $class;
     return $this;
