@@ -1,6 +1,6 @@
---- /trunk/code/perl/templates/js_src/jquery.simpletreeview.org.js	2010-07-03 13:24:36.000000000 +0200
-+++ /trunk/code/perl/templates/js_src/jquery.simpletreeview.js	2010-07-03 13:25:52.000000000 +0200
-@@ -40,10 +40,16 @@
+--- /Data/Arthur_projecten/VisDoc_perl/svn/trunk/code/perl/templates/js_src/jquery.simpletreeview.org.js	2010-07-03 13:28:11.000000000 +0200
++++ /Data/Arthur_projecten/VisDoc_perl/svn/trunk/code/perl/templates/js_src/jquery.simpletreeview.js	2010-07-03 15:13:03.000000000 +0200
+@@ -40,10 +40,22 @@
  		this.expand = function(node) {
  
  			// Find all ul nodes in the object's path to expand...
@@ -15,6 +15,12 @@
 +			var $siblings = $node.parents('ul').siblings();
 +			if ($siblings) {
 +				expandNode($siblings);
++			}
++			
++			// expand children
++			var $children = $node.children();
++			if ($children) {
++				expandNode($children);
 +			}
  		}
  

@@ -50,6 +50,12 @@
 			if ($siblings) {
 				expandNode($siblings);
 			}
+			
+			// expand children
+			var $children = $node.children();
+			if ($children) {
+				expandNode($children);
+			}
 		}
 
 		// Recursive method which expands the specified nodes
