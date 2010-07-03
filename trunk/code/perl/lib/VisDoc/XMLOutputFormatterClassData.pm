@@ -23,7 +23,7 @@ _formatData ($xmlWriter, $classData) -> $bool
 sub _formatData {
     my ( $this, $inWriter ) = @_;
 
-    $this->_writeCSSLocation($inWriter);
+    $this->_writeAssetLocations($inWriter);
     $this->_writeTitleAndPageId($inWriter);
     $this->_writeClassData($inWriter);
     $this->_writeSummary($inWriter);

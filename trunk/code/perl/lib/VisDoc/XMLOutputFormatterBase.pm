@@ -162,6 +162,17 @@ sub _formatData {
 
 =cut
 
+sub _writeAssetLocations {
+    my ( $this, $inWriter ) = @_;
+
+	$this->_writeCSSLocation($inWriter);
+	$this->_writeJsLocation($inWriter);
+}
+
+=pod
+
+=cut
+
 sub _writeCSSLocation {
     my ( $this, $inWriter ) = @_;
 
@@ -170,6 +181,18 @@ sub _writeCSSLocation {
     $inWriter->startTag('cssFile');
     $inWriter->cdata($cssLocation);
     $inWriter->endTag('cssFile');
+}
+
+=pod
+
+=cut
+
+sub _writeJsLocation {
+    my ( $this, $inWriter ) = @_;
+
+	foreach my $file (@{$this->{preferences}->{jsFiles}}) {
+		$inWriter->cdataElement('jsFile', $file);
+	}
 }
 
 =pod

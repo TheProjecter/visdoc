@@ -30,7 +30,7 @@ _formatData ($xmlWriter) -> $bool
 sub _formatData {
     my ( $this, $inWriter ) = @_;
 
-    $this->_writeCSSLocation($inWriter);
+    $this->_writeAssetLocations($inWriter);
     $this->_writeTitleAndPageId($inWriter);
     my $hasFormattedData = $this->_writeList($inWriter);
     $this->_writeFooter($inWriter);

@@ -175,8 +175,10 @@ sub writeData {
     my ( $inDocDirectory, $inCollectiveFileData, $inPreferences ) = @_;
 
     my $dirInfo = _createWriteDirectories( $inDocDirectory, $inPreferences );
-    _copyAssets( $dirInfo, $inPreferences );
-
+    _copyCss( $dirInfo->{dir}->{css}, $inPreferences );
+    my $jsFiles = _copyJs( $dirInfo->{dir}->{js}, $inPreferences );
+	$inPreferences->{jsFiles} = $jsFiles;
+	
     my $baseDir = $inPreferences->{base};
     my $xsltRef = _getXslt( $inPreferences->{templateXsl} );
 
@@ -409,22 +411,6 @@ sub _createWriteDirectories {
 
 =pod
 
-StaticMethod _copyAssets(\%directoryInfo, \%preferences )
-
-=cut
-
-sub _copyAssets {
-    my ( $inDirectoryInfo, $inPreferences ) = @_;
-
-    # copy css
-    _copyCss( $inDirectoryInfo->{dir}->{css}, $inPreferences );
-
-    # copy js
-    _copyJs( $inDirectoryInfo->{dir}->{js}, $inPreferences );
-}
-
-=pod
-
 StaticMethod _createSubDirectory( $docDirectory, $baseDirectory, $subDirectory ) -> $createdPath
 
 Util method to create a sub directory below the doc directory.
@@ -500,7 +486,7 @@ sub _copyCss {
 
 =pod
 
-StaticMethod _copyJs ( $destinationDir, \%preferences )
+StaticMethod _copyJs ( $destinationDir, \%preferences ) -> \@files
 
 Copies javascript files from the template directory to $destinationDir.
 
@@ -533,6 +519,8 @@ sub _copyJs {
             print("Could not copy $path to $inDestinationDir: $!\n");
         }
     }
+    
+    return \@files;
 }
 
 =pod

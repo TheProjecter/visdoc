@@ -301,10 +301,11 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
     <head>
         <title><xsl:value-of select="title" /></title>
         <link rel="stylesheet" type="text/css"><xsl:attribute name="href">../<xsl:value-of select="cssFile" /></xsl:attribute></link>
-		<script src="../js/jquery.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/jquery.cookie.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/jquery.simpletreeview.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
-		<script src="../js/VisDoc.min.js" type="text/javascript"><xsl:text>//</xsl:text></script>
+        <xsl:for-each select="jsFile">
+        	<script type="text/javascript">
+        		<xsl:attribute name="src"><xsl:value-of select="." /></xsl:attribute>
+        	</script>
+		</xsl:for-each>
     </head>
     <body>
     	<xsl:if test="navigation!=''">
