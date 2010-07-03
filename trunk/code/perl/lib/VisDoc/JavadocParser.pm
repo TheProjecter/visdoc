@@ -34,7 +34,7 @@ sub parse {
     my $text = $inText;
     VisDoc::StringUtils::removeStarsInJavadoc($text);
 
-    my $linkTags = $this->_processInlineLinkTags( $inText, $inFileData );
+    my $linkTags = $this->_processInlineLinkTags( $text, $inFileData );
     $this->{data}->{linkTags} = $linkTags if $linkTags;
 
     my ( $firstLine, $fieldNameParts ) = $this->_getFieldNameParts($text);

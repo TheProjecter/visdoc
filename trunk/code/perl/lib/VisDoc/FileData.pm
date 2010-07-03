@@ -40,9 +40,8 @@ BEGIN {
 
     # Default handlers for different %TAGS%
     %functionTags = (
-        $VisDoc::StringUtils::STUB_CODE_BLOCK => { fn => \&_parseStubCode, },
-        $VisDoc::StringUtils::STUB_TAG_CODE   => { fn => \&_parseStubCode, },
-        $VisDoc::StringUtils::STUB_CODE_BLOCK => { fn => \&_parseStubCode, },
+        $VisDoc::StringUtils::STUB_CODE_BLOCK => { fn => \&_parseCodeStub, },
+        $VisDoc::StringUtils::STUB_TAG_CODE   => { fn => \&_parseCodeStub, },
         $VisDoc::StringUtils::STUB_TAG_LITERAL =>
           { fn => \&_parseLiteralText, },
         $VisDoc::StringUtils::STUB_INLINE_LINK =>
@@ -413,13 +412,20 @@ sub _expandMacro {
     }
 }
 
-sub _parseStubCode {
+sub _parseCodeStub {
     my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
 
-    my $codeText = $this->getStubValue( $inTagString, $inTagName );
-    my $formatted = $this->_formatCodeText($codeText);
+    my $stubText = $this->getStubValue( $inTagString, $inTagName );
+    my $formatted = $this->_formatCodeText($stubText);
+    
     return $formatted;
 }
+
+=pod
+
+_parseStubInlineLink($tagString, $tagName, $number) -> $text
+
+=cut
 
 sub _parseStubInlineLink {
     my ( $this, $inTagString, $inTagName, $inNumber ) = @_;
@@ -430,6 +436,12 @@ sub _parseStubInlineLink {
     return '' if !$ref;
     return $$ref->formatInlineLink();
 }
+
+=pod
+
+_parseStubInheritDoc($className, $memberName, $fieldName) -> $text
+
+=cut
 
 sub _parseStubInheritDoc {
     my ( $this, $inClass, $inMember, $inField ) = @_;
@@ -614,11 +626,12 @@ sub _equalizeLeftIndent {
 
         # count number of spaces at left
         $line =~ m/^(\s+)(.*)$/g;
+        push @lines, $line;
+
         next if !$1;
         my $leftIndent = length $1;
         next if $leftIndent == 0;
 
-        push @lines, $line;
         if ($2) {
             $smallestLeftIndent = $leftIndent
               if ( $leftIndent < $smallestLeftIndent );
@@ -629,10 +642,11 @@ sub _equalizeLeftIndent {
 
     foreach my $line (@lines) {
         $line =~ m/^(\s+)(.*)$/g;
+        
         next if !$1;
         my $leftIndent   = ( length $1 ) - $smallestLeftIndent;
         my $indentString = ' ' x $leftIndent;
-        $line =~ s/^(\s+)(.*)$/$indentString$2/g;
+        $line =~ s/^(\s+)(.*)$/$indentString$2/g;        
     }
 
     my $text = join( "\n", @lines );
