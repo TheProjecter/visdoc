@@ -269,6 +269,7 @@ Default: none, no frameset
 =item B<-giveCredits>
 
 Whether to give VisDoc credits in the footer.
+Values: 1 or 0
 Default: 1
 
 =item B<-listPrivate>
@@ -285,11 +286,14 @@ Default: 0
 
 =item B<-saveXML>
 
-To write...
+Whether to save the XML files that are used by the XSLT processor. Useful for debugging.
+Values: 1 or 0
+Default: 0
 
 =item B<-templateCss>
 
-To write...
+CSS file to be copied to the output directory '/css'.
+Default: 'templates/css/VisDoc.min.css'
 
 =item B<-feedback>
 
@@ -304,9 +308,13 @@ Not implemented.
 =item B<-openInBrowser>
 
 Whether to open generated documentation in a browser.
-
 Values: 1 or 0
 Default: 0
+
+=item B<-templateJsDirectory>
+
+Source directory with javascript files to copy. Each file with extension 'js' in this directory gets copied to the output directory '/'js'.
+Default: 'templates/js'
 
 =cut
 
