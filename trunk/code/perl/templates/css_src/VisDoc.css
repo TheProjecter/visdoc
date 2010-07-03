@@ -600,12 +600,12 @@ html>body pre {
 	background-color:#fff;
 }
 
-.classDescription h1,
-.classDescription h2,
-.classDescription h3,
-.classDescription h4,
-.classDescription h5,
-.classDescription h6 {
+.description h1,
+.description h2,
+.description h3,
+.description h4,
+.description h5,
+.description h6 {
 	margin-top:1em;
 }
 
@@ -623,7 +623,7 @@ html>body pre {
 }
 
 .toc {
-	margin-top:3em;
+	margin-top:1.5em;
 }
 
 .toc .boxWithBorder {
@@ -648,11 +648,6 @@ html>body pre {
 	height:1%;
 	margin:-1px -10px 0 -10px;
 	padding:1em 10px 1.5em;
-}
-
-.memberSection h2 {
-	margin:0 -10px;
-	padding:0 10px 8px;
 }
 
 .memberSection .fullMemberString {
@@ -936,7 +931,7 @@ a:hover.private {
 }
 
 .classDescription {
-	margin-bottom:1em;
+	margin-bottom:2.5em;
 }
 
 #main .classDescription .descriptionSummary,
