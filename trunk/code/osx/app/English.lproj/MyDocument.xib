@@ -11,7 +11,7 @@
 			<string key="NS.object.0">762</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="100836"/>
+			<integer value="100837"/>
 			<integer value="100059"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
@@ -1643,7 +1643,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 								<object class="NSScroller" id="311617927">
 									<reference key="NSNextResponder" ref="297989279"/>
 									<int key="NSvFlags">-2147483392</int>
-									<string key="NSFrame">{{1, 112}, {482, 15}}</string>
+									<string key="NSFrame">{{-100, -100}, {482, 15}}</string>
 									<reference key="NSSuperview" ref="297989279"/>
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="297989279"/>
@@ -1654,7 +1654,7 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 							<string key="NSFrame">{{20, 45}, {487, 56}}</string>
 							<reference key="NSSuperview" ref="282854918"/>
 							<reference key="NSNextKeyView" ref="1062331190"/>
-							<int key="NSsFlags">562</int>
+							<int key="NSsFlags">2</int>
 							<reference key="NSVScroller" ref="1068619983"/>
 							<reference key="NSHScroller" ref="311617927"/>
 							<reference key="NSContentView" ref="1062331190"/>

@@ -23,7 +23,7 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	return 5;
+	return 3;
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn
@@ -31,7 +31,7 @@
 {	
 	if ([[aTableColumn identifier] isEqualToString:@"key"]) {
 		if (rowIndex == 0) return @"css template file";
-		if (rowIndex == 1) return @"js template file";
+		if (rowIndex == 1) return @"js template directory";
 		if (rowIndex == 2) return @"xslt template file";
 	}
 	if ([[aTableColumn identifier] isEqualToString:@"value"]) {
@@ -49,7 +49,7 @@
 		if (rowIndex == 0) key = @"templateCss";
 		if (rowIndex == 1) key = @"templateJsDirectory";
 		if (rowIndex == 2) key = @"templateXsl";
-		[[delegate settings] setObject:anObject forKey:key];
+		[[delegate settings] setObject:[self cleanupUrl:[anObject absoluteString]] forKey:key];
 	}
 }
 
@@ -86,8 +86,8 @@
 }
 
 - (void)importPanelDidEnd:(NSOpenPanel*)sheet
-					 returnCode:(int)returnCode
-					contextInfo:(void*)contextInfo
+			   returnCode:(int)returnCode
+			  contextInfo:(void*)contextInfo
 {
     if (returnCode == NSOKButton) {
 		NSArray* paths = [sheet filenames];
@@ -116,10 +116,16 @@
 - (NSDictionary*)settings
 {
 	return [NSDictionary dictionaryWithObjectsAndKeys:
-		[[delegate settings] objectForKey:@"templateCss"], @"templateCss",
-		[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
-		[[delegate settings] objectForKey:@"templateXsl"], @"templateXsl",
+			[[delegate settings] objectForKey:@"templateCss"], @"templateCss",
+			[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
+			[[delegate settings] objectForKey:@"templateXsl"], @"templateXsl",
 			nil];
+}
+
+- (NSString*)cleanupUrl:(NSString*)inUrl 
+{
+	NSString* cleanUrl = [inUrl stringByReplacingOccurrencesOfString:@"file://localhost" withString:@""];
+	return cleanUrl;
 }
 
 - (BOOL)hasDefaultSettings

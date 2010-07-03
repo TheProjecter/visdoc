@@ -393,8 +393,7 @@ sub _createWriteDirectories {
     $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_HTML );
     $info->{dir}->{html} = $dir;
 
-    $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_CSS )
-      if $inPreferences->{copyCSS};
+    $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_CSS );
     $info->{dir}->{css} = $dir;
 
     $dir = _createSubDirectory( $inDocDirectory, $base, $VisDoc::Defaults::DESTINATION_JS );
@@ -495,8 +494,12 @@ Copies javascript files from the template directory to $destinationDir.
 sub _copyJs {
     my ( $inDestinationDir, $inPreferences ) = @_;
 
-    my $dir = File::Spec->rel2abs( $VisDoc::Defaults::FILE_JS_TEMPLATE_DIR,
-        $inPreferences->{base} );
+    my $dir;
+    if (-d $inPreferences->{templateJsDirectory}) {
+    	$dir = $inPreferences->{templateJsDirectory};
+    } else {
+    	$dir = File::Spec->rel2abs($inPreferences->{templateJsDirectory}, $inPreferences->{base});
+    }
 
     # get all .js files from that directory
     my @files;

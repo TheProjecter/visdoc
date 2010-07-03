@@ -17,6 +17,7 @@
 - (IBAction)exportSettings:(id)sender;
 - (void)setToValues:(NSDictionary*)dictionary;
 - (NSDictionary*)settings;
+- (NSString*)cleanupUrl:(NSString*)inUrl;
 - (BOOL)hasDefaultSettings;
 - (BOOL)compareCurrentWithDefault:(NSString*)key;
 - (void)updateUsesDefaults;
