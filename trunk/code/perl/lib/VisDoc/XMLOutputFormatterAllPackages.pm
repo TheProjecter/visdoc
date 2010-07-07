@@ -105,17 +105,8 @@ sub _writePackages {
         }
 
         my $classes = $package->{classes};
-	
-		if (scalar @{$classes} > 1) {
-			# sort classes
-			@{$classes} =
-			  sort {
-				lc( $a->getClasspathWithoutName()   || $a->{name} ) cmp
-				  lc( $b->getClasspathWithoutName() || $b->{name} )
-			  } @{$classes};
-		}
 		
-        foreach my $class ( @{$classes} ) {
+        foreach my $class ( sort @{$classes} ) {
             next if $class->isExcluded();
             next if !$this->{preferences}->{listPrivate} && !$class->isPublic();
             my $classpath = $class->getClasspathWithoutName();

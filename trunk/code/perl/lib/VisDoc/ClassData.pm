@@ -6,7 +6,9 @@ use VisDoc::MemberData;
 use VisDoc::StringUtils;
 use VisDoc::Class;
 
-use overload ( '""' => \&as_string );
+use overload ( '""' => \&as_string,
+			   'cmp' => \&compare
+			 );
 
 our $TYPE = {
     CLASS     => ( 1 << 1 ),
@@ -102,6 +104,16 @@ sub new {
     };
     bless $this, $class;
     return $this;
+}
+
+=pod
+
+=cut
+
+sub compare {
+    my ($first, $second) = @_;
+    
+    return (lc $first->{'classpath'} cmp lc $second->{'classpath'});
 }
 
 =pod
