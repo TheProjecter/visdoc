@@ -703,26 +703,36 @@ sub _preparePropertyParsing {
 
     $text = $this->{fileParser}->stubArrays( $text, $this->{PATTERN_ARRAY}, 1 );
     $text = $this->_putSemicolonsAfterPropertyLines($text);
-    $text = $this->_splitOutMultiplePropertiesOnOneLine($text);
+    $text = $this->_splitOutCombinedAssignments($text);
     $text =~ s/$VisDoc::StringUtils::STUB_SPACE/ /go;
     return $text;
 }
 
 =pod
 
+_splitOutCombinedAssignments( $text ) -> $text
+
+Takes the entire text and finds properties that have combined assignments, like:
+
+	private var chimpansee:Number = 10, elephant:Number = 20, tiger:Number = 30;
+	
+to create separate Property objects.
+
 =cut
 
-sub _splitOutMultiplePropertiesOnOneLine {
+sub _splitOutCombinedAssignments {
     my ( $this, $inText ) = @_;
-
+	
     my $pattern    = $this->{PATTERN_PROPERTY_WITH_JAVADOC};
     my $patternMap = $this->{MAP_PROPERTY_WITH_JAVADOC};
 
-    #print("_splitOutMultiplePropertiesOnOneLine inText=$inText\n");
-    #print(  "_parseProperties pattern="
-    #      . VisDoc::StringUtils::stripCommentsFromRegex($pattern)
-    #      . "\n" );
-    #print(" ======================\n");
+=pod
+    print("_splitOutCombinedAssignments inText=$inText\n");
+    print(  "_parseProperties pattern="
+          . VisDoc::StringUtils::stripCommentsFromRegex($pattern)
+          . "\n" );
+    print(" ======================\n");
+=cut
 
     my $text = $inText;
     local $_ = $text;
@@ -730,7 +740,7 @@ sub _splitOutMultiplePropertiesOnOneLine {
 
     if ( scalar @matches ) {
         my $stub =
-          $this->_copyAttributesOfPropertiesOnOneLine( \@matches, $patternMap );
+          $this->_copyAttributesOfCombinedAssignments( \@matches, $patternMap );
 
         # prepare the fetching and removal of property string
         my $startLoc = $-[0] || 0;
@@ -744,22 +754,8 @@ sub _splitOutMultiplePropertiesOnOneLine {
         #print("\t stub=$stub \n");
         #print("\t stripped=$stripped \n");
 
-        $text = $this->_splitOutMultiplePropertiesOnOneLine($text);
+        $text = $this->_splitOutCombinedAssignments($text);
     }
-    return $text;
-}
-
-sub _putSemicolonsAfterPropertyLines {
-    my ( $this, $inText ) = @_;
-
-    my $text = $inText;
-
-    my $pattern = $this->{PATTERN_PROPERTY_SIMPLE_SEMICOLON};
-
-    # use a stub to easy remove double semi-colons
-    $text =~ s/$pattern/$1VISDOC_STUB_SEMI_COLON$8/gsx;
-    $text =~ s/;*VISDOC_STUB_SEMI_COLON;*/;/gsx;
-
     return $text;
 }
 
@@ -767,11 +763,8 @@ sub _putSemicolonsAfterPropertyLines {
 
 =cut
 
-sub _copyAttributesOfPropertiesOnOneLine {
+sub _copyAttributesOfCombinedAssignments {
     my ( $this, $inMatches, $inPatternMap ) = @_;
-
-   #use Data::Dumper;
-   #print("_copyAttributesOfPropertiesOnOneLine matches=" . Dumper($inMatches));
 
     # set properties
     my $i;    # match index
@@ -811,17 +804,29 @@ sub _copyAttributesOfPropertiesOnOneLine {
         $accessStr = $inMatches->[$i];
     }
 
-    # property id
-    $i = $inPatternMap->{nameAndDataType};
+    # nameAndDataType
+        $i = $inPatternMap->{nameAndDataType};
     if ( $inMatches->[$i] && $inMatches->[$i] ) {
         my $valueStr = $inMatches->[$i];
         if ( $valueStr ne '' ) {
+
+        	# protect method params
+        	my $paramStubs;
+        	my $paramStubCounter = 0;
+        	my $substituteParamStub = sub {
+        		my ($orgString) = @_;
+        		$paramStubs->{$paramStubCounter} = $orgString;
+        		return '%TMP_VISDOC_PARAM_STUB_' . $paramStubCounter++ . '%';
+        	};
+        	while ( $valueStr =~ s/(\=\s*new\s(.*?)\s*(\(.*?\)))/&$substituteParamStub($1)/ge ) {};
+        
             my @values =
               VisDoc::StringUtils::commaSeparatedListFromCommaSeparatedString(
                 $valueStr);
             if ( ( scalar @values ) > 1 ) {
                 $text = '';
                 foreach my $otherValue (@values) {
+
                     $text .= $javadocStr ? "\n$javadocStr\n" : '';
                     $text .= $accessStr  ? "$accessStr"      : '';
 
@@ -834,6 +839,10 @@ sub _copyAttributesOfPropertiesOnOneLine {
                     $text .= "\n\n";
                 }
             }
+            
+            if ($paramStubs) {
+            	$text =~ s/%TMP_VISDOC_PARAM_STUB_([0-9]+)%/$paramStubs->{$1}/g;
+            }
         }
     }
 
@@ -841,6 +850,32 @@ sub _copyAttributesOfPropertiesOnOneLine {
     $text =~ s/( |\t)/$VisDoc::StringUtils::STUB_SPACE/go;
     return $text;
 }
+
+=pod
+
+_putSemicolonsAfterPropertyLines( $text ) -> $text
+
+'Repairs' property statements by adding a ; char at the end of the line.
+
+=cut
+
+sub _putSemicolonsAfterPropertyLines {
+    my ( $this, $inText ) = @_;
+
+    my $text = $inText;
+
+    my $pattern = $this->{PATTERN_PROPERTY_SIMPLE_SEMICOLON};
+
+    # use a stub to easy remove double semi-colons
+    $text =~ s/$pattern/$1VISDOC_STUB_SEMI_COLON$8/gsx;
+    $text =~ s/;*VISDOC_STUB_SEMI_COLON;*/;/gsx;
+
+    return $text;
+}
+
+=pod
+
+=cut
 
 sub _handlePropertyMatches {
     my ( $this, $inMatches, $inProperties, $inPatternMap ) = @_;

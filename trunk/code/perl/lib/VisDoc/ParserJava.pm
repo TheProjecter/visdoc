@@ -440,7 +440,7 @@ sub _handlePropertyMatches {
         $data->{dataType} = $this->_parsePropertyDataType($dataTypeStr);
     }
 
-    # property nameAndDataType
+    # property id
     $data->{_id} = scalar @{$inProperties} - 1;
 
     # javadoc

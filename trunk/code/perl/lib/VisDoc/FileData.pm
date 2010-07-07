@@ -550,6 +550,7 @@ sub _handleContentsOfVerbatimTags {
           ;    # includes number, for instance: %STUB_1%
                # find original value
         my $value = $_[0]->_getValue( $1, $key );
+
         $_[1] =~ s/$key/$value/ if $value;
     }
 }

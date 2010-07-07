@@ -236,6 +236,91 @@ sub test_parseClassData_as3 {
 
 =cut
 
+sub test_parseClassData_as3_interface {
+    my ($this) = @_;
+
+    my $text = '
+	package org.casalib.collection {
+	
+	/**
+		Interface for list collections.
+		
+		@author Aaron Clinger
+		@author Dave Nelson
+		@version 06/04/09
+	*/
+	public interface IList {
+		
+		
+		/**
+			Appends the specified item to the end of this list.
+			
+			@param item: Element to be inserted.
+			@return Returns <code>true</code> if the list was changed as a result of the call; otherwise <code>false</code>.
+		*/
+		function addItem(item:*):Boolean;
+		
+		/**
+			Inserts an item as a specified position.
+			
+			@param item: Element to be inserted.
+			@param index: Position where the elements should be added.
+			@return Returns <code>true</code> if the list was changed as a result of the call; otherwise <code>false</code>.
+		*/
+		function addItemAt(item:*, index:int):Boolean;
+		
+	}
+}';
+    my $fileParser = VisDoc::FileParser->new();
+    my $fileData   = $fileParser->parseText($text);
+    my $classData  = $fileData->{packages}->[0]->{classes}->[0];
+
+    #use Data::Dumper;
+    #print("classData=" . Dumper($classData));
+
+
+    {
+
+        # test interface name
+        my $result   = $classData->{name};
+        my $expected = 'IList';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 0: name
+        my $result   = $classData->{methods}->[0]->{name};
+        my $expected = 'addItem';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 0: returnType
+        my $result   = $classData->{methods}->[0]->{returnType};
+        my $expected = 'Boolean';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+    {
+
+        # test method 1: desciption
+        my $result   = $classData->{methods}->[1]->{javadoc}->getDescription();
+        my $expected = 'Inserts an item as a specified position.';
+        print("RES=$result.\n")   if $debug;
+        print("EXP=$expected.\n") if $debug;
+        $this->assert( $result eq $expected );
+    }
+}
+
+=pod
+
+=cut
+
 sub test_parseClassData_java {
     my ($this) = @_;
 
@@ -1547,6 +1632,84 @@ sub test_parseProperties_as3 {
         print("EXP=$expected.\n") if $debug;
         $this->assert( $result eq $expected );
     }
+}
+
+=pod
+
+=cut
+
+sub test_parseProperties_as3_array {
+    my ($this) = @_;
+
+    my $text = "
+package {
+	class Def {
+
+		public static var AUDIO_EXTENSIONS:Array = new Array('f4a', 'f4b', 'mp3'), VIDEO_EXTENSIONS:Array = new Array('mov', 'wma', 'mpg'); /**< The default list of audio file extensions. */
+
+		/**
+		Num vars.
+		*/
+		private var chimpansee:Number = 10, elephant:Number = 20, tiger:Number = 30;
+	}
+}";
+
+	my $fileData   = VisDoc::parseText( $text, 'as3' );
+    my $classData  = $fileData->{packages}->[0]->{classes}->[0];
+    my $properties = $classData->{properties};
+
+    #use Data::Dumper;
+    #print("properties=" . Dumper($properties));
+
+	{
+		# property 0: name
+		my $result   = $properties->[0]->{name};
+		my $expected = 'AUDIO_EXTENSIONS';
+		print("RES=$result.\n")   if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# property 0: value
+		my $result   = $properties->[0]->{value};
+		my $expected = "new Array('f4a', 'f4b', 'mp3')";
+		print("RES=$result.\n")   if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# property 1: name
+		my $result   = $properties->[1]->{name};
+		my $expected = 'VIDEO_EXTENSIONS';
+		print("RES=$result.\n")   if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# property 1: value
+		my $result   = $properties->[1]->{value};
+		my $expected = "new Array('mov', 'wma', 'mpg')";
+		print("RES=$result.\n")   if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# property 2: name
+		my $result   = $properties->[2]->{name};
+		my $expected = 'chimpansee';
+		print("RES=$result.\n")   if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	{
+		# property 3: name
+		my $result   = $properties->[3]->{name};
+		my $expected = 'elephant';
+		print("RES=$result.\n")   if $debug;
+		print("EXP=$expected.\n") if $debug;
+		$this->assert( $result eq $expected );
+	}
+	
 }
 
 =pod

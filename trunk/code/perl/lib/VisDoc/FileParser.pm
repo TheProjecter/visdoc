@@ -494,7 +494,7 @@ sub stubArrays {
     my $merged =
       $this->{data}
       ->mergeData( $VisDoc::StringUtils::VERBATIM_STUB_ARRAY, $blocks );
-    $this->{data}->{arrays} = $merged;
+    $this->{data}->{'arrays'} = $merged;
 
     return $newText;
 }
@@ -532,7 +532,7 @@ sub _stubRegularJavadocComments {
     my ( $newText, $blocks ) = $_[0]->_replaceJavadocCommentsByStubs( $_[1] );
 
     my $merged = $_[0]->{data}->mergeData( 'javadocComments', $blocks );
-    $_[0]->{data}->{javadocComments} = $merged;
+    $_[0]->{data}->{'javadocComments'} = $merged;
 
     return $newText;
 }
@@ -554,7 +554,7 @@ sub _stubJavadocSideComments {
       $_[0]->_replaceJavadocSideCommentsByStubs( $_[1] );
 
     my $merged = $_[0]->{data}->mergeData( 'javadocComments', $blocks );
-    $_[0]->{data}->{javadocComments} = $merged;
+    $_[0]->{data}->{'javadocComments'} = $merged;
 
     return $newText;
 }
@@ -575,7 +575,7 @@ sub _stubQuotedStrings {
     my ( $newText, $blocks ) = $_[0]->_replaceQuotedStringsByStubs( $_[1] );
 
     my $merged = $_[0]->{data}->mergeData( 'quotedStrings', $blocks );
-    $_[0]->{data}->{quotedStrings} = $merged;
+    $_[0]->{data}->{'quotedStrings'} = $merged;
 
     return $newText;
 }
@@ -592,7 +592,7 @@ sub parseJavadoc {
     return undef if !$inJavadocStub;
 
     # regular javadoc comments
-    my $javadocText = $this->{data}->{javadocComments}->{$inJavadocStub};
+    my $javadocText = $this->{data}->{'javadocComments'}->{$inJavadocStub};
 
     my VisDoc::JavadocParser $javadocParser = VisDoc::JavadocParser->new();
     my $javadocData = $javadocParser->parse( $javadocText, $this->{data} );

@@ -30,7 +30,7 @@ sub new {
     my ($class) = @_;
     my $this = {};
     $this = {
-        _id         => undef,
+        _id         => undef,    # unique id for each type (a method and a property can have the same id)
         memberOrder => undef,    # int
         type =>
           undef
