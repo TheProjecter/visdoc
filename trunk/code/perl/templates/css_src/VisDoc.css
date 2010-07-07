@@ -173,6 +173,7 @@ table {
 html body {
 	background:#fafafa;
 	font-family:"Lucida Grande",arial,helvetica,sans-serif;
+	text-rendering:optimizeLegibility;
 	height:100%;
 }
 ul {
@@ -255,6 +256,7 @@ pre {
 	margin-bottom:1em;
 	color:brown;
 	padding-bottom:1.5em;
+	white-space:pre-wrap;
 }
 
 html>body pre {
@@ -543,7 +545,7 @@ html>body pre {
 	border-color:#e3e9ec;
 	border-style:none solid solid;
 	border-width:1px;
-	padding:.4em 10px .7em;
+	padding:.4em 10px;
 }
 
 .boxWithBorder .boxedElem .contentHolder .inheritedList a:link,
