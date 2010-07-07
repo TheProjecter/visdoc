@@ -71,7 +71,7 @@ Creates a NSDictionary property list object from a string. The string must have 
 																	format:&format
 														  errorDescription:&errorString];
 	
-	NSAssert1 (dict, @"propertyListFromString -- could not create property list: %@", errorString);
+	NSAssert1 (dict, @"propertyListFromString -- could not create property list: %@", inText);
 	return dict;
 }
 
