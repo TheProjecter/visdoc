@@ -14,10 +14,10 @@ BEGIN {
 }
 
 sub minifyFile {
-	my ($inSourceDir, $inSourceFile, $inOutputDir) = @_;
+	my ($inSourceDir, $inSourceFile, $inOutputDir, $inOrderNumber) = @_;
 	
 	my $inputFile = "$inSourceDir$inSourceFile";
-	my $outputFile = "$inOutputDir$inSourceFile";
+	my $outputFile = $inOutputDir . $inOrderNumber . '_' . $inSourceFile;
 	$outputFile =~ s/^(.*?)(\.js)$/$1.min$2/;
 
 	open(INFILE, $inputFile) or die;
@@ -29,11 +29,15 @@ sub minifyFile {
 
 my $SOURCE_DIR = '../templates/js_src/';
 my $OUTPUT_DIR = '../templates/js/';
+my $counter = 1;
 
-minifyFile($SOURCE_DIR, 'jquery.simpletreeview.js', $OUTPUT_DIR);
-minifyFile($SOURCE_DIR, 'VisDoc.js', $OUTPUT_DIR);
-minifyFile($SOURCE_DIR, 'jquery.cookie.js', $OUTPUT_DIR);
-
+minifyFile($SOURCE_DIR, 'jquery.js', $OUTPUT_DIR, $counter++);
+minifyFile($SOURCE_DIR, 'jquery.cookie.js', $OUTPUT_DIR, $counter++);
+minifyFile($SOURCE_DIR, 'jquery.simpletreeview.js', $OUTPUT_DIR, $counter++);
+minifyFile($SOURCE_DIR, 'shCore.js', $OUTPUT_DIR, $counter++);
+minifyFile($SOURCE_DIR, 'shBrushAS3.js', $OUTPUT_DIR, $counter++);
+minifyFile($SOURCE_DIR, 'shBrushJava.js', $OUTPUT_DIR, $counter++);
+minifyFile($SOURCE_DIR, 'VisDoc.js', $OUTPUT_DIR, $counter++);
 
 
 # VisDoc - Code documentation generator, http://visdoc.org

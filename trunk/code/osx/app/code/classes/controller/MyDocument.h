@@ -91,7 +91,7 @@
 - (void)registerForChangedKeys;
 - (void)unRegisterForChangedKeys;
 - (NSDictionary*)defaultSettings;
-- (void)mergeNewDefaultSettings:(NSMutableDictionary*)rawSettings;
+- (void)cleanupSettings:(NSMutableDictionary*)rawSettings;
 
 #pragma mark Table
 - (void)selectButtonClicked:(id)sender;

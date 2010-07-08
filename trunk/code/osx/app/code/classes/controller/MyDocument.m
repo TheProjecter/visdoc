@@ -23,7 +23,7 @@ static NSMutableDictionary* sDefaultSettings;
 {	
     self = [super init];
     if (self) {
-
+		settings = [[NSMutableDictionary alloc] init];
 		[self initializeListedPaths];
 		[self initializeProjectData];
     }
@@ -85,7 +85,7 @@ static NSMutableDictionary* sDefaultSettings;
 			[self unRegisterForChangedKeys];
 			NSMutableDictionary* projectSettings = [allData objectForKey:@"settings"];
 			// new default settings may not be in the project file, so merge
-			[self mergeNewDefaultSettings:projectSettings];
+			[self cleanupSettings:projectSettings];
 			[self setSettings:projectSettings];
 			[self setListedPaths:[allData objectForKey:@"listedPaths"]];
 			[oLayoutSettingsController updateUsesDefaults];
@@ -376,11 +376,9 @@ static NSMutableDictionary* sDefaultSettings;
 
 - (void)initializeProjectData
 {
-	/*
-	 if ([[[self settings] allKeys] count] != 0) {
+	if ([[[self settings] allKeys] count] != 0) {
 		return;	
 	}
-	 */
 
 	if (!sDefaultSettings) {
 		sDefaultSettings = [[NSMutableDictionary alloc] init];
@@ -404,9 +402,7 @@ static NSMutableDictionary* sDefaultSettings;
 			[sDefaultSettings setObject:[defaultSettings objectForKey:key] forKey:key];
 		}
 	}
-	if (!settings) {
-		settings = [[NSMutableDictionary alloc] init];
-	}
+
 	[settings addEntriesFromDictionary:sDefaultSettings];
 	[self registerForChangedKeys];
 }
@@ -454,7 +450,11 @@ static NSMutableDictionary* sDefaultSettings;
 	return sDefaultSettings;
 }
 
-- (void)mergeNewDefaultSettings:(NSMutableDictionary*)rawSettings
+/**
+New default settings may not be in the project file, so merge
+*/
+
+- (void)cleanupSettings:(NSMutableDictionary*)rawSettings
 {
 	NSEnumerator* e = [sDefaultSettings keyEnumerator];
 	NSString* key = nil;
@@ -462,6 +462,19 @@ static NSMutableDictionary* sDefaultSettings;
 		if ([rawSettings objectForKey:key] == nil) {
 			[rawSettings setObject:[sDefaultSettings objectForKey:key] forKey:key];
 		}
+	}
+
+	// remove settings that are not in the defaults
+	e = [rawSettings keyEnumerator];
+	NSMutableArray* removeKeys = [[[NSMutableArray alloc] init] autorelease];
+	key = nil;
+	while (key = [e nextObject]) {
+		if ([sDefaultSettings objectForKey:key] == nil) {
+			[removeKeys addObject:key];
+		}
+	}
+	if ([removeKeys count] > 0) { 
+		[rawSettings removeObjectsForKeys:removeKeys];	
 	}
 }
 

@@ -31,6 +31,7 @@ my $SOURCE_DIR = '../templates/css_src/';
 my $OUTPUT_DIR = '../templates/css/';
 
 minifyFile($SOURCE_DIR, 'VisDoc.css', $OUTPUT_DIR);
+minifyFile($SOURCE_DIR, 'shCoreDefault.css', $OUTPUT_DIR);
 
 
 

@@ -2,12 +2,16 @@
 
 #import <Cocoa/Cocoa.h>
 @class MyDocument;
+@class MyPathCell;
 
 @interface LayoutSettingsController : NSObject {
 	IBOutlet MyDocument* delegate;
 	IBOutlet NSTableView* oSettingsTable;
 	IBOutlet NSWindow* oSettingsWindow;
 	NSNumber* usesDefaults;
+	MyPathCell* templateCssPathCell;
+	MyPathCell* templateJsDirectoryPathCell;
+	MyPathCell* templateXslPathCell;
 }
 @property (readwrite, retain) NSNumber* usesDefaults;
 
@@ -19,7 +23,8 @@
 - (NSDictionary*)settings;
 - (NSString*)cleanupUrl:(NSString*)inUrl;
 - (BOOL)hasDefaultSettings;
-- (BOOL)compareCurrentWithDefault:(NSString*)key;
+- (BOOL)compareCurrentWithDefaultUrl:(NSString*)key;
+- (BOOL)compareCurrentWithDefaultValue:(NSString*)key;
 - (void)updateUsesDefaults;
 @end
 

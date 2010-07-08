@@ -142,6 +142,16 @@ sub _title {
 
 =pod
 
+=cut
+
+sub _htmlTitle {
+    my ($this) = @_;
+
+	return $this->_title() . ' | ' . $this->{preferences}->{projectTitle};
+}
+
+=pod
+
 _formatData ($classData) -> $bool
 
 Writes out formatted xml.
@@ -175,12 +185,18 @@ sub _writeAssetLocations {
 
 sub _writeCSSLocation {
     my ( $this, $inWriter ) = @_;
-
+    
+    foreach my $file (@{$this->{preferences}->{cssFiles}}) {
+		$inWriter->cdataElement('cssFile', $file);
+	}
+	
+=pod
 	my $cssLocation = $VisDoc::Defaults::DESTINATION_CSS . '/' . VisDoc::StringUtils::getLastPathComponent( $this->{preferences}->{templateCss} );
 	
     $inWriter->startTag('cssFile');
     $inWriter->cdata($cssLocation);
     $inWriter->endTag('cssFile');
+=cut
 }
 
 =pod
@@ -203,7 +219,8 @@ sub _writeTitleAndPageId {
     my ( $this, $inWriter ) = @_;
 
     $inWriter->cdataElement( 'pageClass', $this->_uri() );
-    $inWriter->cdataElement( 'title',     $this->_title() );
+    $inWriter->cdataElement( 'htmlTitle',     $this->_htmlTitle());
+    $inWriter->cdataElement( 'title',     $this->_title());
 }
 
 =pod
@@ -339,8 +356,8 @@ sub _writeFooter {
     $inWriter->startTag('meta');
 
     # copyright
-    my $copyrightText = $this->{preferences}->{copyrightText};
-    $inWriter->cdataElement( 'copyright', $copyrightText ) if $copyrightText;
+    my $footerText = $this->{preferences}->{footerText};
+    $inWriter->cdataElement( 'copyright', $footerText ) if $footerText;
 
     # credits
     if ( $this->{preferences}->{giveCredits} ) {
@@ -350,7 +367,7 @@ sub _writeFooter {
     }
 
     # show/hide TOC (if frameset)
-    if ( $this->{preferences}->{generateIndex} ) {
+    if ( $this->{preferences}->{generateNavigation} ) {
         $inWriter->cdataElement( 'showTOC', $this->_docTerm('menu_showTOC') );
         $inWriter->cdataElement( 'hideTOC', $this->_docTerm('menu_hideTOC') );
     }

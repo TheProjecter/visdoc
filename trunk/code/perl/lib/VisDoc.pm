@@ -175,7 +175,8 @@ sub writeData {
     my ( $inDocDirectory, $inCollectiveFileData, $inPreferences ) = @_;
 
     my $dirInfo = _createWriteDirectories( $inDocDirectory, $inPreferences );
-    _copyCss( $dirInfo->{dir}->{css}, $inPreferences );
+    my $cssFiles = _copyCss( $dirInfo->{dir}->{css}, $inPreferences );
+	$inPreferences->{cssFiles} = $cssFiles;
     my $jsFiles = _copyJs( $dirInfo->{dir}->{js}, $inPreferences );
 	$inPreferences->{jsFiles} = $jsFiles;
 	
@@ -225,7 +226,7 @@ sub writeData {
 
     my $tocXML = '';
 
-    if ( $inPreferences->{generateIndex} ) {
+    if ( $inPreferences->{generateNavigation} ) {
 
         my $tocNavigationKeys = {
             'index'         => undef,
@@ -467,20 +468,45 @@ sub _writeHtmlFile {
 
 StaticMethod _copyCss ( $destinationDir, \%preferences )
 
-Uses template css from %preferences (property 'templateCss').
+Copies css files from the template directory to $destinationDir.
 
 =cut
 
 sub _copyCss {
     my ( $inDestinationDir, $inPreferences ) = @_;
 
-	my $file = $inPreferences->{templateCss};
-	my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
-	
-	my $result = File::Copy::copy( $path, $inDestinationDir );
-	if ( !$result ) {
-		print("Could not copy $path to $inDestinationDir: $!\n");
-	}
+    my $dir = File::Spec->abs2rel( $inPreferences->{templateCssDirectory} ) ;
+    if (-d $dir) {
+    	$dir = File::Spec->rel2abs($inPreferences->{templateCssDirectory}, $inPreferences->{base});
+    }
+
+    # get all .css files from that directory
+    my @files;
+    File::Find::find(
+        {
+            wanted => sub {
+
+                # check if file is css file
+                push @files, $File::Find::name
+                  if ( $File::Find::name =~ /(\.css)$/ );
+            },
+        },
+        $dir
+    );
+
+	my @outFiles;
+    foreach my $file (@files) {
+        my $path = File::Spec->rel2abs( $file, $inPreferences->{base} );
+        my $result = File::Copy::copy( $path, $inDestinationDir );
+        if ( !$result ) {
+            print("Could not copy $path to $inDestinationDir: $!\n");
+        } else {
+        	my $localPath = '../' . $VisDoc::Defaults::DESTINATION_CSS . '/' . VisDoc::StringUtils::getLastPathComponent( $file );
+        	push @outFiles, $localPath;
+        }
+    }
+    
+    return \@outFiles;
 }
 
 =pod

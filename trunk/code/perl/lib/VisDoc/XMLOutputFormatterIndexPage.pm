@@ -37,11 +37,29 @@ sub _uri {
     return $uri;
 }
 
+=pod
+
+=cut
+
 sub _title {
     my ($this) = @_;
 
-    return $this->{preferences}->{indexTitle} || 'Documentation';
+    return $this->{preferences}->{projectTitle};
 }
+
+=pod
+
+=cut
+
+sub _htmlTitle {
+    my ($this) = @_;
+
+	return $this->_title();
+}
+
+=pod
+
+=cut
 
 sub _writeList {
     my ( $this, $inWriter ) = @_;

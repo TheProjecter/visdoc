@@ -265,6 +265,7 @@
 		updateSummaries();
 		updateSourceCode();
 		//updateSort();
+		SyntaxHighlighter.all();
 	});
 
 })(jQuery);

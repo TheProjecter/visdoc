@@ -85,7 +85,7 @@ sub _writeDocTitle {
     $inWriter->startTag('link');
 
     $inWriter->cdataElement( 'name',
-        $this->{preferences}->{indexTitle} || 'Documentation' );
+        $this->{preferences}->{projectTitle});
     $inWriter->cdataElement( 'uri', 'index' );
     $inWriter->endTag('link');
     $inWriter->endTag('item');

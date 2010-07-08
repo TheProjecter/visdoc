@@ -3,19 +3,30 @@
 #import "LayoutSettingsController.h"
 #import "MyDocument.h"
 #import "interfacestrings.h"
+#import "MyPathCell.h"
 
 @implementation LayoutSettingsController
 
 @synthesize usesDefaults;
 
+- (void)awakeFromNib
+{
+	templateCssPathCell = [[[MyPathCell alloc] init] retain];
+	templateJsDirectoryPathCell = [[[MyPathCell alloc] init] retain];
+	templateXslPathCell = [[[MyPathCell alloc] init] retain];
+}
+
 - (void)dealloc
 {
 	[usesDefaults release];
+	[templateCssPathCell release];
+	[templateJsDirectoryPathCell release];
+	[templateXslPathCell release];
 	[super dealloc];
 }
 
 - (IBAction)showSettingsWindow:(id)sender
-{
+{	
 	[oSettingsTable reloadData];
 	[oSettingsWindow center];
 	[oSettingsWindow makeKeyAndOrderFront:self];
@@ -23,35 +34,72 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	return 3;
+	return 4;
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn
             row:(int)rowIndex
 {	
 	if ([[aTableColumn identifier] isEqualToString:@"key"]) {
-		if (rowIndex == 0) return @"css template file";
-		if (rowIndex == 1) return @"js template directory";
-		if (rowIndex == 2) return @"xslt template file";
+		if (rowIndex == 0) return @"CSS template directory";
+		if (rowIndex == 1) return @"JS template directory";
+		if (rowIndex == 2) return @"XSLT template file";
+		if (rowIndex == 3) return @"Document encoding";
+
 	}
 	if ([[aTableColumn identifier] isEqualToString:@"value"]) {
-		if (rowIndex == 0) return [[delegate settings] objectForKey:@"templateCss"];
+		if (rowIndex == 0) return [[delegate settings] objectForKey:@"templateCssDirectory"];
 		if (rowIndex == 1) return [[delegate settings] objectForKey:@"templateJsDirectory"];
 		if (rowIndex == 2) return [[delegate settings] objectForKey:@"templateXsl"];
+		if (rowIndex == 3) return [[delegate settings] objectForKey:@"docencoding"];
 	}
 	return nil;
 }
 
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
-{
-	if ([[aTableColumn identifier] isEqualToString:@"value"]) {
+- (void)tableView:(NSTableView *)tableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)tableColumn row:(int)rowIndex
+{	
+	if (!anObject) return;
+	
+	if ([[tableColumn identifier] isEqualToString:@"value"]) {
 		NSString* key;
-		if (rowIndex == 0) key = @"templateCss";
+		if (rowIndex == 0) key = @"templateCssDirectory";
 		if (rowIndex == 1) key = @"templateJsDirectory";
 		if (rowIndex == 2) key = @"templateXsl";
-		[[delegate settings] setObject:[self cleanupUrl:[anObject absoluteString]] forKey:key];
+		if (rowIndex != 3) {
+			[[delegate settings] setObject:[self cleanupUrl:[anObject absoluteString]] forKey:key];
+			return;
+		}
+		if (rowIndex == 3) {
+			key = @"docencoding";
+			[[delegate settings] setObject:anObject forKey:key];
+			return;
+		}
 	}
 }
+
+- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)rowIndex
+{
+	
+}
+
+- (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)rowIndex
+{
+	id cell = [tableColumn dataCellForRow:rowIndex];
+	
+	if ([[tableColumn identifier] isEqualToString:@"key"]) {
+		float GRAY = 0.95;
+		[cell setBackgroundColor:[NSColor colorWithDeviceRed:GRAY green:GRAY blue:GRAY alpha:1.0]];
+		[cell setDrawsBackground:YES];
+	}
+	
+	if ([[tableColumn identifier] isEqualToString:@"value"]) {
+		if (rowIndex == 0) return templateCssPathCell;
+		if (rowIndex == 1) return templateJsDirectoryPathCell;
+		if (rowIndex == 2) return templateXslPathCell;
+	}
+	return cell;
+}
+
 
 - (IBAction)restoreToDefaultValues:(id)sender
 {
@@ -60,9 +108,10 @@
 
 - (void)setToValues:(NSDictionary*)dictionary
 {
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateCss"] forKey:@"templateCss"];
+	[[delegate settings] setObject:[dictionary objectForKey:@"templateCssDirectory"] forKey:@"templateCssDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateJsDirectory"] forKey:@"templateJsDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateXsl"] forKey:@"templateXsl"];
+	[[delegate settings] setObject:[dictionary objectForKey:@"docencoding"] forKey:@"docencoding"];
 	[oSettingsTable reloadData];
 }
 
@@ -116,10 +165,11 @@
 - (NSDictionary*)settings
 {
 	return [NSDictionary dictionaryWithObjectsAndKeys:
-			[[delegate settings] objectForKey:@"templateCss"], @"templateCss",
-			[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
-			[[delegate settings] objectForKey:@"templateXsl"], @"templateXsl",
-			nil];
+		[[delegate settings] objectForKey:@"templateCssDirectory"], @"templateCssDirectory",
+		[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
+		[[delegate settings] objectForKey:@"templateXsl"], @"templateXsl",
+		[[delegate settings] objectForKey:@"docencoding"], @"docencoding",
+		nil];
 }
 
 - (NSString*)cleanupUrl:(NSString*)inUrl 
@@ -130,18 +180,26 @@
 
 - (BOOL)hasDefaultSettings
 {
-	if (![self compareCurrentWithDefault:@"templateCss"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateJsDirectory"]) return NO;
-	if (![self compareCurrentWithDefault:@"templateXsl"]) return NO;
+	if (![self compareCurrentWithDefaultUrl:@"templateCssDirectory"]) return NO;
+	if (![self compareCurrentWithDefaultUrl:@"templateJsDirectory"]) return NO;
+	if (![self compareCurrentWithDefaultUrl:@"templateXsl"]) return NO;
+	if (![self compareCurrentWithDefaultValue:@"docencoding"]) return NO;
+
 	return YES;
 }
 
-- (BOOL)compareCurrentWithDefault:(NSString*)key
+- (BOOL)compareCurrentWithDefaultUrl:(NSString*)key
 {
 	id value = [[delegate settings] objectForKey:key];
 	if ([value isMemberOfClass:[NSURL class]]) {
 		value = [value relativeString];
 	}
+	return [value isEqualToString:[[delegate defaultSettings] objectForKey:key]];
+}
+
+- (BOOL)compareCurrentWithDefaultValue:(NSString*)key
+{
+	id value = [[delegate settings] objectForKey:key];
 	return [value isEqualToString:[[delegate defaultSettings] objectForKey:key]];
 }
 

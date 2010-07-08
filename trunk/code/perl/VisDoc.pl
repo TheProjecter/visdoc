@@ -62,13 +62,13 @@ $preferences->{'doc-sources'} = \$process;
     $preferences,              'output=s',
     'docencoding:s',           'giveCredits=i',
     'doc-sources=s',
-    'copyright:i',             'copyrightText|footer:s',
+    'footerText:s',
     'extensions:s',            'eventHandlerPrefixes:s',
-    'eventHandlers:i',         'generateIndex:i',
+    'eventHandlers:i',         'generateNavigation:i',
     'ignoreClasses:i',         'includeSourceCode:i',
-    'indexTitle|main-title:s', 'listPrivate:i',
+    'projectTitle|main-title:s', 'listPrivate:i',
     'preserveLinebreaks:i',    'saveXML:i',
-    'datapath:s',  'templateCss:s',
+    'datapath:s',  'templateCssDirectory:s',
     'templateJsDirectory:s',
     'templateXsl:s',           'feedback:i',
     'openInBrowser:i',         'help'
@@ -84,8 +84,7 @@ $preferences->{'base'} = getcwd();
 my $dataPath = $preferences->{'datapath'};
 delete $preferences->{'datapath'};
 
-$preferences->{copyrightText} ||= $preferences->{footer};
-$preferences->{indexTitle} ||= $preferences->{'main-title'};
+$preferences->{projectTitle} ||= $preferences->{'main-title'};
 
 =pod
 eval "use Data::Dumper";
@@ -228,10 +227,10 @@ Value: string
 Directory path to write documentation files in. In the directory the subdirectories 'css', 'html', 'js' and optionally 'xml' will be created.
 Value: string
 
-=item B<-footer>
+=item B<-footerText>
 
 Footer text.
-Value: HTML string. To write a copyright sign, use &copy;.
+Value: HTML string.
 Default: none (no footer)
 
 =item B<-extensions>
@@ -254,11 +253,17 @@ Whether to include source code in the documentation.
 Values: 1 or 0
 Default: 0
 
-=item B<-main-title>
+=item B<-generateNavigation>
 
-Title of frameset and main.html header.
+Whether to create a left menu navigation with corresponding files.
+Values: 1 or 0
+Default: 1
+
+=item B<-projectTitle>
+
+Title of project.
 Value: string
-Default: none, no frameset
+Default: "Documentation"
 
 =item B<-giveCredits>
 
@@ -284,10 +289,15 @@ Whether to save the XML files that are used by the XSLT processor. Useful for de
 Values: 1 or 0
 Default: 0
 
-=item B<-templateCss>
+=item B<-templateCssDirectory>
 
-CSS file to be copied to the output directory '/css'.
-Default: 'templates/css/VisDoc.min.css'
+Source directory with css files to copy. Each file with extension 'css' in this directory gets copied to the output directory '/'css'.
+Default: 'templates/css'
+
+=item B<-templateJsDirectory>
+
+Source directory with javascript files to copy. Each file with extension 'js' in this directory gets copied to the output directory '/'js'.
+Default: 'templates/js'
 
 =item B<-feedback>
 
@@ -304,11 +314,6 @@ Not implemented.
 Whether to open generated documentation in a browser.
 Values: 1 or 0
 Default: 0
-
-=item B<-templateJsDirectory>
-
-Source directory with javascript files to copy. Each file with extension 'js' in this directory gets copied to the output directory '/'js'.
-Default: 'templates/js'
 
 =cut
 

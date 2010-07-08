@@ -3,11 +3,21 @@
 
 @implementation MyPathCell
 
-- (void)awakeFromNib
-{
-	[self setDelegate:self];
-	[self setPathStyle:NSPathStylePopUp];
-	[self setEditable:YES];
+
+- (id)init
+{	
+    self = [super init];
+    if (self) {
+		[self setDelegate:self];
+		[self setPathStyle:NSPathStylePopUp];
+		[self setEditable:YES];
+		
+		float fontSize = [NSFont systemFontSizeForControlSize:NSSmallControlSize];
+		NSFont *font = [NSFont fontWithName:[[self font] fontName] size:fontSize];
+		[self setFont:font];
+		[self setControlSize:NSSmallControlSize];
+    }
+    return self;
 }
 
 - (void)setObjectValue:(id)obj
@@ -24,7 +34,6 @@
 	if (url) {
 		[super setObjectValue:url];
 	}
-	NSLog(@"url=%@", url);
 }
 
 @end
