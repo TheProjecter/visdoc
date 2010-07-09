@@ -7,7 +7,7 @@ use warnings;
 use VisDoc::FileData;
 use VisDoc::Defaults;
 use VisDoc::XMLOutputFormatterClassPage;
-use VisDoc::XMLOutputFormatterPackageData;
+use VisDoc::XMLOutputFormatterPackagePage;
 use VisDoc::Language;
 
 my $doctermsInited = 0;
@@ -39,7 +39,7 @@ sub formatFileData {
 
             # excludes unmaterialized packages, such as with as2
             my $formatter =
-              VisDoc::XMLOutputFormatterPackageData->new( $inPreferences,
+              VisDoc::XMLOutputFormatterPackagePage->new( $inPreferences,
                 $inFileData->{language}, $packageData );
             push @{$xmlData}, $formatter->format($inXmlWriter);
         }

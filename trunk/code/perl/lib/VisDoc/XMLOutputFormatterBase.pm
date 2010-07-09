@@ -6,7 +6,7 @@ Base class for XML output formatters. Includes common methods that are used by s
 
 Subclasses:
 - XMLOutputFormatterClassPage
-- XMLOutputFormatterPackageData (not yet created)
+- XMLOutputFormatterPackagePage (not yet created)
 
 =cut
 

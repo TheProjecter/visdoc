@@ -1,6 +1,6 @@
 # See bottom of file for license and copyright information
 
-package VisDoc::XMLOutputFormatterPackageData;
+package VisDoc::XMLOutputFormatterPackagePage;
 use base 'VisDoc::XMLOutputFormatterClassPage';
 
 use strict;
