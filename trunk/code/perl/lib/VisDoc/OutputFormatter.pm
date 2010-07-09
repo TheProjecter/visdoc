@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use VisDoc::FileData;
 use VisDoc::Defaults;
-use VisDoc::XMLOutputFormatterClassData;
+use VisDoc::XMLOutputFormatterClassPage;
 use VisDoc::XMLOutputFormatterPackageData;
 use VisDoc::Language;
 
@@ -49,7 +49,7 @@ sub formatFileData {
             next if $classData->isExcluded();
             next if !$inPreferences->{listPrivate} && !$classData->isPublic();
             my $formatter =
-              VisDoc::XMLOutputFormatterClassData->new( $inPreferences,
+              VisDoc::XMLOutputFormatterClassPage->new( $inPreferences,
                 $inFileData->{language}, $classData );
             push @{$xmlData}, $formatter->format($inXmlWriter);
         }
