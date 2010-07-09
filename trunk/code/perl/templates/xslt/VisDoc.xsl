@@ -634,7 +634,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			<xsl:if test="viewSourceButton!=''">
 				<span class="sourceCodeShow"><a href="#"><span class="closure">&#9658;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="viewSourceButton" /></span></a></span><span class="sourceCodeHide"><a href="#"><span class="disclosure">&#9660;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="hideSourceButton" /></span></a></span>
 			</xsl:if>
-			<pre id="source"><xsl:attribute name="class">brush: <xsl:value-of select="../../language" />;</xsl:attribute><xsl:value-of select="sourceCodeText" /></pre>
+			<pre id="source"><xsl:attribute name="class">brush: <xsl:value-of select="/document/language" />;</xsl:attribute><xsl:value-of select="sourceCodeText" /></pre>
 		</div>
 	</xsl:if>
 </xsl:template>
@@ -1123,11 +1123,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 						<span class="packagePath"><xsl:value-of select="packagePath" /></span>
 					</xsl:if>
 					<xsl:if test="link/name!=''">
-						<span><xsl:if test="(class|interface)='true'">
-								<xsl:attribute name="class">className</xsl:attribute>
-							</xsl:if>
-							<xsl:value-of select="link/name" />
-						</span>
+						<span><xsl:if test="(class|interface)='true'"><xsl:attribute name="class">className</xsl:attribute></xsl:if><xsl:value-of select="link/name" /></span>
 					</xsl:if>
 					<xsl:if test="className!=''">
 						<span class="className"><xsl:text disable-output-escaping="yes">(</xsl:text><xsl:value-of select="className" /><xsl:text disable-output-escaping="yes"><![CDATA[)]]></xsl:text></span>
@@ -1136,6 +1132,8 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 						<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text><span class="attribute"><xsl:value-of select="attribute" /></span>
 					</xsl:if>
 				</a>
+				<xsl:if test="interface='true'"><span><xsl:attribute name="class">type small</xsl:attribute> interface</span></xsl:if>
+				<xsl:if test="private='true'"><span><xsl:attribute name="class">type small</xsl:attribute> private</span></xsl:if>
 			</xsl:if>
 			<xsl:if test="not(link/uri)">
 				<xsl:value-of select="link/name" />

@@ -14,6 +14,7 @@
 	templateCssPathCell = [[[MyPathCell alloc] init] retain];
 	templateJsDirectoryPathCell = [[[MyPathCell alloc] init] retain];
 	templateXslPathCell = [[[MyPathCell alloc] init] retain];
+	[self updateUsesDefaults];
 }
 
 - (void)dealloc
@@ -99,7 +100,6 @@
 	}
 	return cell;
 }
-
 
 - (IBAction)restoreToDefaultValues:(id)sender
 {

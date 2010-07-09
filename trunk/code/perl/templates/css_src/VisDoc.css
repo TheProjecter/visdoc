@@ -94,7 +94,6 @@ from esc tab hack moz min-height solution ***/
 }
 #sidebarContent {
 	position:relative;
-	/*word-wrap:break-word;*/
 }
 #main {
 	width:100%;
@@ -159,6 +158,11 @@ p.small {
 	font-size: 0.8333333333333334em;
 	line-height: 1.8em;
 	margin-bottom: 1.8em;
+}
+span.small {
+	margin: 0;
+	font-size: 0.8333333333333334em;
+	line-height: 1.8em;
 }
 table {
 	border-collapse: collapse;
@@ -601,7 +605,9 @@ html>body pre {
 .classProperties th.classDetails {
 	background-color:#fff;
 }
-
+.description {
+	margin-top:1em;
+}
 .description h1,
 .description h2,
 .description h3,
@@ -655,7 +661,7 @@ html>body pre {
 .memberSection .class {
 	height:1%;
 	margin:-1px -10px 0 -10px;
-	padding:1em 10px 1.5em;
+	padding:1em 10px;
 }
 
 .memberSection .fullMemberString {
@@ -952,6 +958,9 @@ a:hover.private {
 #main .list li.package {
 	font-weight:700;
 }
+.type {
+	color:#95ADC0;
+}	
 
 .toc .memberList .memberSummaryPart .boxWithBorder .boxedElem .contentHolder .item,
 .memberSection .boxWithBorder,

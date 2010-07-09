@@ -179,7 +179,7 @@
 		"default" : "Main"
 	},
 	"tree_link" : {
-		"default" : "Tree"
+		"default" : "Package tree"
 	},
 	"tree_title" : {
 		"default" : "Package and Class Hierarchy",
