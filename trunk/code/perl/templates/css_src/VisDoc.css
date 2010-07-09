@@ -607,7 +607,13 @@ html>body pre {
 .description h3,
 .description h4,
 .description h5,
-.description h6 {
+.description h6,
+.classDescription h1,
+.classDescription h2,
+.classDescription h3,
+.classDescription h4,
+.classDescription h5,
+.classDescription h6 {
 	margin-top:1em;
 }
 

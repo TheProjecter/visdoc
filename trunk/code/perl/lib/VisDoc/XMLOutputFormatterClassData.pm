@@ -25,12 +25,23 @@ sub _formatData {
 
     $this->_writeAssetLocations($inWriter);
     $this->_writeTitleAndPageId($inWriter);
+    $this->_writeLanguageId($inWriter);
     $this->_writeClassData($inWriter);
     $this->_writeSummary($inWriter);
     $this->_writeMembers($inWriter);
     $this->_writeFooter($inWriter);
 
     return 1;
+}
+
+=pod
+
+=cut
+
+sub _writeLanguageId {
+    my ( $this, $inWriter ) = @_;
+
+	$inWriter->cdataElement( 'language', $this->{language} );
 }
 
 =pod

@@ -189,14 +189,6 @@ sub _writeCSSLocation {
     foreach my $file (@{$this->{preferences}->{cssFiles}}) {
 		$inWriter->cdataElement('cssFile', $file);
 	}
-	
-=pod
-	my $cssLocation = $VisDoc::Defaults::DESTINATION_CSS . '/' . VisDoc::StringUtils::getLastPathComponent( $this->{preferences}->{templateCss} );
-	
-    $inWriter->startTag('cssFile');
-    $inWriter->cdata($cssLocation);
-    $inWriter->endTag('cssFile');
-=cut
 }
 
 =pod
