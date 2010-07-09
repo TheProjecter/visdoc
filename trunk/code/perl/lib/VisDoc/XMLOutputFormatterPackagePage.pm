@@ -20,7 +20,7 @@ sub _formatData {
     $this->_writeAssetLocations($inWriter);
     $this->_writeTitleAndPageId($inWriter);
     $this->_writeClassData($inWriter);
-    $this->_writeSummary($inWriter);
+	# do not write the summary
     $this->_writeMembers($inWriter);
     $this->_writeFooter($inWriter);
 
@@ -228,8 +228,41 @@ sub _writeMembers_forMemberGroup_memberText {
 =cut
 
     $inWriter->endTag('member');
-
 }
+
+=pod
+
+Override: do not write the full description, only the summary.
+
+=cut
+
+sub _writeMembers_forMemberGroup_memberText_description {
+    my ( $this, $inWriter, $inMember ) = @_;
+
+    return if !$inMember->{javadoc};
+
+    
+    $inWriter->startTag('description');
+
+	my $fields      = $inMember->{javadoc}->fieldsWithName('deprecated');
+    
+    if ($fields) {
+        $inWriter->startTag('fields');
+        $this->_writeFieldValue( $inWriter, 'deprecated', $fields );
+        $inWriter->endTag('fields');
+    }
+
+    # description text
+    $inWriter->startTag('text');
+    
+    my $summary =
+          $this->getSummaryLine( $inMember->{javadoc}, $this->{data}->{fileData} ) || '';
+    $this->_writeValueXml( $inWriter, $summary );
+    $inWriter->endTag('text');
+
+    $inWriter->endTag('description');
+}
+
 1;
 
 # VisDoc - Code documentation generator, http://visdoc.org
