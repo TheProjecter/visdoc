@@ -5,7 +5,7 @@ package VisDoc::StringUtils;
 use strict;
 use warnings;
 
-our $PATTERN_URL = '(http://[[:alnum:]\.\/\_]*[[:space:]].*?)$';
+our $PATTERN_URL = '(?:[^\'\"]|^)\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))';
 
 our $PATTERN_TAG_PACKAGE_CLASS_METHOD_LABEL = '
   ^
@@ -884,6 +884,20 @@ sub handleStarsInCodeText {
     # cleanup
     $_[0] =~ s/$PLACEHOLDER_LINEBREAK//gs;
 }
+
+=pod
+
+TODO
+
+=cut
+
+sub preserveLinebreaks {
+    #my $text = $_[0]
+        
+	# first preserve empty lines
+	$_[0] =~ s/(\n)(\s*?\*\s{0,1})(\n)/$1$PLACEHOLDER_LINEBREAK$3/gs;
+
+ }
 
 1;
 

@@ -183,6 +183,8 @@ sub _processFields {
             $isParam = 1;
         }
 
+		VisDoc::StringUtils::preserveLinebreaks( $value );
+		
         # process field
         my $field;
         if ( $fieldName =~ m/^(see|throws|exception|sends)$/ ) {

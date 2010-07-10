@@ -6,6 +6,7 @@ use base 'VisDoc::FieldData';
 use strict;
 use warnings;
 use VisDoc::StringUtils;
+use VisDoc::UrlLinkData;
 
 use overload ( '""' => \&as_string );
 
@@ -20,6 +21,14 @@ param $stub: optional
 sub createLinkData {
     my ( $inFieldName, $inValue, $inStub ) = @_;
 
+	# is this a url?
+	if ($inValue =~ m/^$VisDoc::StringUtils::PATTERN_URL/) {
+		return VisDoc::UrlLinkData->new(
+			$inFieldName, $inStub, undef, undef,
+			undef, undef, $inValue
+		);
+	}
+	
     my $pattern = VisDoc::StringUtils::stripCommentsFromRegex(
         $VisDoc::StringUtils::PATTERN_TAG_PACKAGE_CLASS_METHOD_LABEL);
 

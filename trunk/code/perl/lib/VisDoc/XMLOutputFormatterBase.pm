@@ -229,7 +229,7 @@ sub _writeClassData {
 
 =pod
 
-_writeDetailsValue( $writer, $key, $docTermKey)
+_writeDetailsValue( $writer, $value, $key, $docTermKey)
 
 =cut
 

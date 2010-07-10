@@ -191,14 +191,6 @@ sub _parseClasses {
 
     my ( $text, $classes ) = $this->_parseClassData($inText);
 
-=pod
-    use Data::Dumper;
-    print "_parseClasses\n";
-    print( " classes=" . Dumper($classes) . "\n" );
-    print( " class count=" . @$classes . "\n" );
-    print(" text=$text\n");
-=cut
-
     foreach my $classData (@$classes) {
 
         $this->_postProcessClassData($classData);
@@ -304,15 +296,10 @@ sub _parseClassData {
             my $stripped = substr( $text, $startLoc, pos() - $startLoc,
                 "\nVISDOC_STRIPPED_CLASS" );
 
-            #print("stripped=$stripped\n");
-            #print("DEEPER\n");
-
             # parse class contents
             my ( $text, $classes ) =
               $this->_parseClassData( $contents, $data, $classes );
         }
-
-        #print("SAME LEVEL\n");
 
         # repeat parsing in case there is next class at the same level
         ( $text, $classes ) =
@@ -357,11 +344,19 @@ sub _handleClassMatches {
     $i = $inPatternMap->{javadoc} - 1;
     if ( $inMatches->[$i] ) {
 
-        #$data->{javadocStub} = $inMatches->[$i];
         $data->{javadoc} =
           $this->{fileParser}->parseJavadoc( $inMatches->[$i] );
     }
 
+    # metadata
+    if ($inPatternMap->{metadata}) {
+		$i = $inPatternMap->{metadata} - 1;
+		if ( $inMatches->[$i] && $inMatches->[$i] ) {
+			my $metadata = $inMatches->[$i];
+			$data->{metadata} = $this->_parseMetadataData($metadata);
+		}
+	}
+	
     # access
     $i = $inPatternMap->{access} - 1;
     if ( $inMatches->[$i] ) {
@@ -537,12 +532,6 @@ sub _parseMembers {
 
     $this->_setMemberOrder( $text, $methods, $properties );
 
-    #use Data::Dumper;
-    #print( " methods=" . Dumper($methods) . "\n" );
-    #print( " properties=" . Dumper($properties) . "\n" );
-    #print( " properties count=" . @$properties . "\n" );
-    #print(" text=$text\n");
-
     return ( $methods, $properties, $text );
 }
 
@@ -607,12 +596,6 @@ sub _parseMethods {
     my $pattern    = $this->{PATTERN_METHOD_WITH_JAVADOC};
     my $patternMap = $this->{MAP_METHOD_WITH_JAVADOC};
 
-=pod
-print("_parseMethods inText=$inText\n");
-print("pattern=" . VisDoc::StringUtils::stripCommentsFromRegex($pattern) . "\n");
-print("======================\n");
-=cut
-
     my $text = $inText;
     local $_ = $text;
     use re 'eval';    # to be able to use Eval-group in pattern
@@ -650,8 +633,6 @@ print("======================\n");
             $endLoc - $startLoc,
             "; STRIPPED_METHOD_$order\n"
         );
-
-        #print("\t stripped=$stripped\n");
 
         die(
 "Infinite recursion while parsing:$inText\nPlease check the syntax of this code."

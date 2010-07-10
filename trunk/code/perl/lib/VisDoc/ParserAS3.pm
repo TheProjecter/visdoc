@@ -40,6 +40,10 @@ sub new {
 
     my VisDoc::ParserAS3 $this = $class->SUPER::new($inFileParser);
 
+    my $PATTERN_METADATA = '
+  ((?:\[[^\]]*\][[:space:]]*)*)     # everything between [...] brackets
+  ';
+
     $this->{PATTERN_PACKAGE} = '
   [[:space:]]*						    # any space
   (%VISDOC_STUB_JAVADOC_COMMENT_[0-9]+%)* # i1: javadoc comment
@@ -58,34 +62,33 @@ sub new {
     $this->{PATTERN_CLASS_NAME} = '[[:alnum:]_\$\.]+';
 
     $this->{PATTERN_CLASS_LINE_WITH_JAVADOC} = '
-  [[:space:]]*						# any space
-  (									# i1: javadoc comment
+  [[:space:]]*						        # any space
+  (									        # i1: javadoc comment
   %VISDOC_STUB_JAVADOC_COMMENT_[0-9]+%		# javadoc comment contents
   )*
-  [[:space:];]*						# any space or semi-colon
-  (public|static|private|final|dynamic|intrinsic|internal|protected)*	  						# access at index 2
-  [[:space:]]*						# any space
-  \b(class|interface)+\b            # type: "class" or "interface" at index 3
-  [[:space:]]*						# any space
-  (' . $this->{PATTERN_CLASS_NAME} . ')   # i4: class name
-  [[:space:]]*						# any space
-  ([^{]*)							# i5: superclasses, interfaces: group words in "extends" or "implements"
-  [[:space:]]*						# any space
-  {									# opening brace
+  [[:space:];]*						        # any space or semi-colon
+  ' . $PATTERN_METADATA . '                 # i2: metadata
+  [[:space:];]*						        # any space or semi-colon
+  (public|static|private|final|dynamic|intrinsic|internal|protected)*	  						 # i3: access
+  [[:space:]]*						        # any space
+  \b(class|interface)+\b                    # i4: type: "class" or "interface"
+  [[:space:]]*						        # any space
+  (' . $this->{PATTERN_CLASS_NAME} . ')     # i5: class name
+  [[:space:]]*						        # any space
+  ([^{]*)							        # i6: superclasses, interfaces: group words in "extends" or "implements"
+  [[:space:]]*						        # any space
+  {									        # opening brace
   ';
     $this->{MAP_CLASS_LINE_WITH_JAVADOC} = {
         javadoc      => 1,
-        access       => 2,
-        type         => 3,
-        name         => 4,
-        superclasses => 5,
-        interfaces   => 5,
+        metadata     => 2,
+        access       => 3,
+        type         => 4,
+        name         => 5,
+        superclasses => 6,
+        interfaces   => 6,
     };
-
-    my $PATTERN_METADATA = '
-  ((?:\[[^\]]*\][[:space:]]*)*)     # everything between [...] brackets
-  ';
-
+    
     $this->{PATTERN_METADATA_CONTENTS} = '
   \[								# opening bracket [
   ([[:alnum:]\"\']*)								# i1: metadata identifier

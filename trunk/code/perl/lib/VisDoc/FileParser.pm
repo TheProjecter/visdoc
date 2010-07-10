@@ -239,6 +239,10 @@ sub _cleanText {
     return $text;
 }
 
+=pod
+
+=cut
+
 sub _stubAllTags {
     my ( $this, $inText ) = @_;
 
@@ -255,6 +259,9 @@ sub _stubAllTags {
 
     # put {@link ...} in hash and replace by stubs
     $text = $this->_stubLinkTags($text);
+    
+    # put http:// links in hash and replace by stubs
+    $text = $this->_stubUrls($text);
 
     # put /**...*/ and /**<..*/ in hash and replace by stubs
     $text = $this->_stubJavadocComments($text);
@@ -385,6 +392,31 @@ sub _stubLinkTags {
 
 =pod
 
+_stubUrls( $text ) -> $text
+
+Replaces http:// urls with stubs.
+Stores stubs in %data.
+
+Returns the processed text.
+
+=cut
+
+sub _stubUrls {
+
+    #my $this = $_[0]
+    #my $text = $_[1]
+
+    return $_[0]->_stubTags(
+        \$_[1],
+        $VisDoc::StringUtils::PATTERN_URL,
+        1,
+        $VisDoc::StringUtils::STUB_INLINE_LINK,
+        VisDoc::FileData::getDataKey($VisDoc::StringUtils::STUB_INLINE_LINK)
+    );
+}
+
+=pod
+
 _stubLiteralTags( $text ) -> $text
 
 Replaces {@literal...} tags with stubs.
@@ -494,6 +526,7 @@ sub _stubRegularJavadocComments {
 
     my $merged = $_[0]->{data}->mergeData( 'javadocComments', $blocks );
     $_[0]->{data}->{'javadocComments'} = $merged;
+
 
     return $newText;
 }
