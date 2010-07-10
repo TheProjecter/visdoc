@@ -1015,6 +1015,19 @@ sub _stubObjectProperties {
     return "$inPre$newText;$inPost";
 }
 
+=pod
+
+_parseMetadataData( $text ) -> \@metadataList
+
+To be implemented by subclasses.
+
+=cut
+
+sub _parseMetadataData {
+#    my ( $this, $inText ) = @_;
+
+}
+
 1;
 
 # VisDoc - Code documentation generator, http://visdoc.org

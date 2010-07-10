@@ -14,6 +14,7 @@ our $NO_KEY = 'NO_KEY';
 sub new {
     my ( $class, $inName, $inItems ) = @_;
     my $this = {};
+    
     $this = {
         name  => $inName,     # name string
         items => $inItems,    # ref of list of hashes

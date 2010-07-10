@@ -43,7 +43,7 @@ sub new {
     my $PATTERN_METADATA = '
   ((?:\[[^\]]*\][[:space:]]*)*)     # everything between [...] brackets
   ';
-
+  
     $this->{PATTERN_PACKAGE} = '
   [[:space:]]*						    # any space
   (%VISDOC_STUB_JAVADOC_COMMENT_[0-9]+%)* # i1: javadoc comment
@@ -91,13 +91,17 @@ sub new {
     
     $this->{PATTERN_METADATA_CONTENTS} = '
   \[								# opening bracket [
-  ([[:alnum:]\"\']*)								# i1: metadata identifier
+  ([[:alnum:]\"\']*)				# i1: metadata identifier
+  \]
+  |
+  \[								# opening bracket [
+  ([[:alnum:]\"\']*)				# i2: metadata identifier
   [[:space:]]*						# any space
-  \(								# opening bracket of contents
+  \(*								# optional opening bracket of contents
   [[:space:]]*						# any space
-  ([^\)]*)							# i2: contents (any char except closing bracket)
+  ([^\)]*)							# i3: contents (any char except closing bracket)
   [[:space:]]*						# any space
-  \)								# closing bracket of contents
+  \)*								# optional closing bracket of contents
   [[:space:]]*						# any space
   \]								# closing bracket ]
   ';

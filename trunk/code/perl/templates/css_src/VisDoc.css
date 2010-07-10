@@ -832,7 +832,7 @@ div.typeInfo {
 .memberSection .class:target,
 h2:target {
 	background-color:#fafcfd;
-	border:1px solid #f8ba54;
+	border:1px solid #aaa;
 }
 .member:hover {
 	background-color:#f1f5f9;
