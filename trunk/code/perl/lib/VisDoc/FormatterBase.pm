@@ -301,8 +301,6 @@ sub formatLiteral {
     #my $this = $_[0]
     #my $text = $_[1]
 
-    #print("literal:$_[1]\n");
-
     VisDoc::StringUtils::convertHtmlEntities( $_[1] );
     $_[1] =~ s/\n/<br \/>/go;
 

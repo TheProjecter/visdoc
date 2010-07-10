@@ -530,11 +530,10 @@ sub _substituteInheritDocStubs {
                             foreach my $field ( @{$memberFields} ) {
 
             #next if ($field->{name} !~ m/^(description|throws|param|return)$/);
-
                                 $field->{value} =
-                                  $fileData->substituteInheritDocStub(
+                                  $class->{fileData}->substituteInheritDocStub(
                                     $field->{value},
-                                    $class, $member, $field );
+                                    $class, $member, $field ) if $field->{value};
                             }
                         }
                     }
@@ -943,7 +942,7 @@ sub _substituteInlineLinkStubs {
                     foreach my $field ( @{$packageFields} ) {
                         $field->{value} =
                           $fileData->substituteInlineLinkStub(
-                            $field->{value} );
+                            $field->{value} ) if $field->{value};
                     }
                 }
             }
@@ -958,7 +957,7 @@ sub _substituteInlineLinkStubs {
                         foreach my $field ( @{$classFields} ) {
                             $field->{value} =
                               $fileData->substituteInlineLinkStub(
-                                $field->{value} );
+                                $field->{value} ) if $field->{value};
                         }
                     }
                 }
@@ -972,7 +971,19 @@ sub _substituteInlineLinkStubs {
                             foreach my $field ( @{$javadocFields} ) {
                                 $field->{value} =
                                   $fileData->substituteInlineLinkStub(
-                                    $field->{value} );
+                                    $field->{value} ) if $field->{value};
+                            }
+                        }
+                        
+                        my $linkDataFields = $member->{javadoc}->getLinkDataFields();
+                        if ($linkDataFields) {
+                            foreach my $field ( @{$linkDataFields} ) {
+
+            #next if ($field->{name} !~ m/^(description|throws|param|return)$/);
+                                $field->{label} =
+                                  $class->{fileData}->substituteInlineLinkStub(
+                                    $field->{label},
+                                    $class, $member, $field ) if $field->{label};
                             }
                         }
                     }

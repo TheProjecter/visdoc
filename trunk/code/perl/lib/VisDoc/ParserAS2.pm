@@ -539,9 +539,9 @@ sub _handleMethodMatches {
         if ($accessStr) {
             my @access = $this->_parseMemberAccess($accessStr);
             $data->{access}         = \@access;
-            $data->{isAccessPublic} = $this->_isPublic( $data->{access} );
         }
     }
+	$data->{isAccessPublic} = $this->_isPublic( $data->{access} );
 
     # type: read or write
     $i = $inPatternMap->{name} - 1;    # beware: type is parsed from name
@@ -919,9 +919,9 @@ sub _handlePropertyMatches {
         if ($accessStr) {
             my @access = $this->_parseMemberAccess($accessStr);
             $data->{access}         = \@access;
-            $data->{isAccessPublic} = $this->_isPublic( $data->{access} );
         }
     }
+	$data->{isAccessPublic} = $this->_isPublic( $data->{access} );
 
     # type
     $i = $inPatternMap->{type} - 1;

@@ -661,8 +661,9 @@ html>body pre {
 .memberSection .member,
 .memberSection .class {
 	height:1%;
-	margin:-1px -10px 0 -10px;
+	margin:0 -10px 0 -10px;
 	padding:1em 10px;
+	border:1px solid #fff;
 }
 
 .memberSection .fullMemberString {
@@ -830,7 +831,8 @@ div.typeInfo {
 .memberSection .member:target,
 .memberSection .class:target,
 h2:target {
-	background-color:#f1f5f9;
+	background-color:#fafcfd;
+	border:1px solid #f8ba54;
 }
 .member:hover {
 	background-color:#f1f5f9;

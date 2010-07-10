@@ -53,7 +53,7 @@ BEGIN {
         $VisDoc::StringUtils::STUB_TAG_CODE,
         $VisDoc::StringUtils::STUB_TAG_LITERAL,
 
-        #       $VisDoc::StringUtils::STUB_INLINE_LINK, ### done by PostParser
+        # $VisDoc::StringUtils::STUB_INLINE_LINK, ### done by PostParser
     ) . ')';
 }
 
@@ -156,6 +156,10 @@ sub getContents {
     return $text;
 }
 
+=pod
+
+=cut
+
 sub substituteInlineLinkStub {
     my ( $this, $inText ) = @_;
 
@@ -171,6 +175,10 @@ sub substituteInlineLinkStub {
 
     return $text;
 }
+
+=pod
+
+=cut
 
 sub substituteInheritDocStub {
     my ( $this, $text, $inClass, $inMember, $inField ) = @_;

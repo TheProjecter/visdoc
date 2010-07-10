@@ -6,6 +6,7 @@ use VisDoc::JavadocData;
 use VisDoc::StringUtils;
 use VisDoc::FieldData;
 use VisDoc::LinkData;
+use VisDoc::EventLinkData;
 use VisDoc::HashUtils;
 
 =pod
@@ -106,6 +107,9 @@ sub _createLinkData {
     if ( $inValue =~ m/$pattern/s ) {
         my $value = $1;
         return VisDoc::FieldData->new( $inFieldName, $value );
+    }
+    elsif ( $inFieldName =~ m/^(throws|exception|sends)$/ ) {
+    	return VisDoc::EventLinkData::createLinkData( $inFieldName, $inValue );
     }
     else {
         return VisDoc::LinkData::createLinkData( $inFieldName, $inValue );

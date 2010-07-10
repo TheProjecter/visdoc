@@ -634,7 +634,10 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 			<xsl:if test="viewSourceButton!=''">
 				<span class="sourceCodeShow"><a href="#"><span class="closure">&#9658;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="viewSourceButton" /></span></a></span><span class="sourceCodeHide"><a href="#"><span class="disclosure">&#9660;<xsl:text disable-output-escaping="yes">&nbsp;</xsl:text></span><span class="linkLabel"><xsl:value-of select="hideSourceButton" /></span></a></span>
 			</xsl:if>
-			<pre id="source"><xsl:attribute name="class">brush: <xsl:value-of select="/document/language" />;</xsl:attribute><xsl:value-of select="sourceCodeText" /></pre>
+			<pre id="source"><xsl:attribute name="class">brush: 
+			<xsl:if test="/document/language='as2'">as3;</xsl:if>
+			<xsl:if test="/document/language='as3'">as3;</xsl:if>
+			<xsl:if test="/document/language='java'">java;</xsl:if></xsl:attribute><xsl:value-of select="sourceCodeText" /></pre>
 		</div>
 	</xsl:if>
 </xsl:template>

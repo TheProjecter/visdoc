@@ -161,7 +161,6 @@ sub getLinkDataFields {
       @{ $this->{linkTags} };
 
     return $linkFields;
-
 }
 
 sub getFields {
