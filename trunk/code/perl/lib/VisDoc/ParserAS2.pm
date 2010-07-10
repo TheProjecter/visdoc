@@ -94,10 +94,14 @@ sub new {
     $this->{PATTERN_METADATA_CONTENTS} = '
   \[								# opening bracket [
   ([[:alnum:]\"\']*)				# i1: metadata identifier
+  \]
+  |
+  \[								# opening bracket [
+  ([[:alnum:]\"\']*)				# i2: metadata identifier
   [[:space:]]*						# any space
   \(*								# optional opening bracket of contents
   [[:space:]]*						# any space
-  ([^\)]*)							# i2: contents (any char except closing bracket)
+  ([^\)]*)							# i3: contents (any char except closing bracket)
   [[:space:]]*						# any space
   \)*								# optional closing bracket of contents
   [[:space:]]*						# any space
@@ -667,10 +671,13 @@ sub _parseMetadataData {
     local $_ = $text;
 
     while (/$this->{PATTERN_METADATA_CONTENTS}/gsx) {
-        my ( $name, $contents ) = ( $1, $2 );
-        my @items =
+        my ( $noContentName, $name, $contents ) = ( $1, $2, $3 );
+        
+        my @items;
+        @items =
           VisDoc::StringUtils::commaSeparatedListFromCommaSeparatedString(
-            $contents);
+            $contents) if $contents;
+
         my @metaContent = ();
         foreach my $item (@items) {
             $item =~ m/$this->{PATTERN_KEY_IS_VALUE}/x;
@@ -680,7 +687,7 @@ sub _parseMetadataData {
             push( @metaContent, { $key => $value } );
         }
         my VisDoc::MetadataData $metadata =
-          VisDoc::MetadataData->new( $name, \@metaContent );
+          VisDoc::MetadataData->new( $name || $noContentName, \@metaContent );
         push( @metadataList, $metadata );
     }
     return \@metadataList;
