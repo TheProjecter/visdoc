@@ -167,17 +167,6 @@ sub parseText {
     my @packages = ($packageData);
     $this->{data}->{packages} = \@packages;
 
-    # tmp
-    #foreach my $classData (@$classes) {
-    #	print "\t " . $classData->{name} . "\n";
-    #}
-
-    # store the package name in each class
-    #    foreach my $classData (@$classes) {
-    #        $classData->{packageName} = $packageData->{name}
-    #          if !$classData->{packageName};
-    #    }
-
     # store the file data in each class
     $this->{data}->{modificationDate} = time()
       if !$this->{data}->{modificationDate};
@@ -267,9 +256,6 @@ sub _stubAllTags {
     # put {@link ...} in hash and replace by stubs
     $text = $this->_stubLinkTags($text);
 
-    # put {@inheritDoc ...} in hash and replace by stubs
-    #$text = $this->_stubInheritDocTags($text);
-
     # put /**...*/ and /**<..*/ in hash and replace by stubs
     $text = $this->_stubJavadocComments($text);
 
@@ -298,6 +284,8 @@ sub _stubTags {
       VisDoc::StringUtils::replacePatternMatchWithStub( $_[1], $_[2], 0, $_[3],
         $_[4], $_[0]->{data}->getStubCounterRef() );
 
+	return $newText unless keys %{$blocks};
+	
     my $merged = $_[0]->{data}->mergeData( $_[5], $blocks );
     $_[0]->{data}->{ $_[5] } = $merged;
 
@@ -444,33 +432,6 @@ sub _stubImageTags {
         VisDoc::FileData::getDataKey($VisDoc::StringUtils::STUB_TAG_IMG)
     );
 }
-
-=pod
-
-_stubInheritDocTags( $text ) -> $text
-
-Replaces {@inheritDoc} tags with stubs.
-Stores stubs in %data.
-
-Returns the processed text.
-
-=cut
-
-=pod
-sub _stubInheritDocTags {
-
-    #my $this = $_[0]
-    #my $text = $_[1]
-
-    return $_[0]->_stubTags(
-        \$_[1],
-        $VisDoc::StringUtils::PATTERN_TAG_INHERITDOC,
-        $VisDoc::StringUtils::PATTERN_TAG_INHERITDOC_CONTENT_INDEX,
-        $VisDoc::StringUtils::STUB_TAG_INHERITDOC,
-        VisDoc::FileData::getDataKey($VisDoc::StringUtils::STUB_TAG_INHERITDOC)
-    );
-}
-=cut
 
 =pod
 

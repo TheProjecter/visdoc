@@ -417,7 +417,7 @@ sub _parseCodeStub {
 
     my $stubText = $this->getStubValue( $inTagString, $inTagName );
     my $formatted = $this->_formatCodeText($stubText);
-    
+
     return $formatted;
 }
 
@@ -448,8 +448,8 @@ sub _parseStubInheritDoc {
 
     my $inheritedComment =
       $this->_getInheritedComment( $inClass, $inMember, $inField );
-    return $inheritedComment if $inheritedComment;
-    return '';
+          
+    return $inheritedComment || '';
 }
 
 =pod
@@ -464,6 +464,7 @@ sub _getInheritedComment {
     my $inherited;
 
     my $interfaceChain = $inClass->getSuperInterfaceChain();
+    
     $inherited =
       $this->_getInheritedCommentForSuperclassOrInterface( $inMember, $inField,
         $interfaceChain );
@@ -493,14 +494,18 @@ sub _getInheritedCommentForSuperclassOrInterface {
     foreach my $superclass ( @{$inSuperChain} ) {
 
         my $superclassData = $superclass->{classdata};
-        return undef if !$superclassData;
+        next if !$superclassData;
 
         my $superMember =
           $superclassData->getMemberWithQualifiedName($memberName);
         next if !$superMember;
 
-        return $this->createInheritedFieldValue( $inField, $superclassData,
+        my $inherited = $this->createInheritedFieldValue( $inField, $superclassData,
             $superMember );
+            
+        # retrieve contents through the superclass filedata object
+		$inherited = $superclassData->{fileData}->getContents($inherited);
+		return $inherited;
     }
     return undef;
 }
@@ -522,6 +527,8 @@ sub _parseLiteralText {
 =pod
 
 _handleContentsOfVerbatimTags( $text ) -> $text
+
+Verbatim tags: quoted strings, property objects, arrays.
 
 =cut
 

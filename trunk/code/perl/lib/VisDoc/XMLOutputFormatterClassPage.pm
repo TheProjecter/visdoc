@@ -233,7 +233,8 @@ sub _writeImplements {
         }
         elsif ( $interface->{name} ) {
             $inWriter->startTag('item');
-            $this->_writeLinkXml( $inWriter, $interface->{name}, undef );
+            $this->_writeLinkXml( $inWriter, $interface->{name}, VisDoc::ClassData::createUriForClass( $interface->{classpath} )
+            );
             $inWriter->endTag('item');
         }
     }

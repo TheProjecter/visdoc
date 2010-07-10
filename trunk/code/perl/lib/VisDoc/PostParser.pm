@@ -178,16 +178,17 @@ sub _resolveClasspaths {
 
             if ($correspondingClass) {
                 $superclass->{classpath} = $correspondingClass->{classpath};
-                $superclass->{classdata} = $correspondingClass;
+                $superclass->{classdata} ||= $correspondingClass;
             }
         }
         foreach my $interface ( @{ $class->{interfaces} } ) {
             my $correspondingClass =
               _getClassWithName( $inClasses, $interface->{name},
                 $class->{packageName} );
+
             if ($correspondingClass) {
                 $interface->{classpath} = $correspondingClass->{classpath};
-                $interface->{classdata} = $correspondingClass;
+                $interface->{classdata} ||= $correspondingClass;
             }
         }
     }
@@ -423,7 +424,17 @@ sub _mapSuperclasses {
             my $classdata = $nameToClassMap{ $superclass->{classpath} }
               if $superclass->{classpath};
             if ($classdata) {
-                $superclass->{classdata} = $classdata;
+                $superclass->{classdata} ||= $classdata;
+            }
+        }
+    }
+    
+    foreach my $class ( @{$inClasses} ) {
+        foreach my $interface ( @{ $class->{interfaces} } ) {
+            my $classdata = $nameToClassMap{ $interface->{classpath} }
+              if $interface->{classpath};
+            if ($classdata) {
+                $interface->{classdata} ||= $classdata;
             }
         }
     }
@@ -888,7 +899,7 @@ sub _validateLinkData {
     }
 
     if ( !$uri || !$showLink ) {
-        $inLink->{isValidRef} = 0;
+        $inLink->{hideLink} = 1;
     }
 
     # set label

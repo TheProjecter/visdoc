@@ -66,6 +66,7 @@ sub new {
     $this->{label} = $inLabel;    # string
 
     $this->{isValidRef} = undef;  # bool
+    $this->{hideLink} = 0;  # bool
     $this->{isPublic}   = 1;      # bool
     $this->{uri}        = undef;  # string
 
@@ -102,7 +103,10 @@ sub formatInlineLink {
     my $classStr = $this->{isPublic} ? '' : " class=\"private\"";
     my $link = '';
 
-    if ( !$this->{isValidRef} ) {
+	if ( $this->{hideLink} ) {
+        $link = '';
+    }
+    elsif ( !$this->{isValidRef} ) {
         $link = $label;
     }
     elsif ( $this->{uri} ) {
