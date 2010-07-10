@@ -539,13 +539,17 @@ sub _writeClassFields {
 sub _writeFieldValue {
     my ( $this, $inWriter, $inTitleKey, $inFields ) = @_;
 
+	return if !scalar @{$inFields};
+	
     $inWriter->startTag('field');
     my $title = VisDoc::Language::getJavadocTerm($inTitleKey) || $inTitleKey;
+   
     $inWriter->cdataElement( 'title', $title );
     $inWriter->startTag('description');
 
     foreach my $field ( @{$inFields} ) {
         my $value;
+
         if ( $field->isa("VisDoc::LinkData") ) {
             my VisDoc::LinkData $linkData = $field;
             $value = $linkData->formatInlineLink('html');
@@ -1276,8 +1280,6 @@ sub _writeMembers_forMemberGroup_memberText_fields {
 
     my @keys = sort keys %{$allFields};
 
-    #return if !scalar @keys;
-
     my $doneFields     = 'description';
     my $excludedFields = 'deprecated|exclude|private';
     my $privateFields =
@@ -1288,8 +1290,6 @@ sub _writeMembers_forMemberGroup_memberText_fields {
     map { push( @fieldKeys, $_ ) if !( $_ =~ m/($excludePattern)/ ); } @keys;
 
     my $metadataFields = $inMember->{metadata};
-
-#    return if (!scalar @fieldKeys && (!$metadataFields && !scalar @{$metadataFields}));
 
     $inWriter->startTag('fields');
 

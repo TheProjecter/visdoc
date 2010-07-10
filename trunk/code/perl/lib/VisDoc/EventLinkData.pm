@@ -48,51 +48,35 @@ sub formatInlineLink {
 
     my $link = '';
 
-	if ( $this->{hideLink} ) {
-        $link = '';
-    }
-    elsif ( !$this->{isValidRef} ) {
-        $link = $label;
-    }
-    elsif ( $this->{uri} ) {
-        my $type = $inDocumentType || 'html';
+	# do not hide link
 
-		my $linkLabel = '';
-		$linkLabel .= $this->{package} if $this->{package};
-		if ( $this->{class} ) {
-			$linkLabel .= '.' if $linkLabel;
-			$linkLabel .= $this->{class};
-		} elsif ( $this->{member} ) {
-			$linkLabel .= '.' if $linkLabel;
-			$linkLabel .= $this->{member};
-		}
-		
-		my $postLabel = '';
-		if ( $this->{class} && $this->{member} ) {
-			$postLabel .= VisDoc::Language::getDocTerm( 'event_type' ) . ' ' . '<code>' . $this->{member} . '</code>';
-		}
-		$label = '' if $label eq $linkLabel;
-		$postLabel .= " $label" if $label;
-		
-        my $url = $this->{uri};
-        
-        $url =~ s/(.*?)(#\w+|$)/$1.html$2/;
-        my $classStr = $this->{isPublic} ? '' : " class=\"private\"";
-        $link = "<a href=\"$url\"$classStr>$linkLabel</a> $postLabel";
-        
-    }
-    else {
+	my $type = $inDocumentType || 'html';
 
-        if ( $this->{member} || $this->{class} || $this->{package} ) {
-            $link =
-              "<span class=\"doesNotExist\">$this->{qualifiedName}</span>";
-        }
-        else {
-            $label = "$this->{qualifiedName} $label" if $this->{qualifiedName};
-            $label = "$this->{package}.$label"       if $this->{package};
-            $link  = $label;
-        }
-    }
+	my $linkLabel = '';
+	$linkLabel .= $this->{package} if $this->{package};
+	if ( $this->{class} ) {
+		$linkLabel .= '.' if $linkLabel;
+		$linkLabel .= $this->{class};
+	} elsif ( $this->{member} ) {
+		$linkLabel .= '.' if $linkLabel;
+		$linkLabel .= $this->{member};
+	}
+	
+	my $postLabel = '';
+	if ( $this->{class} && $this->{member} ) {
+		$postLabel .= VisDoc::Language::getDocTerm( 'event_type' ) . ' ' . '<code>' . $this->{member} . '</code>';
+	}
+	$label = '' if $label eq $linkLabel;
+	$postLabel .= " $label" if $label;
+	
+	if ($this->{uri}) {
+		my $url = $this->{uri};
+		$url =~ s/(.*?)(#\w+|$)/$1.html$2/;
+		my $classStr = $this->{isPublic} ? '' : " class=\"private\"";
+		$link = "<a href=\"$url\"$classStr>$linkLabel</a> $postLabel";
+	} else {
+		$link = "$linkLabel $postLabel";
+	}
 
     return $link;
 }

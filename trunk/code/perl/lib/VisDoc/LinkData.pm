@@ -172,6 +172,7 @@ sub as_string {
     $str .= "\n\t isValidRef=$this->{isValidRef}"
       if $this->{isValidRef};
     $str .= "\n\t isPublic=$this->{isPublic}" if $this->{isPublic};
+    $str .= "\n\t hideLink=$this->{hideLink}" if $this->{hideLink};
     $str .= "\n";
     return $str;
 }

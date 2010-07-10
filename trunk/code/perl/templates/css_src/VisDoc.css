@@ -629,7 +629,6 @@ html>body pre {
 }
 
 .classDescription .field {
-	font-style:italic;
 	color:red;
 }
 
@@ -681,11 +680,12 @@ html>body pre {
 	margin-left:.35em;
 }
 .memberSection .description .field {
-	font-style:italic;
 	margin:0 0 1em;
 }
 
-.memberSection .description .field,
+.memberSection .description .field {
+	color:red;
+}
 .memberSection .description .field a:link,
 .memberSection .description .field a:visited,
 .memberSection .description .field a:hover {
@@ -709,9 +709,6 @@ html>body pre {
 }
 #treemenu .packagePath {
 	display:none;
-}
-#main .list .interface .attribute {
-	font-style:italic;
 }
 
 /* private toggle controls */
