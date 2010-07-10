@@ -12,7 +12,7 @@ use VisDoc::ParserAS2;
 use VisDoc::ParserAS3;
 use VisDoc::ParserJava;
 
-my $debug = 1;
+my $debug = 0;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -339,7 +339,7 @@ class A {}
         # test field see 1
         my $result = $fields->[1]->{label};
         my $expected =
-'<a href="%VISDOC_STUB_INLINE_LINK_2%">javadoc specification</a>';
+'<a href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/windows/javadoc.html">javadoc specification</a>';
         print("RES=$result.\n")   if $debug;
         print("EXP=$expected.\n") if $debug;
         $this->assert( $result eq $expected );
