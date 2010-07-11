@@ -1135,8 +1135,8 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 						<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text><span class="attribute"><xsl:value-of select="attribute" /></span>
 					</xsl:if>
 				</a>
-				<xsl:if test="../interface='true'"><span><xsl:attribute name="class">type small</xsl:attribute> interface</span></xsl:if>
-				<xsl:if test="../private='true'"><span><xsl:attribute name="class">type small</xsl:attribute> private</span></xsl:if>
+				<xsl:if test="interface='true'"><span><xsl:attribute name="class">type small</xsl:attribute> interface</span></xsl:if>
+				<xsl:if test="private='true'"><span><xsl:attribute name="class">type small</xsl:attribute> private</span></xsl:if>
 			</xsl:if>
 			<xsl:if test="not(link/uri)">
 				<xsl:value-of select="link/name" />
