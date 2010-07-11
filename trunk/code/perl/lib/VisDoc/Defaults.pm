@@ -10,7 +10,7 @@ our $DESTINATION_JS  = 'js';
 our $DESTINATION_CSS  = 'css';
 our $DESTINATION_HTML  = 'html';
 our $DESTINATION_XML  = 'xml';
-#our $DESTINATION_IMG  = 'img';
+our $DESTINATION_IMG  = 'img';
 
 our $NOT_IMPLEMENTED = 'Not implemented by subclass!';
 

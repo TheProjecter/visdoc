@@ -215,6 +215,7 @@ sub _prepareForParsing {
 
     my $text = $inText;
     $text = _cleanText($text);
+    $this->_handleImageTags($text);
     $text = $this->_stubAllTags($text);
 
     return $text;
@@ -253,9 +254,6 @@ sub _stubAllTags {
 
     # put {@literal ...} in hash and replace by stubs
     $text = $this->_stubLiteralTags($text);
-
-    # put {@img ...} in hash and replace by stubs
-    $text = $this->_stubImageTags($text);
 
     # put {@link ...} in hash and replace by stubs
     $text = $this->_stubLinkTags($text);
@@ -442,27 +440,19 @@ sub _stubLiteralTags {
 
 =pod
 
-_stubImageTags( $text ) -> $text
+_handleImageTags( $text )
 
-Replaces {@img...} tags with stubs.
-Stores stubs in %data.
-
-Returns the processed text.
+Converts {@img image.jpg} tags to <img src="img/image.jpg" /> tags.
 
 =cut
 
-sub _stubImageTags {
+sub _handleImageTags {
 
     #my $this = $_[0]
     #my $text = $_[1]
 
-    return $_[0]->_stubTags(
-        \$_[1],
-        $VisDoc::StringUtils::PATTERN_TAG_IMG,
-        $VisDoc::StringUtils::PATTERN_TAG_IMG_CONTENT_INDEX,
-        $VisDoc::StringUtils::STUB_TAG_IMG,
-        VisDoc::FileData::getDataKey($VisDoc::StringUtils::STUB_TAG_IMG)
-    );
+	my $imgUrl = "../$VisDoc::Defaults::DESTINATION_IMG/";
+	$_[1] =~ s/$VisDoc::StringUtils::PATTERN_TAG_IMG/<img src="$imgUrl$1" alt="$1" \/>/gx;	
 }
 
 =pod

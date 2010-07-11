@@ -1048,7 +1048,7 @@ class A {}
     my $fileData = VisDoc::parseText( $text, 'as3' );
     my $javadoc  = $fileData->{packages}->[0]->{classes}->[0]->{javadoc};
     my $result   = $javadoc->getDescription();
-    my $expected = '1111%VISDOC_STUB_TAG_IMG_1%3333';
+    my $expected = '1111<img src="../img/imagename.jpg" alt="imagename.jpg" />3333';
 
     print("RES=$result.\n")   if $debug;
     print("EXP=$expected.\n") if $debug;

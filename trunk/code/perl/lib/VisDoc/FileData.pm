@@ -18,7 +18,6 @@ my $DATA_KEYS = {
     $VisDoc::StringUtils::STUB_JAVADOC_SIDE             => 'javadocComments',
     $VisDoc::StringUtils::STUB_INLINE_LINK              => 'links',
     $VisDoc::StringUtils::STUB_TAG_LITERAL              => 'literalTags',
-    $VisDoc::StringUtils::STUB_TAG_IMG                  => 'images',
     $VisDoc::StringUtils::STUB_TAG_INHERITDOC           => 'inheritDocs',
 };
 my %functionTags;

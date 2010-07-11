@@ -136,15 +136,16 @@ our $PATTERN_TAG_IMG = '
    [[:space:]]*		# any space
    (.*?)			# i1: contents
    }				# close tag
+   [[:space:]]*		# any space
    ';
 our $PATTERN_TAG_IMG_CONTENT_INDEX = 1;
-our $STUB_TAG_IMG                  = 'VISDOC_STUB_TAG_IMG';
 
 # inheritDoc tags: {@inheritDoc}
 our $PATTERN_TAG_INHERITDOC = '
    {@inheritDoc		# opening tag
    [[:space:]]*		# any space
    (.*?)			# i1: contents
+   [[:space:]]*		# any space
    }				# close tag
    ';
 

@@ -702,10 +702,10 @@ html>body pre {
 .memberSection .description .field a:hover {
 	text-decoration:underline;
 }
-.list ul {
+.mainContent .list ul {
 	margin-bottom:1em;
 }
-.list ul ul {
+.mainContent .list ul ul {
 	margin-bottom:0;
 }
 .list ul a:hover .attribute,
@@ -841,7 +841,7 @@ div.typeInfo {
 .memberSection .class:target,
 h2:target {
 	background-color:#fafcfd;
-	border:1px solid #3A456D;
+	border:1px solid #abc;
 }
 .member:hover {
 	background-color:#f1f5f9;
