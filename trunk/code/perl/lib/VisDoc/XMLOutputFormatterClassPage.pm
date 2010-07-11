@@ -980,14 +980,20 @@ sub _writeInheritedMemberList {
 
     my $hasInheritedMembers = 0;
 
-    my $superclasses = $inClassData->{superclasses};
-
+    my $superclasses;
+    if ( $inClassData->{type} & $VisDoc::ClassData::TYPE->{'CLASS'} ) {
+    	$superclasses = $inClassData->getSuperclassChain();
+    } elsif ( $inClassData->{type} & $VisDoc::ClassData::TYPE->{'INTERFACE'} ) {
+    	$superclasses = $inClassData->getSuperInterfaceChain();
+    }
+    
     foreach my $superclass ( @{$superclasses} ) {
 
         my $classDataRef       = $superclass->{classdata};
         my $privateMemberCount = 0;
 
         if ( $classDataRef && $classDataRef->isa("VisDoc::ClassData") ) {
+        
             my $members =
               $this->_getMembersForPart( $classDataRef, $inMemberType );
 
