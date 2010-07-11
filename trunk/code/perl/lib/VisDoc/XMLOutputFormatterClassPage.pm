@@ -987,6 +987,12 @@ sub _writeInheritedMemberList {
     	$superclasses = $inClassData->getSuperInterfaceChain();
     }
     
+    my $currentMembers = $this->_getMembersForPart( $inClassData, $inMemberType );
+    my $currentMembersNameHash = {};
+    foreach my $member (@{$currentMembers}) {
+    	$currentMembersNameHash->{ $member->getName() } = 1;
+    }
+
     foreach my $superclass ( @{$superclasses} ) {
 
         my $classDataRef       = $superclass->{classdata};
@@ -999,42 +1005,54 @@ sub _writeInheritedMemberList {
 
             if ( $members && scalar @{$members} ) {
 
-                $hasInheritedMembers = 1;
 
                 # sort array on method name
                 @{$members} = sort { $a->{name} cmp $b->{name} } @{$members};
+                
+                # filter out members that are already in the current member list
+				@{$members} = grep { !$currentMembersNameHash->{ $_->getName() } } @{$members};
 
-                $inWriter->startTag('inheritedMethods');
-                $inWriter->startTag('fromClass');
+				# add the current members to the hash for next iteration
+				foreach my $member (@{$members}) {
+					$currentMembersNameHash->{ $member->getName() } = 1;
+				}
+	
+				if ( $members && scalar @{$members} ) {
+    
+                    $hasInheritedMembers = 1;
 
-                my $titleKey = "header_summary_inherited$inMemberType";
-                my $title    = $this->_docTerm($titleKey);
-
-                $inWriter->startTag('title');
-                $inWriter->cdataElement( 'text', $title );
-                my $superclassURI = VisDoc::ClassData::createUriForClass(
-                    $superclass->{classpath} );
-                $this->_writeLinkXml( $inWriter, $classDataRef->{name},
-                    $superclassURI );
-                $inWriter->endTag('title');
-
-                foreach my $member ( @{$members} ) {
-
-                    $inWriter->startTag('item');
-
-                    $this->_writeLinkXml(
-                        $inWriter,      $member->{name},
-                        $superclassURI, $member->getId()
-                    );
-                    if ( !$member->isPublic() ) {
-                        $inWriter->startTag('private');
-                        $inWriter->endTag('private');
-                    }
-                    $inWriter->endTag('item');
-                }
-
-                $inWriter->endTag('fromClass');
-                $inWriter->endTag('inheritedMethods');
+					$inWriter->startTag('inheritedMethods');
+					$inWriter->startTag('fromClass');
+	
+					my $titleKey = "header_summary_inherited$inMemberType";
+					my $title    = $this->_docTerm($titleKey);
+	
+					$inWriter->startTag('title');
+					$inWriter->cdataElement( 'text', $title );
+					my $superclassURI = VisDoc::ClassData::createUriForClass(
+						$superclass->{classpath} );
+					$this->_writeLinkXml( $inWriter, $classDataRef->{name},
+						$superclassURI );
+					$inWriter->endTag('title');
+	
+					foreach my $member ( @{$members} ) {
+	
+						$inWriter->startTag('item');
+	
+						$this->_writeLinkXml(
+							$inWriter,      $member->{name},
+							$superclassURI, $member->getId()
+						);
+						if ( !$member->isPublic() ) {
+							$inWriter->startTag('private');
+							$inWriter->endTag('private');
+						}
+						$inWriter->endTag('item');
+					}
+	
+					$inWriter->endTag('fromClass');
+					$inWriter->endTag('inheritedMethods');
+				}
             }
         }
     }
