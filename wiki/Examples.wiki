@@ -1,4 +1,5 @@
-#summary !VisDoc output examples
+#summary VisDoc output examples
+=!VisDoc output examples=
 
   * [http://visdoc.org/examples/as3/CASA_Lib_1.3.0/html/ CASA Lib]
   * [http://visdoc.org/examples/as3/ASAP_Library/html/ CASA Lib]
