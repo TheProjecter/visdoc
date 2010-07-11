@@ -20,7 +20,7 @@ sub createLinkData {
     $inValue =~ m/$pattern/s;
     my $packageName = $3 || undef;
     my $className   = $4 || undef;
-    my $memberName  = $5 || undef;
+    my $memberName  = $5 || undef;    
     my $params      = $6 || undef;
     my $label       = $7 || undef;
 
@@ -60,6 +60,10 @@ sub formatInlineLink {
 	} elsif ( $this->{member} ) {
 		$linkLabel .= '.' if $linkLabel;
 		$linkLabel .= $this->{member};
+		
+		if ( $this->{params} ) {
+			$linkLabel .= '(' . $this->{params} . ')';
+		}
 	}
 	
 	my $postLabel = '';
