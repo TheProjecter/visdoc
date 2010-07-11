@@ -902,7 +902,7 @@ sub _validateLinkData {
     }
 
     # set label
-    if ( !$inLink->{label} ) {
+    if ( !$inLink->{label} && !$inLink->isa("VisDoc::EventLinkData") ) {
 
         # if label not specified, create a new one
         # 3 cases according to the specs:
