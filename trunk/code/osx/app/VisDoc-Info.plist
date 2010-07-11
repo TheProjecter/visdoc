@@ -58,7 +58,7 @@
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>VAVDCopyright</key>
-	<string>Copyright 2004-2010, Arthur Clemens</string>
+	<string>Copyright 2004-2010, Arthur Clemens, http://visdoc.org/</string>
 	<key>VAVDToolsSettingsPath</key>
 	<string>/Library/Preferences/com.visiblearea.visdoctools.plist</string>
 	<key>VAVDToolsVersion</key>

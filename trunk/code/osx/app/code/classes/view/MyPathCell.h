@@ -1,6 +1,6 @@
 
 #import <Cocoa/Cocoa.h>
-
+#import <AppKit/NSPathCell.h>
 
 @interface MyPathCell : NSPathCell {
 

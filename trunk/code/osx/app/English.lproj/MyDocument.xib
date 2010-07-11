@@ -11,8 +11,8 @@
 			<string key="NS.object.0">762</string>
 		</object>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="100059"/>
 			<integer value="101013"/>
+			<integer value="100059"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1572,8 +1572,8 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 				<string key="NSWindowTitle">Processing settings</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{527, 193}</string>
-				<string key="NSWindowContentMinSize">{527, 208}</string>
+				<string key="NSWindowContentMaxSize">{527, 139}</string>
+				<string key="NSWindowContentMinSize">{527, 139}</string>
 				<object class="NSView" key="NSWindowView" id="282854918">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -1787,8 +1787,8 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
-				<string key="NSMinSize">{527, 230}</string>
-				<string key="NSMaxSize">{527, 215}</string>
+				<string key="NSMinSize">{527, 161}</string>
+				<string key="NSMaxSize">{527, 161}</string>
 			</object>
 			<object class="NSCustomObject" id="284678118">
 				<string key="NSClassName">LayoutSettingsController</string>
@@ -3396,8 +3396,8 @@ AGEAbABuAHkAIABwAHIAbwBmAGkAbAAgAHMAegBhAHIAbwFbAGMAaQ</bytes>
 				<boolean value="NO" key="100836.NSWindowTemplate.visibleAtLaunch"/>
 				<boolean value="YES" key="100836.windowTemplate.hasMaxSize"/>
 				<boolean value="YES" key="100836.windowTemplate.hasMinSize"/>
-				<string key="100836.windowTemplate.maxSize">{527, 193}</string>
-				<string key="100836.windowTemplate.minSize">{527, 208}</string>
+				<string key="100836.windowTemplate.maxSize">{527, 139}</string>
+				<string key="100836.windowTemplate.minSize">{527, 139}</string>
 				<string key="100837.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100838.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100839.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
