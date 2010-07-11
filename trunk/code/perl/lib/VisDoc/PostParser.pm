@@ -5,6 +5,8 @@ package VisDoc::PostParser;
 use strict;
 use warnings;
 use VisDoc::JavadocData;
+use VisDoc::LinkData;
+use VisDoc::EventLinkData;
 
 =pod
 
@@ -396,7 +398,8 @@ sub _createOverrideEntries {
 
                     my $linkField =
                       VisDoc::LinkData::createLinkData( 'overrides',
-                        '#' . $member->getName() );
+                        $superclass->{name} . '#' . $member->getName() );
+
                     $linkField->{class} = $superclass->{name};
 
                     push @{ $member->{javadoc}->{fields} }, $linkField;
@@ -898,7 +901,7 @@ sub _validateLinkData {
     }
 
     if ( !$uri || !$showLink ) {
-        $inLink->{hideLink} = 1;
+        #$inLink->{hideLink} = 1;
     }
 
     # set label
