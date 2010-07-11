@@ -153,6 +153,7 @@
 					// Add click function to handle
 					$node.children("span.handle").click(function(){
 						toggle($ul);
+						return false;
 					});
 
 					// Setup the node's childs
