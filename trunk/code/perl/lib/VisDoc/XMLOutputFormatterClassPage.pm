@@ -1277,7 +1277,7 @@ sub _writeMembers_forMemberGroup_memberText_fields {
 
     # other fields
     my $allFields = $inMember->{javadoc}->getAllFieldsGroupedByName();
-
+	
     my @keys = sort keys %{$allFields};
 
     my $doneFields     = 'description';

@@ -330,6 +330,13 @@ html>body pre {
 #sidebar ul ul {
 	margin-left:14px;
 }
+#sidebar h2 {
+	font-size:1em;
+	font-weight:normal;
+	margin:0;
+	padding:0;
+	line-height: 1.5em;
+}
 #sidebar #selected,
 #sidebar #selected a:link,
 #sidebar #selected a:visited {
@@ -695,7 +702,12 @@ html>body pre {
 .memberSection .description .field a:hover {
 	text-decoration:underline;
 }
-
+.list ul {
+	margin-bottom:1em;
+}
+.list ul ul {
+	margin-bottom:0;
+}
 .list ul a:hover .attribute,
 .list ul a:hover .packagePath {
 	text-decoration:underline;
@@ -829,7 +841,7 @@ div.typeInfo {
 .memberSection .class:target,
 h2:target {
 	background-color:#fafcfd;
-	border:1px solid #aaa;
+	border:1px solid #3A456D;
 }
 .member:hover {
 	background-color:#f1f5f9;

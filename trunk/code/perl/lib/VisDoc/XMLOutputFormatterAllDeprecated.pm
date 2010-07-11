@@ -259,12 +259,12 @@ sub _deprecatedProperties {
                       $property->{javadoc}->fieldsWithName('deprecated')
                       if $property->{javadoc};
                     next if !$deprecatedFields;
-                    my $methodId =
+                    my $propertyId =
                       $property->getId() . ".$class->{name}.$package->{name}";
                     push @{$deprecated},
                       {
                         obj      => $property,
-                        id       => $methodId,
+                        id       => $propertyId,
                         language => $fileData->{language},
                         owner    => $class,
                         fileData => $fileData
@@ -319,12 +319,14 @@ sub _writeGroup {
         my $summary =
           $this->getSummaryLine( $obj->{javadoc}, $inObjectHash->{fileData} );
 
+		my $isClass = ($obj->isa("VisDoc::ClassData") && $obj->{type})
+            ? ( $obj->{type} & $VisDoc::ClassData::TYPE->{CLASS} )
+            : undef;
+            
         my $attributes = {
             isPublic => $obj->isPublic(),
-            isClass  => $obj->{type}
-            ? ( $obj->{type} & $VisDoc::ClassData::TYPE->{CLASS} )
-            : undef,
-            isInterface => $obj->{type}
+            isClass  => $isClass,
+            isInterface => ($isClass && $obj->{type})
             ? ( $obj->{type} & $VisDoc::ClassData::TYPE->{INTERFACE} )
             : undef,
             isMethod   => $obj->isa("VisDoc::MethodData")   ? 1 : 0,
