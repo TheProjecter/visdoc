@@ -1099,7 +1099,8 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 <xsl:template name="listItemType">
 	<xsl:if test="(package!='') or (interface!='') or (private!='')">
 		<xsl:attribute name="class">
-			<xsl:if test="package='true'">package </xsl:if>			<xsl:if test="interface='true'">interface </xsl:if>
+			<xsl:if test="package='true'">package </xsl:if>
+			<xsl:if test="interface='true'">interface </xsl:if>
 			<xsl:if test="private='true'">private </xsl:if>
 		</xsl:attribute>
 	</xsl:if>
@@ -1129,7 +1130,7 @@ The generated html is XHTML 1.0 Strict and tested with The W3C Markup Validation
 						<span><xsl:if test="(class|interface)='true'"><xsl:attribute name="class">className</xsl:attribute></xsl:if><xsl:value-of select="link/name" /></span>
 					</xsl:if>
 					<xsl:if test="className!=''">
-						<span class="className"><xsl:text disable-output-escaping="yes">(</xsl:text><xsl:value-of select="className" /><xsl:text disable-output-escaping="yes"><![CDATA[)]]></xsl:text></span>
+						<span class="className"><xsl:text disable-output-escaping="yes"> (</xsl:text><xsl:value-of select="className" /><xsl:text disable-output-escaping="yes"><![CDATA[)]]></xsl:text></span>
 					</xsl:if>
 					<xsl:if test="attribute!=''">
 						<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text><span class="attribute"><xsl:value-of select="attribute" /></span>
