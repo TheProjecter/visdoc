@@ -13,6 +13,8 @@
 		8E05A9A610B2B0F90035FCC1 /* LayoutSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E05A9A510B2B0F90035FCC1 /* LayoutSettingsController.m */; };
 		8E05ABCF10B339930035FCC1 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E05ABCE10B339930035FCC1 /* LogController.m */; };
 		8E05ACB510B351E70035FCC1 /* LayoutSettingsDefaultsValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E05ACB410B351E70035FCC1 /* LayoutSettingsDefaultsValueTransformer.m */; };
+		8E09DA5911EC990B00A928F2 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E92439910ED0788006492BC /* Sparkle.framework */; };
+		8E09DA9911ECF90700A928F2 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E92439910ED0788006492BC /* Sparkle.framework */; };
 		8E0F0D5D11CD902800AC7313 /* MyPathCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F0D5C11CD902800AC7313 /* MyPathCell.m */; };
 		8E11613210A0A77500B12764 /* document.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E11612210A0A77500B12764 /* document.png */; };
 		8E11613310A0A77500B12764 /* document_invalid.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E11612310A0A77500B12764 /* document_invalid.png */; };
@@ -24,7 +26,6 @@
 		8E11655910A4DC8D00B12764 /* cancel button.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E11655810A4DC8D00B12764 /* cancel button.png */; };
 		8E11655F10A4DD4F00B12764 /* cancel button pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E11655E10A4DD4F00B12764 /* cancel button pressed.png */; };
 		8E11696910A6008400B12764 /* in_progress.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E11696810A6008400B12764 /* in_progress.png */; };
-		8E92439A10ED0788006492BC /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E92439910ED0788006492BC /* Sparkle.framework */; };
 		8EB0772D10A7487F00085D2E /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0770B10A7487E00085D2E /* MyDocument.m */; };
 		8EB0772F10A7487F00085D2E /* PathInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0771010A7487E00085D2E /* PathInfo.m */; };
 		8EB0773010A7487F00085D2E /* SimplePerlBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB0771310A7487E00085D2E /* SimplePerlBridge.m */; };
@@ -50,12 +51,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		8EB0774F10A74CE300085D2E /* CopyFiles */ = {
+		8E09DA5711EC98E900A928F2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8E09DA9911ECF90700A928F2 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,7 +127,6 @@
 		8EB607F911B12BBA00118909 /* VisDoc Tools Installer.mpkg */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.installer-mpkg"; name = "VisDoc Tools Installer.mpkg"; path = "../tools_installer/VisDoc Tools Installer.mpkg"; sourceTree = SOURCE_ROOT; };
 		8EBA161D10551A4900E51387 /* VisDoc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisDoc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBA161F10551A4900E51387 /* VisDoc-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisDoc-Info.plist"; sourceTree = "<group>"; };
-		8EC9027E1097C6000081A658 /* VisDoc 10.6-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisDoc 10.6-Info.plist"; sourceTree = "<group>"; };
 		8EF7375A11DFB07200BD122B /* perl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = perl; path = ../../perl; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -134,9 +135,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E09DA5911EC990B00A928F2 /* Sparkle.framework in Frameworks */,
 				8EBA161810551A4900E51387 /* Cocoa.framework in Frameworks */,
 				8EB0777110A7651300085D2E /* Carbon.framework in Frameworks */,
-				8E92439A10ED0788006492BC /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,7 +182,6 @@
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
-				8EC9027E1097C6000081A658 /* VisDoc 10.6-Info.plist */,
 			);
 			name = VisDoc;
 			sourceTree = "<group>";
@@ -337,7 +337,7 @@
 				8EBA160F10551A4900E51387 /* Resources */,
 				8EBA161410551A4900E51387 /* Sources */,
 				8EBA161710551A4900E51387 /* Frameworks */,
-				8EB0774F10A74CE300085D2E /* CopyFiles */,
+				8E09DA5711EC98E900A928F2 /* CopyFiles */,
 			);
 			buildRules = (
 			);
