@@ -1,0 +1,2 @@
+cd /Data/Arthur_projecten/VisDoc_perl/svn/trunk/code/osx/app/updating/Sparkle
+ruby Extras/Signing\ Tools/sign_update.rb /Data/Arthur_projecten/VisDoc_perl/svn/trunk/releases/osx/VisDoc.dmg /Data/Arthur_projecten/VisDoc_perl/svn/trunk/code/osx/app/updating/dsa_priv.pem

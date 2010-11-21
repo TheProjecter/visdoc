@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	</head>
+	<body class="isShowingNavigation" id="page_all-constants">
+	    <div id="page"> 
+			<div id="wrapper">
+				<div id="outer"> 
+					<div id="floatWrap"> 
+						<div id="main">
+							<div id="clearHeaderCenter"></div> 
+							<div id="mainContent">
+<!--
+								<xsl:apply-templates select="classData" />
+								<xsl:apply-templates select="pageSummary|private/pageSummary" />
+								<xsl:apply-templates select="tocList" />
+								<xsl:apply-templates select="memberSections" />
+-->
+							</div>
+						</div>
+<!--
+						<xsl:if test="navigation!=''">
+							<div id="sidebar">
+								<div id="clearHeaderLeft"></div> 
+								<div id="sidebarContent">							
+									<xsl:apply-templates select="navigation/docTitle" />
+									<xsl:apply-templates select="navigation/tocList" ><xsl:with-param name="id" select="treemenu"/></xsl:apply-templates>
+									<xsl:apply-templates select="navigation/globalNav" />
+								</div>
+							</div>
+						</xsl:if>
+-->
+					</div>
+					<div class="clear">&nbsp;</div> 
+				</div>
+			</div>
+			<div id="header">
+				<div id="headerContentWrapper">
+					<div id="headerContent">
+						<ul id="headerButtons">
+<!--
+							<xsl:if test="navigation!=''">
+								<li id="toggleTocButton"><a href="#"><span class="disclosure">&#9660;</span><span class="closure">&#9658;</span>Navigation</a></li>
+							</xsl:if>
+							<xsl:call-template name="showHidePrivate" />
+-->
+						</ul>
+					</div>
+				</div>
+			</div>
+<!--
+			<xsl:apply-templates select="meta" />
+-->
+		</div>
+     </body>
+</html>
