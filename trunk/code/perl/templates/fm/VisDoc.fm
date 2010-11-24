@@ -44,20 +44,42 @@ TODO: create macro keyvalue
 </#macro>
 <#--
 
+-->
+<#macro metadatatags>
+TODO: create macro metadatatags
+</#macro>
+<#--
+
 Field within box
 
 -->
-<#macro field title paramfield items>
+<#macro field data>
 	<div class="boxedElem">
 		<div class="contentHolder">
-			<span class="title">${title}</span>
-<#if paramfield??>
+			<span class="title">${data.title}</span>
+	<#if data.paramfield??>
+			<@keyvalue />
+	<#else>
 			<div class="item">
-				<@keyvalue />
+		<#if data.description.item??>
+			<ul>
+				<#list data.description.item as item>
+				<li>
+					<#if item.value??>${item.value}</#if>
+					<#if item.summary??>
+						<ul class="summary inheritDoc">
+							<li>
+								${item.value}
+							</li>
+						</ul>
+					</#if>
+				</li>
+				</#list>
+			</ul>
+		</#if>
 			</div>
-<#else>
-FIELD
-</#if>
+			<@metadatatags />
+	</#if>
 		</div>
 	</div>
 </#macro>
@@ -124,10 +146,12 @@ FIELD
 	<#if classData.classDescription.restOfDescription??>
 		${classData.classDescription.restOfDescription}
 	</#if>
-	<#if classData.fields??>
+	<#if classData.field??>
 		<div class="classFields">
 			<div class="boxWithBorder">
-				<xsl:apply-templates select="field" />
+				<#list classData.field as field>
+					<@field data=field />
+				</#list>
 			</div>
 		</div>
 	</#if>
@@ -137,22 +161,91 @@ FIELD
 
 -->
 <#assign tmplClassData>
-	<div class="classProperties">
-		<table cellspacing="0">
-			<#if classData.kindOfClass??><@classDataRow data=classData.kindOfClass /></#if>
-			<#if classData.enclosingClass??><@classDataHeaderRow data=classData.enclosingClass /></#if>
-			<#if classData.package??><@classDataLinkList data=classData.package /></#if>
-			<#if classData.packageTitle??><@classDataHeaderRow data=classData.packageTitle /></#if>
-			<#if classData.inheritsFrom??><@classDataLinkList data=classData.inheritsFrom /></#if>
-			<#if classData.conformsTo??><@classDataLinkList data=classData.conformsTo /></#if>
-			<#if classData.implementedBy??><@classDataLinkList data=classData.implementedBy /></#if>
-			<#if classData.subclasses??><@classDataLinkList data=classData.subclasses /></#if>
-			<#if classData.dispatchedBy??><@classDataLinkList data=classData.dispatchedBy /></#if>
-			<#if classData.classDetails??>${tmplClassData_classDetails}</#if>
-		</table>
-	</div>
-	<#if classData.sourceCode??>${tmplClassData_sourceCode}</#if>
-	<#if classData.classDescription??>${tmplClassData_classDescription}</#if>
+	<#if classData??>
+		<div class="classProperties">
+			<table cellspacing="0">
+				<#if classData.kindOfClass??><@classDataRow data=classData.kindOfClass /></#if>
+				<#if classData.enclosingClass??><@classDataHeaderRow data=classData.enclosingClass /></#if>
+				<#if classData.package??><@classDataLinkList data=classData.package /></#if>
+				<#if classData.packageTitle??><@classDataHeaderRow data=classData.packageTitle /></#if>
+				<#if classData.inheritsFrom??><@classDataLinkList data=classData.inheritsFrom /></#if>
+				<#if classData.conformsTo??><@classDataLinkList data=classData.conformsTo /></#if>
+				<#if classData.implementedBy??><@classDataLinkList data=classData.implementedBy /></#if>
+				<#if classData.subclasses??><@classDataLinkList data=classData.subclasses /></#if>
+				<#if classData.dispatchedBy??><@classDataLinkList data=classData.dispatchedBy /></#if>
+				<#if classData.classDetails??>${tmplClassData_classDetails}</#if>
+			</table>
+		</div>
+		<#if classData.sourceCode??>${tmplClassData_sourceCode}</#if>
+		<#if classData.classDescription??>${tmplClassData_classDescription}</#if>
+	</#if>
+</#assign>
+<#--
+
+-->
+<#assign tmplShowHidePrivate>
+	<li id="togglePrivateButton">
+		<@iconButton class="privateHide" icon="&times;" label="${meta.hidePrivate}" />
+		<@iconButton class="privateShow" icon="+" label="${meta.showPrivate}" />
+	</li>
+</#assign>
+<#--
+
+-->
+<#macro iconButton class icon label>
+<span class="${class}"><a href="#"><span class="icon">${icon}</span><span class="label">${label}</span></a></span>
+</#macro>
+
+<#macro inheritedMethods data>
+TODO: write macro inheritedMethods
+</#macro>
+<#--
+
+-->
+<#assign tmplPageSummary>
+	<#if pageSummary?? && pageSummary.memberList??>
+		<div class="toc">
+			<h2 id="${pageSummary.id}">${pageSummary.title}</h2>
+			<div class="docNav">
+				<ul>
+					<#if pageSummary.memberList.showHideTypeInfo??>
+						<li>
+							<@iconButton class="typeInfoHide" icon="&times;" label="${pageSummary.memberList.showHideTypeInfo.hideTypeInfo}" />
+							<@iconButton class="typeInfoShow" icon="+" label="${pageSummary.memberList.showHideTypeInfo.showTypeInfo}" />
+						</li>
+					</#if>
+					<#if pageSummary.memberList.showHideSummaries??>
+						<li>
+							<@iconButton class="summariesHide" icon="&times;" label="${pageSummary.memberList.showHideSummaries.hideSummaries}" />
+							<@iconButton class="summariesShow" icon="+" label="${pageSummary.memberList.showHideSummaries.showSummaries}" />
+						</li>
+					</#if>
+				</ul>
+				<div class="clear"></div>
+			</div>
+			<#if pageSummary.memberList.memberSummaryPart??>
+			<div class="memberList">
+....
+			</div>
+			</#if>
+		</div>
+	</#if>
+</#assign>
+<#--
+
+-->
+<#assign tmplTocList>
+	<#if tocList??>
+		tmplTocList
+	</#if>
+</#assign>
+<#--
+
+-->
+<#assign tmplMemberSections>
+	<#if memberSections??>
+		tmplMemberSections
+	</#if>
 </#assign>
 <#--
 
@@ -177,18 +270,13 @@ HTML
 						<div id="main">
 							<div id="clearHeaderCenter"></div> 
 							<div id="mainContent">
-<#if title??>
+	<#if title??>
 								<h1>${title}</h1>
-</#if>
-<#if classData??>
+	</#if>
 								${tmplClassData}
-</#if>
-<!--
-								<xsl:apply-templates select="classData" />
-								<xsl:apply-templates select="pageSummary|private/pageSummary" />
-								<xsl:apply-templates select="tocList" />
-								<xsl:apply-templates select="memberSections" />
--->
+								${tmplPageSummary}
+								${tmplTocList}
+								${tmplMemberSections}
 							</div>
 						</div>
 <!--
@@ -211,12 +299,10 @@ HTML
 				<div id="headerContentWrapper">
 					<div id="headerContent">
 						<ul id="headerButtons">
-<!--
-							<xsl:if test="navigation!=''">
+							<#if navigation??>
 								<li id="toggleTocButton"><a href="#"><span class="disclosure">&#9660;</span><span class="closure">&#9658;</span>Navigation</a></li>
-							</xsl:if>
-							<xsl:call-template name="showHidePrivate" />
--->
+							</#if>
+							<#if meta.showPrivate??>${tmplShowHidePrivate}</#if>
 						</ul>
 					</div>
 				</div>
