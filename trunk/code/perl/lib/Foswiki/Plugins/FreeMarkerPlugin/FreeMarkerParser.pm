@@ -3467,7 +3467,29 @@ sub new {
 	},
 	{#State 346
 		ACTIONS => {
-			'string' => 353
+			'tag_else' => 9,
+			"<#" => 10,
+			"whitespace" => 18,
+			'variable_verbatim' => 15,
+			'string' => 8,
+			"\${" => 20
+		},
+		DEFAULT => -17,
+		GOTOS => {
+			'tag_assign' => 3,
+			'tag_ftl' => 2,
+			'whitespace' => 1,
+			'content_item' => 5,
+			'variable' => 4,
+			'tmp_tag_condition' => 16,
+			'tag_list' => 6,
+			'tag_if' => 17,
+			'content' => 353,
+			'tag_macro' => 11,
+			'tag_open_start' => 19,
+			'tag_macro_call' => 12,
+			'tag' => 13,
+			'tag_comment' => 14
 		}
 	},
 	{#State 347
@@ -4161,26 +4183,30 @@ sub
 		 '@11-2', 0,
 sub
 #line 382 "FreeMarkerGrammar.yp"
-{ $_[0]->_pushContext('listParams') }
+{
+								$_[0]->{_workingData}->{nestedLevel}++;
+								$_[0]->_pushContext('listParams');
+							}
 	],
 	[#Rule 126
 		 '@12-5', 0,
 sub
-#line 385 "FreeMarkerGrammar.yp"
+#line 388 "FreeMarkerGrammar.yp"
 { $_[0]->_popContext('listParams') }
 	],
 	[#Rule 127
 		 '@13-8', 0,
 sub
-#line 388 "FreeMarkerGrammar.yp"
+#line 391 "FreeMarkerGrammar.yp"
 { $_[0]->_pushContext( 'list' ) }
 	],
 	[#Rule 128
 		 'tag_list', 13,
 sub
-#line 393 "FreeMarkerGrammar.yp"
+#line 396 "FreeMarkerGrammar.yp"
 {
 								$_[0]->_popContext( 'list' );
+								$_[0]->{_workingData}->{nestedLevel}--;
 								my $key = $_[7];
 								my $format = $_[10];
 								my $result = $_[0]->_renderList( $key, $_[4], $format );
@@ -4190,7 +4216,7 @@ sub
 	[#Rule 129
 		 '@14-2', 0,
 sub
-#line 404 "FreeMarkerGrammar.yp"
+#line 408 "FreeMarkerGrammar.yp"
 {
 								$_[0]->{_workingData}->{ifLevel}++;
 								$_[0]->_pushContext('condition');
@@ -4199,7 +4225,7 @@ sub
 	[#Rule 130
 		 '@15-4', 0,
 sub
-#line 409 "FreeMarkerGrammar.yp"
+#line 413 "FreeMarkerGrammar.yp"
 {
 								$_[0]->_popContext('condition');
 							}
@@ -4207,7 +4233,7 @@ sub
 	[#Rule 131
 		 'tag_if', 10,
 sub
-#line 417 "FreeMarkerGrammar.yp"
+#line 421 "FreeMarkerGrammar.yp"
 {
 								$_[0]->{_workingData}->{ifLevel}--;
 								$_[7] =~ s/[[:space:]]+$//s;
@@ -4227,19 +4253,19 @@ sub
 	[#Rule 132
 		 '@16-2', 0,
 sub
-#line 436 "FreeMarkerGrammar.yp"
+#line 440 "FreeMarkerGrammar.yp"
 { $_[0]->_pushContext('evalcondition') }
 	],
 	[#Rule 133
 		 '@17-4', 0,
 sub
-#line 438 "FreeMarkerGrammar.yp"
+#line 442 "FreeMarkerGrammar.yp"
 { $_[0]->_popContext('evalcondition') }
 	],
 	[#Rule 134
 		 'tmp_tag_condition', 6,
 sub
-#line 440 "FreeMarkerGrammar.yp"
+#line 444 "FreeMarkerGrammar.yp"
 {
 								return $_[4] == 1 ? 1 : 0;
 							}
@@ -4247,19 +4273,19 @@ sub
 	[#Rule 135
 		 '@18-2', 0,
 sub
-#line 447 "FreeMarkerGrammar.yp"
+#line 451 "FreeMarkerGrammar.yp"
 { $_[0]->_pushContext('assignment') }
 	],
 	[#Rule 136
 		 '@19-4', 0,
 sub
-#line 449 "FreeMarkerGrammar.yp"
+#line 453 "FreeMarkerGrammar.yp"
 { $_[0]->_popContext('assignment') }
 	],
 	[#Rule 137
 		 'tag_ftl', 6,
 sub
-#line 451 "FreeMarkerGrammar.yp"
+#line 455 "FreeMarkerGrammar.yp"
 { '' }
 	],
 	[#Rule 138
@@ -4271,19 +4297,19 @@ sub
 	[#Rule 140
 		 'expr_ftl_assignment', 3,
 sub
-#line 458 "FreeMarkerGrammar.yp"
+#line 462 "FreeMarkerGrammar.yp"
 { $_[0]->{_data}->{_ftlData}->{$_[1]} = $_[3] }
 	],
 	[#Rule 141
 		 '@20-2', 0,
 sub
-#line 463 "FreeMarkerGrammar.yp"
+#line 467 "FreeMarkerGrammar.yp"
 { $_[0]->_pushContext( 'comment' ) }
 	],
 	[#Rule 142
 		 'tag_comment', 6,
 sub
-#line 467 "FreeMarkerGrammar.yp"
+#line 471 "FreeMarkerGrammar.yp"
 {
 								$_[0]->_popContext( 'comment' );
 								$_[0]->_popContext('tagParams');
@@ -4293,13 +4319,13 @@ sub
 	[#Rule 143
 		 '@21-1', 0,
 sub
-#line 475 "FreeMarkerGrammar.yp"
+#line 479 "FreeMarkerGrammar.yp"
 { $_[0]->_pushContext('variableParams') }
 	],
 	[#Rule 144
 		 'variable', 4,
 sub
-#line 478 "FreeMarkerGrammar.yp"
+#line 482 "FreeMarkerGrammar.yp"
 {
 								$_[0]->_popContext('variableParams');
 								undef $_[0]->{_workingData}->{tmpData};
@@ -4309,13 +4335,13 @@ sub
 	[#Rule 145
 		 'data', 1,
 sub
-#line 486 "FreeMarkerGrammar.yp"
+#line 490 "FreeMarkerGrammar.yp"
 { $_[0]->_value($_[1]) }
 	],
 	[#Rule 146
 		 'data', 1,
 sub
-#line 489 "FreeMarkerGrammar.yp"
+#line 493 "FreeMarkerGrammar.yp"
 { $_[0]->{_data} }
 	],
 	[#Rule 147
@@ -4339,7 +4365,7 @@ sub
 	[#Rule 153
 		 'type_op', 3,
 sub
-#line 506 "FreeMarkerGrammar.yp"
+#line 510 "FreeMarkerGrammar.yp"
 {
 								my $d = $_[0]->{_workingData}->{tmpData};
 								$d = $_[0]->{_data} if !defined $d;
@@ -4351,19 +4377,19 @@ sub
 	[#Rule 154
 		 'type_op', 3,
 sub
-#line 515 "FreeMarkerGrammar.yp"
+#line 519 "FreeMarkerGrammar.yp"
 { $_[2] }
 	],
 	[#Rule 155
 		 'type_op', 3,
 sub
-#line 518 "FreeMarkerGrammar.yp"
+#line 522 "FreeMarkerGrammar.yp"
 { $_[1] * $_[3] }
 	],
 	[#Rule 156
 		 'type_op', 3,
 sub
-#line 522 "FreeMarkerGrammar.yp"
+#line 526 "FreeMarkerGrammar.yp"
 {
 								if ( UNIVERSAL::isa( $_[1], "ARRAY" ) && UNIVERSAL::isa( $_[3], "ARRAY" ) ) {
 									my @list = ( @{$_[1]}, @{$_[3]} );
@@ -4377,13 +4403,13 @@ sub
 	[#Rule 157
 		 'type_op', 3,
 sub
-#line 533 "FreeMarkerGrammar.yp"
+#line 537 "FreeMarkerGrammar.yp"
 { undef }
 	],
 	[#Rule 158
 		 'type_op', 4,
 sub
-#line 536 "FreeMarkerGrammar.yp"
+#line 540 "FreeMarkerGrammar.yp"
 {
 								if ( $_[0]->_context() eq 'listParams' ) {
 									my $value = $_[1]->[$_[3]];
@@ -4399,7 +4425,7 @@ sub
 	[#Rule 159
 		 'type_op', 6,
 sub
-#line 549 "FreeMarkerGrammar.yp"
+#line 553 "FreeMarkerGrammar.yp"
 {
 								my @list;
 								if ( $_[3] > $_[5] ) {
@@ -4414,7 +4440,7 @@ sub
 	[#Rule 160
 		 'type_op', 5,
 sub
-#line 561 "FreeMarkerGrammar.yp"
+#line 565 "FreeMarkerGrammar.yp"
 {
 								my $maxlength = scalar @{$_[1]} - 1;
 								my @list = @{$_[1]}[$_[3]..$maxlength];
@@ -4424,7 +4450,7 @@ sub
 	[#Rule 161
 		 'type_op', 5,
 sub
-#line 568 "FreeMarkerGrammar.yp"
+#line 572 "FreeMarkerGrammar.yp"
 {
 								my @list = @{$_[1]}[0..$_[4]];
 								return \@list;
@@ -4433,7 +4459,7 @@ sub
 	[#Rule 162
 		 'type_op', 4,
 sub
-#line 574 "FreeMarkerGrammar.yp"
+#line 578 "FreeMarkerGrammar.yp"
 {
 								my $d = $_[0]->{_workingData}->{tmpData};
 								$d = $_[0]->{_data} if !defined $d;
@@ -4446,7 +4472,7 @@ sub
 	[#Rule 163
 		 'type_op', 4,
 sub
-#line 584 "FreeMarkerGrammar.yp"
+#line 588 "FreeMarkerGrammar.yp"
 {
 								my $d = $_[0]->{_workingData}->{tmpData};
 								$d = $_[0]->{_data} if !defined $d;
@@ -4458,13 +4484,13 @@ sub
 	[#Rule 164
 		 'type_op', 6,
 sub
-#line 593 "FreeMarkerGrammar.yp"
+#line 597 "FreeMarkerGrammar.yp"
 { join ( _unquote($_[5]), @{$_[1]} ) }
 	],
 	[#Rule 165
 		 'type_op', 3,
 sub
-#line 596 "FreeMarkerGrammar.yp"
+#line 600 "FreeMarkerGrammar.yp"
 {
 								my $sorted = _sort( $_[1] );
 								return $sorted;
@@ -4473,13 +4499,13 @@ sub
 	[#Rule 166
 		 'type_op', 3,
 sub
-#line 602 "FreeMarkerGrammar.yp"
+#line 606 "FreeMarkerGrammar.yp"
 { scalar @{$_[1]} }
 	],
 	[#Rule 167
 		 'type_op', 6,
 sub
-#line 605 "FreeMarkerGrammar.yp"
+#line 609 "FreeMarkerGrammar.yp"
 {
 								my $key = _unquote($_[5]);								
 								my $isStringSort = 1;
@@ -4501,7 +4527,7 @@ sub
 	[#Rule 168
 		 'type_op', 6,
 sub
-#line 624 "FreeMarkerGrammar.yp"
+#line 628 "FreeMarkerGrammar.yp"
 {
 								# differentiate between numbers and strings
 								# this is not fast
@@ -4515,7 +4541,7 @@ sub
 	[#Rule 169
 		 'type_op', 6,
 sub
-#line 635 "FreeMarkerGrammar.yp"
+#line 639 "FreeMarkerGrammar.yp"
 {
 								# differentiate between numbers and strings
 								# this is not fast
@@ -4528,7 +4554,7 @@ sub
 	[#Rule 170
 		 'type_op', 3,
 sub
-#line 645 "FreeMarkerGrammar.yp"
+#line 649 "FreeMarkerGrammar.yp"
 {
 								my @reversed = reverse @{$_[1]};
 								return \@reversed;
@@ -4537,103 +4563,103 @@ sub
 	[#Rule 171
 		 'type_op', 3,
 sub
-#line 651 "FreeMarkerGrammar.yp"
+#line 655 "FreeMarkerGrammar.yp"
 { @{$_[1]}[-1] }
 	],
 	[#Rule 172
 		 'type_op', 3,
 sub
-#line 654 "FreeMarkerGrammar.yp"
+#line 658 "FreeMarkerGrammar.yp"
 { @{$_[1]}[0] }
 	],
 	[#Rule 173
 		 'type_op', 3,
 sub
-#line 658 "FreeMarkerGrammar.yp"
+#line 662 "FreeMarkerGrammar.yp"
 { _capfirst( $_[1] ) }
 	],
 	[#Rule 174
 		 'type_op', 3,
 sub
-#line 661 "FreeMarkerGrammar.yp"
+#line 665 "FreeMarkerGrammar.yp"
 { _capitalize( $_[1] ) }
 	],
 	[#Rule 175
 		 'type_op', 3,
 sub
-#line 664 "FreeMarkerGrammar.yp"
+#line 668 "FreeMarkerGrammar.yp"
 { $_[0]->_parse('${' . $_[1] . '}') }
 	],
 	[#Rule 176
 		 'type_op', 3,
 sub
-#line 667 "FreeMarkerGrammar.yp"
+#line 671 "FreeMarkerGrammar.yp"
 { _html($_[1]) }
 	],
 	[#Rule 177
 		 'type_op', 3,
 sub
-#line 670 "FreeMarkerGrammar.yp"
+#line 674 "FreeMarkerGrammar.yp"
 { _xhtml($_[1]) }
 	],
 	[#Rule 178
 		 'type_op', 3,
 sub
-#line 673 "FreeMarkerGrammar.yp"
-{ length( $_[1] ) }
+#line 677 "FreeMarkerGrammar.yp"
+{ return defined $_[1] ? length( $_[1] ) : 0 }
 	],
 	[#Rule 179
 		 'type_op', 3,
 sub
-#line 676 "FreeMarkerGrammar.yp"
+#line 680 "FreeMarkerGrammar.yp"
 { lc $_[1] }
 	],
 	[#Rule 180
 		 'type_op', 8,
 sub
-#line 679 "FreeMarkerGrammar.yp"
+#line 683 "FreeMarkerGrammar.yp"
 { _replace( $_[1], _unquote($_[5]), _unquote($_[7]) ) }
 	],
 	[#Rule 181
 		 'type_op', 3,
 sub
-#line 682 "FreeMarkerGrammar.yp"
+#line 686 "FreeMarkerGrammar.yp"
 { $_[1] }
 	],
 	[#Rule 182
 		 'type_op', 8,
 sub
-#line 685 "FreeMarkerGrammar.yp"
+#line 689 "FreeMarkerGrammar.yp"
 { $_[1] ? _unquote($_[5]) : _unquote($_[7]) }
 	],
 	[#Rule 183
 		 'type_op', 6,
 sub
-#line 688 "FreeMarkerGrammar.yp"
+#line 692 "FreeMarkerGrammar.yp"
 { _substring( $_[1], $_[5] ) }
 	],
 	[#Rule 184
 		 'type_op', 8,
 sub
-#line 691 "FreeMarkerGrammar.yp"
+#line 695 "FreeMarkerGrammar.yp"
 { _substring( $_[1], $_[5], $_[7] ) }
 	],
 	[#Rule 185
 		 'type_op', 3,
 sub
-#line 694 "FreeMarkerGrammar.yp"
+#line 698 "FreeMarkerGrammar.yp"
 { _uncapfirst( $_[1] ) }
 	],
 	[#Rule 186
 		 'type_op', 3,
 sub
-#line 697 "FreeMarkerGrammar.yp"
+#line 701 "FreeMarkerGrammar.yp"
 { uc $_[1] }
 	],
 	[#Rule 187
 		 'type_op', 3,
 sub
-#line 700 "FreeMarkerGrammar.yp"
+#line 704 "FreeMarkerGrammar.yp"
 {
 								my @list = _wordlist( $_[1] );
 								return \@list;
@@ -4642,13 +4668,13 @@ sub
 	[#Rule 188
 		 'type_op', 3,
 sub
-#line 706 "FreeMarkerGrammar.yp"
+#line 710 "FreeMarkerGrammar.yp"
 { _unquote($_[3]) }
 	],
 	[#Rule 189
 		 'type_op', 3,
 sub
-#line 709 "FreeMarkerGrammar.yp"
+#line 713 "FreeMarkerGrammar.yp"
 { 
 								if (_isString($_[3])) {
 									return $_[1] eq $_[3];
@@ -4660,7 +4686,7 @@ sub
 	[#Rule 190
 		 'type_op', 3,
 sub
-#line 718 "FreeMarkerGrammar.yp"
+#line 722 "FreeMarkerGrammar.yp"
 { 
 								if (_isString($_[3])) {
 									return $_[1] ne $_[3];
@@ -4672,43 +4698,43 @@ sub
 	[#Rule 191
 		 'type_op', 2,
 sub
-#line 727 "FreeMarkerGrammar.yp"
+#line 731 "FreeMarkerGrammar.yp"
 { return defined $_[1] }
 	],
 	[#Rule 192
 		 'type_op', 3,
 sub
-#line 730 "FreeMarkerGrammar.yp"
+#line 734 "FreeMarkerGrammar.yp"
 { return 0 if !defined $_[1]; $_[1] > $_[3] }
 	],
 	[#Rule 193
 		 'type_op', 3,
 sub
-#line 733 "FreeMarkerGrammar.yp"
+#line 737 "FreeMarkerGrammar.yp"
 { return 0 if !defined $_[1]; $_[1] >= $_[3] }
 	],
 	[#Rule 194
 		 'type_op', 3,
 sub
-#line 736 "FreeMarkerGrammar.yp"
+#line 740 "FreeMarkerGrammar.yp"
 { return 0 if !defined $_[1]; $_[1] < $_[3] }
 	],
 	[#Rule 195
 		 'type_op', 3,
 sub
-#line 739 "FreeMarkerGrammar.yp"
+#line 743 "FreeMarkerGrammar.yp"
 { return 0 if !defined $_[1]; $_[1] <= $_[3] }
 	],
 	[#Rule 196
 		 'string_op', 1,
 sub
-#line 743 "FreeMarkerGrammar.yp"
+#line 747 "FreeMarkerGrammar.yp"
 { _unquote( $_[1] ) }
 	],
 	[#Rule 197
 		 'string_op', 3,
 sub
-#line 746 "FreeMarkerGrammar.yp"
+#line 750 "FreeMarkerGrammar.yp"
 {
 								if (defined $_[3]) {
 									return $_[1] . $_[3];
@@ -4720,19 +4746,19 @@ sub
 	[#Rule 198
 		 'string_op', 2,
 sub
-#line 755 "FreeMarkerGrammar.yp"
+#line 759 "FreeMarkerGrammar.yp"
 { _protect(_unquote( $_[2] )) }
 	],
 	[#Rule 199
 		 'hash', 3,
 sub
-#line 759 "FreeMarkerGrammar.yp"
+#line 763 "FreeMarkerGrammar.yp"
 { $_[2] }
 	],
 	[#Rule 200
 		 'hashes', 1,
 sub
-#line 762 "FreeMarkerGrammar.yp"
+#line 766 "FreeMarkerGrammar.yp"
 {
 								$_[0]->{_workingData}->{'hashes'} ||= ();
 								push @{$_[0]->{_workingData}->{'hashes'}}, $_[1];
@@ -4741,7 +4767,7 @@ sub
 	[#Rule 201
 		 'hashes', 3,
 sub
-#line 768 "FreeMarkerGrammar.yp"
+#line 772 "FreeMarkerGrammar.yp"
 {	
 								$_[0]->{_workingData}->{'hashes'} ||= ();
 								push @{$_[0]->{_workingData}->{'hashes'}}, $_[3];
@@ -4753,7 +4779,7 @@ sub
 	[#Rule 203
 		 'hash_op', 3,
 sub
-#line 776 "FreeMarkerGrammar.yp"
+#line 780 "FreeMarkerGrammar.yp"
 {
 								my %merged = (%{$_[1]}, %{$_[3]});
 								return \%merged;
@@ -4762,7 +4788,7 @@ sub
 	[#Rule 204
 		 'hashvalue', 3,
 sub
-#line 782 "FreeMarkerGrammar.yp"
+#line 786 "FreeMarkerGrammar.yp"
 {
 								my $local = {
 									_unquote($_[1]) => _unquote($_[3])
@@ -4776,7 +4802,7 @@ sub
 	[#Rule 206
 		 'hashvalues', 3,
 sub
-#line 792 "FreeMarkerGrammar.yp"
+#line 796 "FreeMarkerGrammar.yp"
 {
 								my %merged = (%{$_[1]}, %{$_[3]});
 								return \%merged;
@@ -4785,7 +4811,7 @@ sub
 	[#Rule 207
 		 'array_op', 3,
 sub
-#line 799 "FreeMarkerGrammar.yp"
+#line 803 "FreeMarkerGrammar.yp"
 {
 								my @list = @{$_[0]->{_workingData}->{'hashes'}};
 								undef $_[0]->{_workingData}->{'hashes'};
@@ -4795,13 +4821,13 @@ sub
 	[#Rule 208
 		 'array_op', 1,
 sub
-#line 806 "FreeMarkerGrammar.yp"
+#line 810 "FreeMarkerGrammar.yp"
 { _toList($_[1]) }
 	],
 	[#Rule 209
 		 'array_op', 3,
 sub
-#line 809 "FreeMarkerGrammar.yp"
+#line 813 "FreeMarkerGrammar.yp"
 {
 								my @list;
 								if ( $_[1] > $_[3] ) {
@@ -4816,7 +4842,7 @@ sub
 	[#Rule 210
 		 'array_op', 2,
 sub
-#line 821 "FreeMarkerGrammar.yp"
+#line 825 "FreeMarkerGrammar.yp"
 {
 								my @list = (0..$_[2]);
 								return \@list;
@@ -4828,13 +4854,13 @@ sub
 	[#Rule 212
 		 'array_pos', 1,
 sub
-#line 830 "FreeMarkerGrammar.yp"
+#line 834 "FreeMarkerGrammar.yp"
 { $_[0]->_value($_[1]) }
 	],
 	[#Rule 213
 		 'func_op', 4,
 sub
-#line 834 "FreeMarkerGrammar.yp"
+#line 838 "FreeMarkerGrammar.yp"
 {
 								my $function = $_[0]->_value($_[1]);
 								return undef if !$function;
@@ -4851,7 +4877,7 @@ sub
     bless($self,$class);
 }
 
-#line 845 "FreeMarkerGrammar.yp"
+#line 849 "FreeMarkerGrammar.yp"
 
 
 
@@ -4891,6 +4917,7 @@ sub _init {
     $this->{_workingData}->{tmpData}       ||= undef;
     $this->{_workingData}->{ifBlocks}      ||= ();    # array with block contents
     $this->{_workingData}->{ifLevel}       ||= 0;
+    $this->{_workingData}->{nestedLevel}       ||= 0;
     $this->{_workingData}->{inTagBrackets} ||= 0;
 }
 
@@ -4992,9 +5019,14 @@ _renderList( $key, \@list, $format ) -> $renderedList
 sub _renderList {
     my ( $this, $key, $list, $format ) = @_;
 
-	print STDERR "_renderList; key=$key\n"      if ( $this->{debug} || $this->{debugLevel} );
-	print STDERR "list=" . Dumper($list) if ( $this->{debug} || $this->{debugLevel} );
-	print STDERR "format=$format\n" if ( $this->{debug} || $this->{debugLevel} );
+	return $format if $_[0]->{_workingData}->{nestedLevel} > 0;
+
+	if ( $this->{debug} || $this->{debugLevel} ) {
+		print STDERR "_renderList; key=$key\n";
+		print STDERR "nestedLevel=$_[0]->{_workingData}->{nestedLevel}\n";
+		print STDERR "list=" . Dumper($list);
+		print STDERR "format=$format\n";
+	}
 	
     my ( $spaceBeforeItems, $trimmedFormat, $spaceAfterEachItem ) =
       ( '', $format, '' );
@@ -5319,6 +5351,8 @@ sub _lexer {
           if ( $_[0]->{debug} || $_[0]->{debugLevel} );
         print STDERR "\t if level=" . $_[0]->{_workingData}->{ifLevel} . "\n"
           if ( $_[0]->{debug} || $_[0]->{debugLevel} );
+		print STDERR "\t list level=" . $_[0]->{_workingData}->{nestedLevel} . "\n"
+          if ( $_[0]->{debug} || $_[0]->{debugLevel} );
         print STDERR "\t inTagBrackets=" . $_[0]->{_workingData}->{inTagBrackets} . "\n"
           if ( $_[0]->{debug} || $_[0]->{debugLevel} );
 
@@ -5396,34 +5430,54 @@ s/^\b(sort_by|sort|size|seq_index_of|seq_contains|reverse|last|join|first)\b\s*/
         # ignore all other tags, these will be parsed in _parseIfBlock
         if ( $_[0]->{_workingData}->{ifLevel} != 0 ) {
             return ( '>',      '' ) if (s/^\s*>//);
-            return ( '<#',     '' ) if (s/^<\#(if)/$1/);
-            return ( '</#',    '' ) if (s/^<\/\#(if)/$1/);
+            if (s/^<\#\b(if)\b/$1/) {
+	            $_[0]->{_workingData}->{inTagBrackets} = 1;
+	            return ( '<#',     '' );
+	        }
+            return ( '</#',    '' ) if (s/^\s*<\/\#\b(if)\b/$1/);
             return ( 'if',     $1 ) if s/^\b(if)\b//;
-            return ( 'string', $1 ) if (s/^(.*?)(<(\#if|\/\#if))/$2/s);
+            return ( 'string', $1 ) if (s/^(.*?)(<(\/?\#\bif\b))/$2/s);
         }
-        
+
         # delay parsing of list contents
-        if ( $_[0]->_context() eq 'list' ) {
-            return ( '>',      '' ) if (s/^\s*>//);
-            return ( '</#',    '' ) if (s/^<\/\#(list)/$1/);
-            return ( 'list',     $1 ) if s/^\b(list)\b//;
-            return ( 'string', $1 ) if (s/^(.*?)(<(\#list|\/\#list))/$2/s);
+        if ( $_[0]->{_workingData}->{nestedLevel} != 0 ) {
+        	return ( 'string', $1 ) if (s/^\s*(<#\blist\b.*?\/\#\blist\b>)//s);	
         }
         
+        if ( $_[0]->_context() eq 'list' ) {
+        #if ( $_[0]->{_workingData}->{nestedLevel} != 0 ) {
+            return ( '>',      '' ) if (s/^\s*>//);
+            if (s/^<\#\b(list)\b/$1/) {
+            	$_[0]->{_workingData}->{inTagBrackets} = 1;
+            	return ( '<#',     '' );
+            }
+            return ( '</#',    '' ) if (s/^\s*<\/\#\b(list)\b/$1/);
+            return ( 'list',     $1 ) if s/^\b(list)\b//;
+            return ( 'string', $1 ) if (s/^(.*?)(<(\/?\#\blist\b))/$2/s);
+        }
+
         # delay parsing of macro contents
         if ( $_[0]->_context() eq 'macrocontents' ) {
             return ( '>',      '' ) if (s/^\s*>//);
-            return ( '</#',    '' ) if (s/^<\/\#(macro)/$1/);
+            if (s/^<\#\b(macro)\b/$1/) {
+	            $_[0]->{_workingData}->{inTagBrackets} = 1;
+	            return ( '<#',     '' );
+	        }
+            return ( '</#',    '' ) if (s/^\s*<\/\#\b(macro)\b/$1/);
             return ( 'macro',     $1 ) if s/^\b(macro)\b//;
-            return ( 'string', $1 ) if (s/^(.*?)(<(\#macro|\/\#macro))/$2/s);
+            return ( 'string', $1 ) if (s/^(.*?)(<(\/?\#\bmacro\b))/$2/s);
         }
         
         # delay parsing of assign contents
         if ( $_[0]->_context() eq 'assign' ) {
             return ( '>',      '' ) if (s/^\s*>//);
-            return ( '</#',    '' ) if (s/^<\/\#(assign)/$1/);
+            if (s/^<\#\b(assign)\b/$1/) {
+	            $_[0]->{_workingData}->{inTagBrackets} = 1;
+	            return ( '<#',     '' );
+	        }
+            return ( '</#',    '' ) if (s/^\s*<\/\#\b(assign)\b/$1/);
             return ( 'assign',     $1 ) if s/^\b(assign)\b//;
-            return ( 'string', $1 ) if (s/^(.*?)(<(\#assign|\/\#assign))/$2/s);
+            return ( 'string', $1 ) if (s/^(.*?)(<(\/?\#\bassign\b))/$2/s);
         }
 
         # tags

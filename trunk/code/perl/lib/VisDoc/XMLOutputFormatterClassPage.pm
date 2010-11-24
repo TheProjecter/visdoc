@@ -77,7 +77,8 @@ sub _writeClassData {
     $this->_writeSourceCode($inWriter);
     $this->_writeClassDescription($inWriter);
     $this->_writeClassFields($inWriter);
-
+	$this->_writeMetadata($inWriter);
+	
     $inWriter->endTag('classData');
 }
 
@@ -516,6 +517,18 @@ sub _writeClassFields {
 
 =pod
 
+=cut
+
+sub _writeMetadata {
+	my ( $this, $inWriter ) = @_;
+
+	my $metadataFields = $this->{data}->{metadata};
+	$this->_writeMetadataFields( $inWriter, 'metadata', $metadataFields )
+		if $metadataFields && scalar @{$metadataFields};
+}
+
+=pod
+
 <field>
 	<title>
 		<![CDATA[Events broadcasted to listeners]]>
@@ -789,9 +802,7 @@ sub _writeSummary_forMemberGroup {
 
     my $isPrivatePart = $this->_isPartPrivate( $members );
 
-    $inWriter->startTag('private') if ($isPrivatePart);
-
-    $inWriter->startTag('memberSummaryPart');
+    $inWriter->startTag('memberSummaryPart', 'private' => $isPrivatePart);
 
     if ( $members && scalar @{$members} ) {
 
@@ -803,15 +814,13 @@ sub _writeSummary_forMemberGroup {
             next
               if !$this->{preferences}->{listPrivate} && !$member->isPublic();
 
-            $inWriter->startTag('item');
-            $inWriter->startTag('private') if !$member->isPublic();
+            $inWriter->startTag('item', 'private' => !$member->isPublic());
 
             $inWriter->cdataElement( 'id',    $member->getId() );
             $inWriter->cdataElement( 'title', $member->{name} );
 
             $this->_writeSummary_typeInfo( $inWriter, $member, $inSummaryData );
 
-            $inWriter->endTag('private') if !$member->isPublic();
             $inWriter->endTag('item');
         }
     }
@@ -830,8 +839,6 @@ sub _writeSummary_forMemberGroup {
     }
 
     $inWriter->endTag('memberSummaryPart');
-
-    $inWriter->endTag('private') if ($isPrivatePart);
 }
 
 =pod

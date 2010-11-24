@@ -596,8 +596,8 @@ sub _transformXmlToHtml {
 	$data = $data->{document} if $data->{document};
 	$data->{encoding} = $inEncoding;
 	
-    use Data::Dumper;
-    print STDOUT "data=" . Dumper($data);
+    #use Data::Dumper;
+    #print STDOUT "data=" . Dumper($data);
     
     my $freeMarkerTemplate = ${$inTemplateRef};
     
@@ -606,7 +606,7 @@ sub _transformXmlToHtml {
 	$parser->setDebugLevel( $debug ? 0x1F : 0 );
 
     my $parsed = $parser->parse($freeMarkerTemplate, $data);
-    print STDOUT "parsed=" . $parsed . "\n";
+    #print STDOUT "parsed=" . $parsed . "\n";
 
     return \$parsed;
 }
