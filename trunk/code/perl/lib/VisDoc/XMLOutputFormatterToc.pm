@@ -5,7 +5,7 @@ use base 'VisDoc::XMLOutputFormatterAllPackages';
 
 use strict;
 use warnings;
-use XML::Writer;
+use XML::Writer();
 
 =pod
 
@@ -94,18 +94,16 @@ sub _writeDocTitle {
 
 =pod
 
-<items>
-	<item>
-		<link>
-			<name>
-				<![CDATA[Main]]>
-			</name>
-			<uri>
-				<![CDATA[index]]>
-			</uri>
-		</link>
-	</item>
-</items>
+<item>
+	<link>
+		<name>
+			<![CDATA[Main]]>
+		</name>
+		<uri>
+			<![CDATA[index]]>
+		</uri>
+	</link>
+</item>
 
 =cut
 
@@ -115,7 +113,6 @@ sub _writeTocNavigation {
     return if !$this->{tocNavigationKeys};
 
     $inWriter->startTag('globalNav');
-    $inWriter->startTag('items');
 
     my $callToWriteLink = sub {
         my ( $inTitleKey, $inUri ) = @_;
@@ -183,7 +180,6 @@ sub _writeTocNavigation {
         &$callToWriteName('all_deprecated_link');
     }
 
-    $inWriter->endTag('items');
     $inWriter->endTag('globalNav');
 }
 

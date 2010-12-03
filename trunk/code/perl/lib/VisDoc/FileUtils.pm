@@ -2,9 +2,9 @@ package VisDoc::FileUtils;
 
 use strict;
 use warnings;
-use File::stat;
-use File::Find;
-use File::Spec;
+use File::stat();
+use File::Find();
+use File::Spec();
 use Cwd 'getcwd';
 
 =pod
@@ -64,7 +64,7 @@ sub getFiles {
         }
         push @{$files}, $File::Find::name;
     };
-    find( \&$wanted, @fileList );
+    File::Find::find( \&$wanted, @fileList );
 
     my $base = getcwd();
     foreach my $file ( @{$files} ) {

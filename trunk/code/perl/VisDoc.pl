@@ -60,7 +60,7 @@ $preferences->{'doc-sources'} = \$process;
 
 &GetOptions(
     $preferences,              'output=s',
-    'docencoding:s',           'giveCredits=i',
+    'docencoding:s',
     'doc-sources=s',
     'footerText:s',
     'extensions:s',            'eventHandlerPrefixes:s',
@@ -264,12 +264,6 @@ Default: 1
 Title of project.
 Value: string
 Default: "Documentation"
-
-=item B<-giveCredits>
-
-Whether to give VisDoc credits in the footer.
-Values: 1 or 0
-Default: 1
 
 =item B<-listPrivate>
 

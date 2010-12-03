@@ -5,7 +5,7 @@ use base 'VisDoc::XMLOutputFormatterListingBase';
 
 use strict;
 use warnings;
-use XML::Writer;
+use XML::Writer();
 
 our $URI = 'all-deprecated';
 

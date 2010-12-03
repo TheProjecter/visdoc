@@ -225,7 +225,8 @@ sub writeData {
     }
 
     my $tocXML = '';
-
+	my $tocHtmlRef;
+	
     if ( $inPreferences->{generateNavigation} ) {
 
         my $tocNavigationKeys = {
@@ -243,7 +244,6 @@ sub writeData {
         };
 
         {
-
             # index.html
             my $xmlData = _createIndexHtmlPageXmlData(
                 $dirInfo->{dir}->{html}, $inPreferences,
@@ -302,13 +302,9 @@ sub writeData {
         push( @{ $processing->{$key}->{XMLs} }, $xmlData )        if $xmlData;
         push( @htmlSupportingFileNames,         $xmlData->{uri} ) if $xmlData;
 
-        # add TOC XML to each class XML
+        # store TOC html to pass this to to-be-generated html files
         if ($tocXML) {
-            while ( my ( $key, $value ) = each %{$processing} ) {
-                foreach my $xml ( @{ $value->{XMLs} } ) {
-                    ${ $xml->{textRef} } .= ${ $tocXML->{textRef} };
-                }
-            }
+        	$tocHtmlRef = _transformXmlToHtml( $inPreferences, $tocXML->{textRef}, $templateRef, $inPreferences->{docencoding} );
         }
     }
 
@@ -340,13 +336,11 @@ sub writeData {
               if $inPreferences->{saveXML};
 
             # write HTML
-            my $encoding = $inPreferences->{docencoding};
-            my $htmlRef = _transformXmlToHtml( $xml->{textRef}, $templateRef, $encoding );
-            _writeHtmlFile( $dirInfo->{dir}->{html},
-                "$xml->{uri}.html", $htmlRef );
+            my $htmlRef = _transformXmlToHtml( $inPreferences, $xml->{textRef}, $templateRef, $inPreferences->{docencoding}, {tocHtml => $$tocHtmlRef } );
+           _writeHtmlFile( $dirInfo->{dir}->{html},
+               "$xml->{uri}.html", $htmlRef );
         }
     }
-    print STDOUT "htmlDocFileNames=" . join(',', @htmlDocFileNames) . "\n";
     
     return ( $dirInfo->{dir}->{html},
         $indexHtml, \@htmlDocFileNames, \@htmlSupportingFileNames );
@@ -426,8 +420,6 @@ Writes XML text to file $fileName.
 
 sub _writeXmlFile {
     my ( $inXmlDirectory, $inFileName, $inXmlTextRef ) = @_;
-
-print "_writeXmlFile:$inXmlDirectory\n";
 
     # append the filename to the path
     my $writePath = File::Spec->catpath( '', $inXmlDirectory, $inFileName );
@@ -564,7 +556,7 @@ sub _getFreeMarkerTemplate {
 
 =pod
 
-StaticMethod _transformXmlToHtml( \$xmlText, \$template ) -> \$html
+StaticMethod _transformXmlToHtml( \$preferences, \$xmlText, \$template, \$data ) -> \$html
 
 Transforms XML to HTML using a FreeMarker template.
 Uses LibXML engine (must be installed).
@@ -572,31 +564,30 @@ Uses LibXML engine (must be installed).
 =cut
 
 sub _transformXmlToHtml {
-    my ( $inXmlTextRef, $inTemplateRef, $inEncoding ) = @_;
+    my ( $inPreferences, $inXmlTextRef, $inTemplateRef, $inEncoding, $inData ) = @_;
 
 	my $tpp = XML::TreePP->new();
-	$tpp->set( force_array => [ 'item', 'field', 'fields' ] );
+	$tpp->set( force_array => [ 'item', 'field', 'fields', 'memberSummaryPart', 'fromClass', 'memberSection', 'member', 'listGroup' ] );
+	$tpp->set( attr_prefix => '' );
 	
-=test
-	my $testXml = '<classDetails>
-        <item>
-            <title><![CDATA[Classpath]]></title>
-            <value><![CDATA[org.asaplibrary.data.array.TraverseArrayEnumerator]]></value>
-        </item>
-        <item>
-            <title><![CDATA[File last modified]]></title>
-            <value><![CDATA[Wednesday, 19 March 2008, 12:59:24]]></value>
-        </item>
-    </classDetails>';
-	my $data = $tpp->parse( $testXml );
-=cut
-
 	my $data = $tpp->parse( ${$inXmlTextRef} );
 	# remove extra level 'document'
-	$data = $data->{document} if $data->{document};
+	if ($data->{document}) {
+		$data = $data->{document};
+		# let the parser know the type of document
+		$data->{document} = 1;
+	}
 	$data->{encoding} = $inEncoding;
+	$data->{showNavigation} = $inPreferences->{generateNavigation};
 	
-    #use Data::Dumper;
+	# merge data
+	if ($inData) {
+		foreach my $key ( keys %{$inData} ) {
+			$data->{$key} = $inData->{$key};
+		}
+	}
+
+   	#use Data::Dumper;
     #print STDOUT "data=" . Dumper($data);
     
     my $freeMarkerTemplate = ${$inTemplateRef};

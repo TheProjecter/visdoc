@@ -5,12 +5,17 @@
 use strict;
 use warnings;
 use Cwd 'getcwd';
-use CSS::Minifier qw(minify);
 
 BEGIN {
     my $here = Cwd::abs_path;
     my $root = $here;
     push @INC, "$root/lib";
+}
+
+eval "use CSS::Minifier";
+if ($@) {
+    print STDOUT $@;
+    die;
 }
 
 sub minifyFile {
@@ -22,7 +27,7 @@ sub minifyFile {
 
 	open(INFILE, $inputFile) or die;
 	open(OUTFILE, '>' . $outputFile) or die;
-	minify(input => *INFILE, outfile => *OUTFILE);
+	CSS::Minifier::minify(input => *INFILE, outfile => *OUTFILE);
 	close(INFILE);
 	close(OUTFILE);
 }

@@ -633,9 +633,9 @@ Class method that returns the last path component. For example:
 sub getLastPathComponent {
     my ( $inPath ) = @_;
 
-    use File::Basename;
+    use File::Basename();
     my @suffixlist = qw(as java);
-    my $name = fileparse( $inPath, @suffixlist );
+    my $name = File::Basename::fileparse( $inPath, @suffixlist );
     $name =~ s/^(.*?)\.$/$1/;    # strip remaining dot (why is it there?)
     return $name;
 }

@@ -344,7 +344,7 @@ html>body pre {
 }
 
 #mainContent {
-	margin:23px 3em 2em 23px;
+	margin:23px 3em 2em 35px;
 }
 #footer {
 	border-top:1px solid #566d85;
@@ -376,10 +376,13 @@ html>body pre {
 #headerButtons a:visited {
 	display:block;
 	margin:6px 23px;
-	color:#666;
 	text-decoration:none;
 }
-#headerButtons a:hover .label {
+#toggleTocButton a:link,
+#toggleTocButton a:visited {
+	color:#666;
+}
+#toggleTocButton a:hover .label {
 	text-decoration:underline;
 }
 #toggleTocButton {
@@ -411,6 +414,9 @@ html>body pre {
 .isShowingNavigation #toggleTocButton a:hover {
 	background:#c8d4e6;
 	color:#000;
+}
+#headerButtons #togglePrivateButton {
+	float:right;
 }
 #header .closure,
 #header .disclosure {
@@ -492,12 +498,7 @@ html>body pre {
 .doesNotExist {}
 
 .docNav {
-	color:#9399af;
-}
-
-.summary .docNav {
-	margin:0 0 .5em 0;
-	border-bottom:1px solid #e3e9ec;
+	margin:0 0 1em 0;
 }
 
 .docNav ul li {
@@ -507,11 +508,6 @@ html>body pre {
 
 .docNav a {
 	margin-right:.5em;
-}
-
-.docNav a:link .accessKey,
-.docNav a:visited .accessKey {
-	border-bottom:1px solid #666;
 }
 
 .icon {
@@ -567,7 +563,6 @@ html>body pre {
 
 .boxWithBorder {
 	margin-top:1em;
-	margin-bottom:1em;
 	border-top:1px solid #e3e9ec;
 }
 
@@ -613,7 +608,7 @@ html>body pre {
 	margin:0;
 }
 .classProperties {
-	margin:2em 0 0 2em;
+	margin:2em 0 0 2.5em;
 }
 
 .classProperties table {
@@ -685,10 +680,14 @@ html>body pre {
 
 .memberSection .member,
 .memberSection .class {
-	height:1%;
-	margin:0 -10px 0 -10px;
+	margin:0 -10px 6px -10px;
 	padding:1em 10px;
 	border:1px solid #fff;
+}
+.memberSection .member p,
+.memberSection .class p {
+	margin:0;
+	padding:0;
 }
 
 .memberSection .fullMemberString {
@@ -721,10 +720,10 @@ html>body pre {
 .memberSection .description .field a:hover {
 	text-decoration:underline;
 }
-.mainContent .list ul {
+#mainContent .list ul {
 	margin-bottom:1em;
 }
-.mainContent .list ul ul {
+#mainContent .list ul ul {
 	margin-bottom:0;
 }
 .list ul a:hover .attribute,
@@ -857,11 +856,12 @@ div.typeInfo {
 .memberSection .member:target,
 .memberSection .class:target,
 h2:target {
-	background-color:#fafcfd;
+	background-color:#fff;
 	border:1px solid #abc;
 }
 .member:hover {
-	background-color:#f1f5f9;
+	background-color:#fff;
+	border:1px solid #abc;
 }
 
 .memberSection .member:target .boxWithBorder,
@@ -892,8 +892,6 @@ h2:target {
 	padding:.25em 1em;
 }
 
-.docNav a:link,
-.docNav a:visited,
 #footerContent a:link,
 #footerContent a:visited {
 	color:#9399af;
@@ -930,7 +928,6 @@ tt,
 	font-family:"Bitstream Vera Sans Mono","Andale Mono",Courier,monospace;
 }
 
-.docNav a:hover,
 .memberSection .fullMemberString a:hover,
 .memberSection .fullMemberString a:visited:hover,
 #footerContent a:hover,
@@ -1005,5 +1002,115 @@ a:hover.private {
 	display:none;
 }
 
+/* buttons */
+select.styledSelect {
+	position:relative;
+	display:inline-block;
+	margin:0;
+}
 
+button.jqButton,
+button.jqButton.jqButtonDisabled,
+button.jqButton.jqButtonDisabled:hover {
+	padding:0 6px;
+	height:1.9em;
+	line-height:1em;
+}
+a.jqButton:link,
+a.jqButton:visited,
+a.jqButton.jqButtonDisabled,
+a.jqButton.jqButtonDisabled:hover {
+	display:inline-block;
+	padding:0 6px;
+	line-height:1.8em;
+}
+a.jqButton:link,
+a.jqButton:visited,
+button.jqButton {
+	position:relative;
+	margin:0 6px 0 0;
+	text-decoration:none;
+	font-weight:normal;
+	border-width:1px;
+	border-style:solid;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	-webkit-font-smoothing:subpixel-antialiased!important;
+	-webkit-border-horizontal-spacing:0;
+	-webkit-border-vertical-spacing:0;
+}
+button.jqButton::-moz-focus-inner {
+    border:none;
+    padding:0;
+}
+a.jqButton:active,
+a.jqButton:focus {
+	outline:none;
+	-moz-outline-style:none;
+}
+button.jqButton::-moz-focus-inner {
+	border:none;
+}
+button.jqButton:hover,
+a.jqButton:hover {
+	cursor:pointer;
+	text-decoration:none;
+}
+button.jqButton .jqButtonIcon,
+a.jqButton .jqButtonIcon {
+	padding-left:22px;
+	background-repeat:no-repeat;
+	background-position:0 50%;
+}
+button.jqButton.jqButtonLarge,
+a.jqButton.jqButtonLarge {
+	font-size:1.5em;
+	line-height:1.5em;	
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	border-radius:5px;
+}
+a.jqButton:link,
+a.jqButton:visited,
+a.jqButton.jqButtonDisabled:hover,
+a.jqButton.jqButtonDefault,
+button.jqButton,
+button.jqButton.jqButtonDisabled,
+button.jqButton.jqButtonDisabled:hover,
+button.jqButton.jqButtonDefault {
+	color:#000;
+	background:#d0d0d0;
+	border-color:#d0d0d0;
+	filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#ffffff', endColorstr='#dedede');
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#ffffff),to(#dedede));
+	background:-moz-linear-gradient(-90deg,#ffffff,#dedede);
+}
+a.jqButton:hover,
+a.jqButton.jqButtonDefault:hover,
+button.jqButton:hover,
+button.jqButton.jqButtonDefault:hover {
+	color:#fff;
+	background:#376ca0;
+	border-color:#376ca0;
+	filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#7baad7', endColorstr='#376ca0');
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#7baad7),to(#376ca0));
+	background:-moz-linear-gradient(-90deg,#7baad7,#376ca0);
+}
+a.jqButton.jqButtonDisabled,
+a.jqButton.jqButtonDisabled:hover,
+button.jqButton.jqButtonDisabled,
+button.jqButton.jqButtonDisabled:hover {
+	cursor:default;
+	color:#aaa;
+}
+
+a.jqButtonSmall {
+	font-size: 0.8333333333333334em;
+	line-height: 0.8333333333333334em;
+}
+a.jqButtonSmall .jqButtonIcon {
+	padding-left:1px;
+	padding-right:4px;
+}
 /* END VISDOC STYLES */

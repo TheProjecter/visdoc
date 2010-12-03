@@ -352,7 +352,7 @@ sub _getAnonymousPackageName {
 
     return undef if !$inPath;
 
-    use File::Spec;
+    use File::Spec();
     my ( $volume, $directories, $file ) = File::Spec->splitpath($inPath);
     my $name = VisDoc::StringUtils::deletePathExtension($file);
 
