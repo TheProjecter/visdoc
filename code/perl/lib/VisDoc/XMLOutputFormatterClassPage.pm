@@ -5,7 +5,7 @@ use base 'VisDoc::XMLOutputFormatterBase';
 
 use strict;
 use warnings;
-use XML::Writer;
+use XML::Writer();
 use VisDoc::ClassData;
 use VisDoc::MemberData;
 use VisDoc::PackageData;
@@ -430,9 +430,7 @@ sub _writeClassDescription {
 
     my $fields = $this->{data}->{javadoc}->fieldsWithName('deprecated');
     if ($fields) {
-#        $inWriter->startTag('fields');
         $this->_writeFieldValue( $inWriter, 'deprecated', $fields );
-#        $inWriter->endTag('fields');
     }
 
     my $description = $this->{data}->{javadoc}->getDescription();
@@ -507,12 +505,10 @@ sub _writeClassFields {
     map { push( @fieldKeys, $_ ) if !( $_ =~ m/($excludePattern)/ ); } @keys;
     return if !( scalar @fieldKeys );
 
-#    $inWriter->startTag('fields');
     foreach my $key (@fieldKeys) {
         my $fields = $allFields->{$key};
         $this->_writeFieldValue( $inWriter, $key, $fields ) if $fields;
     }
-#    $inWriter->endTag('fields');
 }
 
 =pod
@@ -570,8 +566,8 @@ sub _writeFieldValue {
         }
         if ($value) {
             $value = $this->{data}->{fileData}->getContents($value);
-            $this->_writeValueXml( $inWriter, $value );
         }
+        $this->_writeValueXml( $inWriter, $value );
     }
     $inWriter->endTag('description');
     $inWriter->endTag('field');
@@ -814,7 +810,7 @@ sub _writeSummary_forMemberGroup {
             next
               if !$this->{preferences}->{listPrivate} && !$member->isPublic();
 
-            $inWriter->startTag('item', 'private' => !$member->isPublic());
+            $inWriter->startTag('item', 'private' => $member->isPublic() ? 0 : 1);
 
             $inWriter->cdataElement( 'id',    $member->getId() );
             $inWriter->cdataElement( 'title', $member->{name} );
@@ -1045,8 +1041,12 @@ sub _writeInheritedMemberList {
 						$inWriter->startTag('item');
 	
 						$this->_writeLinkXml(
-							$inWriter,      $member->{name},
-							$superclassURI, $member->getId()
+							$inWriter,
+							$member->{name},
+							$superclassURI,
+							{
+								memberName => $member->getId()
+							}
 						);
 						if ( !$member->isPublic() ) {
 							$inWriter->startTag('private');
@@ -1106,10 +1106,9 @@ sub _writeMembers_forMemberGroup {
     if ( $members && scalar @{$members} ) {
 
 		my $isPrivatePart = $this->_isPartPrivate( $members );	
-		$inWriter->startTag('private') if ($isPrivatePart);
 		
-        $inWriter->startTag('memberSection');
-
+		$inWriter->startTag('memberSection', 'private' => $isPrivatePart ? 1 : 0);
+		
         my $title = $this->_docTerm($inTitleKey);
         $inWriter->cdataElement( 'title', $title );
         $title =~ s/ //go;
@@ -1125,7 +1124,6 @@ sub _writeMembers_forMemberGroup {
         }
 
         $inWriter->endTag('memberSection');
-		$inWriter->endTag('private') if ($isPrivatePart);
     }
 }
 
@@ -1140,14 +1138,10 @@ sub _writeMembers_forMemberGroup_memberText {
     return if !$this->{preferences}->{listPrivate} && !$inMember->isPublic();
 
     my $isInnerClass = $inMember->{isInnerClass};
-    $inWriter->startTag('member') if !$isInnerClass;
-    $inWriter->startTag('class')  if $isInnerClass;
+    $inWriter->startTag('member', 'private' => $inMember->isPublic() ? 0 : 1); # if !$isInnerClass;
+#    $inWriter->startTag('class')  if $isInnerClass;
 
-    $inWriter->cdataElement( 'id', $inMember->getId() );
-
-    if ( !$inMember->isPublic() ) {
-        $inWriter->cdataElement( 'private', 'true' );
-    }
+    $inWriter->cdataElement( 'id', $inMember->getId());
 
     my $link = $inMember->{name};
 
@@ -1167,8 +1161,8 @@ sub _writeMembers_forMemberGroup_memberText {
     $this->_writeMembers_forMemberGroup_memberText_fields( $inWriter,
         $inMember );
 
-    $inWriter->endTag('member') if !$isInnerClass;
-    $inWriter->endTag('class')  if $isInnerClass;
+    $inWriter->endTag('member'); # if !$isInnerClass;
+#    $inWriter->endTag('class')  if $isInnerClass;
 
 }
 
@@ -1183,7 +1177,7 @@ sub _writeMembers_forMemberGroup_memberText_fullMethod {
       VisDoc::MemberFormatterFactory::getMemberFormatterForLanguage(
         $this->{language} );
 
-    $inWriter->startTag('fullMemberString');
+    $inWriter->startTag('fullMemberString', 'private' => $inMember->isPublic() ? 0 : 1);
 
     my $leftString  = $memberFormatter->fullMemberStringLeft($inMember);
     my $rightString = $memberFormatter->fullMemberStringRight($inMember);
@@ -1201,8 +1195,7 @@ sub _writeMembers_forMemberGroup_memberText_fullMethod {
     my $memberString = $leftString . $rightString;
     $memberString =~ s/\n/\n$linefiller/g;
 
-    $inWriter->cdataElement( 'member', $memberString );
-    $inWriter->cdataElement( 'private', 'true' ) if !$inMember->isPublic();
+    $inWriter->cdataElement( 'memberString', $memberString  );
 
     if ( $inMember->isa("VisDoc::PropertyData") ) {
         my $getSetString = $memberFormatter->getSetString(
@@ -1234,11 +1227,7 @@ sub _writeMembers_forMemberGroup_memberText_fullMethod {
 		</field>
 	</fields>
 	<text>
-		<item>
-			<value>
-				<![CDATA[ 	Example of <b>supported</b> Javadoc tags. Inline tags: <b>@code:</b> <code>I can use &lt;html&gt; inside here &lt;hr&gt;</code>, <b>@inheritDoc</b>, <b>@link:</b> <a href="AllTags.html#method_A">link to method A</a>, <b>@literal:</b> I can use &lt;html&gt; inside here and even <br /><br /><br />some newlines. ]]>
-			</value>
-		</item>
+		<![CDATA[ 	Example of <b>supported</b> Javadoc tags. Inline tags: <b>@code:</b> <code>I can use &lt;html&gt; inside here &lt;hr&gt;</code>, <b>@inheritDoc</b>, <b>@link:</b> <a href="AllTags.html#method_A">link to method A</a>, <b>@literal:</b> I can use &lt;html&gt; inside here and even <br /><br /><br />some newlines. ]]>
 	</text>
 </description>
 
@@ -1253,21 +1242,15 @@ sub _writeMembers_forMemberGroup_memberText_description {
     my $description = $inMember->{javadoc}->getDescription();
 
     return if !$fields && !$description;
-
+	
     $inWriter->startTag('description');
 
     if ($fields) {
-#        $inWriter->startTag('fields');
         $this->_writeFieldValue( $inWriter, 'deprecated', $fields );
-#        $inWriter->endTag('fields');
     }
 
     # description text
-    $inWriter->startTag('text');
-
-    $description = $this->{data}->{fileData}->getContents($description);
-    $this->_writeValueXml( $inWriter, $description );
-    $inWriter->endTag('text');
+    $inWriter->cdataElement('text', $this->{data}->{fileData}->getContents($description));
 
     $inWriter->endTag('description');
 }

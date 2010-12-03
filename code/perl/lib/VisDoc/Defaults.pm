@@ -33,7 +33,7 @@ our $SETTINGS = {
     saveXML              => 0,
     templateCssDirectory => 'templates/css',
     templateJsDirectory  => 'templates/js',
-    templateFreeMarker   => 'templates/fm/VisDoc.fm',
+    templateFreeMarker   => 'templates/ftl/VisDoc.ftl',
 };
 
 1;

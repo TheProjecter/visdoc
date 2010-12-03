@@ -673,7 +673,7 @@ public function growl () : void {}
     $preferences->{saveXML} = 1;
     $preferences->{templateCssDirectory} = '../../templates/css';
     $preferences->{templateJsDirectory} = '../../templates/js';
-    $preferences->{templateFreeMarker} = '../../templates/fm/VisDoc.fm';
+    $preferences->{templateFreeMarker} = '../../templates/ftl/VisDoc.ftl';
 
     VisDoc::writeData('testfiles/docs/', $fileData, $preferences);
 }

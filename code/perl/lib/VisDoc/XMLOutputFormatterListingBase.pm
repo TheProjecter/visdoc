@@ -5,7 +5,7 @@ use base 'VisDoc::XMLOutputFormatterBase';
 
 use strict;
 use warnings;
-use XML::Writer;
+use XML::Writer();
 
 =pod
 

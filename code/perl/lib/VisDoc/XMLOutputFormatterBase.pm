@@ -14,7 +14,7 @@ package VisDoc::XMLOutputFormatterBase;
 
 use strict;
 use warnings;
-use XML::Writer;
+use XML::Writer();
 use VisDoc::Formatter;
 use VisDoc::Defaults;
 use VisDoc::StringUtils;
@@ -56,19 +56,25 @@ sub format {
 
 =pod
 
-_writeLinkXml( $writer, $label, $uri, $member)
+_writeLinkXml( $writer, $label, $uri, $options)
+
+options:
+memberName
+packagePath
 
 Writes link XML.
 
 =cut
 
 sub _writeLinkXml {
-    my ( $this, $inWriter, $inLabel, $inUri, $inMemberName ) = @_;
+    my ( $this, $inWriter, $inLabel, $inUri, $inOptions ) = @_;
 
     $inWriter->startTag('link');
     $inWriter->cdataElement( 'name',   $inLabel );
     $inWriter->cdataElement( 'uri',    $inUri ) if $inUri;
-    $inWriter->cdataElement( 'member', $inMemberName ) if $inMemberName;
+    $inWriter->cdataElement( 'memberName', $inOptions->{memberName} ) if $inOptions->{memberName};
+    $inWriter->cdataElement( 'packagePath', $inOptions->{packagePath} )  if $inOptions->{packagePath};
+    
     $inWriter->endTag('link');
 }
 
@@ -349,7 +355,7 @@ sub _writeFooter {
 
     # copyright
     my $footerText = $this->{preferences}->{footerText};
-    $inWriter->cdataElement( 'copyright', $footerText ) if $footerText;
+    $inWriter->cdataElement( 'footerText', $footerText ) if $footerText;
 
     # credits
     if ( $this->{preferences}->{giveCredits} ) {
@@ -397,13 +403,13 @@ _writeClassItem( $xmlWriter, $name, $uri, \%attributes )
 		<uri>
 			<![CDATA[path_to_ReferencedClass]]>
 		</uri>
+		<packagePath>
+			<![CDATA[path.to.]]>
+		</packagePath>
 	</link>
 	<class>
 		<![CDATA[true]]>
-	</class>
-	<packagePath>
-		<![CDATA[path.to.]]>
-	</packagePath>
+	</class>	
 </item>
 
 =cut
@@ -413,12 +419,12 @@ sub _writeClassItem {
 
     $inWriter->startTag('item');
 
-    my $path = $inAttributes->{path} if $inAttributes && $inAttributes->{path};
-    $inWriter->cdataElement( 'packagePath', $path ) if $path;
+    my $packagePath = $inAttributes->{path} if $inAttributes->{path};
+    
     my $memberName = $inAttributes->{memberName}
       if $inAttributes && $inAttributes->{memberName};
 
-    $this->_writeLinkXml( $inWriter, $inName, $inUri, $memberName );
+    $this->_writeLinkXml( $inWriter, $inName, $inUri, {memberName => $memberName, packagePath => $packagePath} );
     $this->_writeAttribute( $inWriter, $inAttributes );
 
     $inWriter->endTag('item');

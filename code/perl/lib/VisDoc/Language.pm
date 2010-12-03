@@ -2,7 +2,7 @@ package VisDoc::Language;
 
 use strict;
 use warnings;
-use JSON;
+use JSON();
 
 our $docTerms;
 our $javadocTerms;

@@ -5,7 +5,7 @@ use base 'VisDoc::XMLOutputFormatterClassPage';
 
 use strict;
 use warnings;
-use XML::Writer;
+use XML::Writer();
 use VisDoc::PackageData;
 
 =pod
@@ -247,18 +247,15 @@ sub _writeMembers_forMemberGroup_memberText_description {
 	my $fields      = $inMember->{javadoc}->fieldsWithName('deprecated');
     
     if ($fields) {
-#        $inWriter->startTag('fields');
         $this->_writeFieldValue( $inWriter, 'deprecated', $fields );
-#        $inWriter->endTag('fields');
     }
 
     # description text
-    $inWriter->startTag('text');
-    
     my $summary =
           $this->getSummaryLine( $inMember->{javadoc}, $this->{data}->{fileData} ) || '';
-    $this->_writeValueXml( $inWriter, $summary );
-    $inWriter->endTag('text');
+          
+    $inWriter->cdataElement('text', $summary);
+
 
     $inWriter->endTag('description');
 }
