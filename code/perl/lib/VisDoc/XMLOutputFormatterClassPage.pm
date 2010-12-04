@@ -89,9 +89,6 @@ sub _writeClassData {
 sub _writePackage {
     my ( $this, $inWriter ) = @_;
 
-    # hack
-    return if $this->{language} eq 'as2';
-
     my $packageName = $this->{data}->{packageName};
     return if !$packageName;
 

@@ -135,7 +135,11 @@ sub parsePackage {
     }
 
     my $packageName = $this->retrievePackageName($inText);
-
+	if (!$packageName) {
+		$packageName = $packageData->{classes}->[0]->{classpath};
+		# remove class name from classpath
+		$packageName = VisDoc::StringUtils::deletePathExtension($packageName);
+	}
     $packageData->{name} = $packageName;
 
     my ( $functions, $properties, $text ) = $this->_parseMembers($inText);
