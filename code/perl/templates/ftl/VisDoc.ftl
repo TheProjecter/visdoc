@@ -140,7 +140,7 @@ Field within box
 	<#if classData.sourceCode.viewSourceButton??>
 			<span class='sourceCodeShow'><a href="#"><span class='closure'>&#9658;&nbsp;</span><span class='linkLabel'>${classData.sourceCode.viewSourceButton}</span></a></span><span class='sourceCodeHide'><a href="#"><span class='disclosure'>&#9660;&nbsp;</span><span class='linkLabel'>${classData.sourceCode.hideSourceButton}</span></a></span>
 	</#if>
-	<pre id='source' class='brush:${language}'>${classData.sourceCode.sourceCodeText}</pre>
+	<pre id="source" class="brush:<#if language='as2'>as3</#if><#if language='as3'>as3</#if><#if language='java'>java</#if>">${classData.sourceCode.sourceCodeText}</pre>
 </div>
 </#assign>
 <#--

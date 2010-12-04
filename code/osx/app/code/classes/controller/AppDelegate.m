@@ -1,12 +1,7 @@
 /* See bottom of file for license and copyright information */
 
 #import "AppDelegate.h"
-#import "NSPanel+Fade.h"
-#import "State.h"
 #import "MyDocument.h"
-
-static BOOL sNeedsInstallerFeedBack = NO;
-static float WINDOW_PRE_WAIT = 2.0;
 
 
 @implementation AppDelegate
@@ -20,33 +15,15 @@ static float WINDOW_PRE_WAIT = 2.0;
 	NSArray* documentsUrls = [NSKeyedUnarchiver	unarchiveObjectWithData:openDocumentsAsData];
 	if (!documentsUrls) return;
 		
+	// prevent duplicates
+	NSMutableSet* openDocuments = [[[NSMutableSet alloc] init] autorelease];
 	NSEnumerator* e = [documentsUrls objectEnumerator];
 	NSURL* url = nil;
 	while (url = [e nextObject]) {
-		[self _newDocumentWithUrl:url];
-	}
-}
-
-- (void)applicationDidBecomeActive:(NSNotification *)aNotification
-{	
-	[State resetCheck];
-	
-	if ([State needsToolsInstaller]) {
-		showWindowTimer = [[NSTimer scheduledTimerWithTimeInterval:WINDOW_PRE_WAIT
-															target:self
-														  selector:@selector(_showInstallToolsWindow:)
-														  userInfo:NULL
-														   repeats:NO]
-						   retain];
-	} else if (sNeedsInstallerFeedBack) {
-		if ([State needsInstall] || [State needsUpdate]) {
-			// feedback: "not installed"
-		} else {
-			[self _showWindow:oInstalledOkFeedbackPanel];
-			float showPanelDuration = 8.0;
-			[NSTimer scheduledTimerWithTimeInterval:showPanelDuration target:self selector:@selector(_delayedHideWindow:) userInfo:oInstalledOkFeedbackPanel repeats:NO];
+		if (![openDocuments containsObject:url]) {
+			[self _newDocumentWithUrl:url];
+			[openDocuments addObject:url];
 		}
-		sNeedsInstallerFeedBack = NO;
 	}
 }
 
@@ -76,7 +53,6 @@ static float WINDOW_PRE_WAIT = 2.0;
 
 - (void)dealloc
 {
-	[self _killTimer];
 	[super dealloc];
 }
 
@@ -91,52 +67,6 @@ static float WINDOW_PRE_WAIT = 2.0;
 							 [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], @"ApplicationVersion",
 							 nil];
     [[NSApplication sharedApplication] orderFrontStandardAboutPanelWithOptions:options];
-}
-
-- (void)_killTimer
-{
-	if (showWindowTimer) {
-		[showWindowTimer invalidate];	
-		[showWindowTimer release];
-		showWindowTimer = nil;
-	}
-}
-
-- (IBAction)installToolsNow:(id)sender
-{
-	[self _hideWindow:oInstallToolsPanel];
-	NSString* packagePath = [[NSBundle mainBundle] pathForResource:@"VisDoc Tools Installer" ofType:@"mpkg"];
-	if (packagePath) {
-		[[NSWorkspace sharedWorkspace] openFile:packagePath];
-		sNeedsInstallerFeedBack = YES;
-	} else {
-		NSLog(@"Package installer could not be found. Please contact the author.");
-	}
-}
-
-- (void)_showInstallToolsWindow:(NSTimer *)timer
-{
-	[self _killTimer];
-	[self _showWindow:oInstallToolsPanel];
-}
-
-- (void)_showWindow:(NSPanel*)window
-{
-	[window setAlphaValue:0.2];
-	[window makeKeyAndOrderFront:self];
-	[window center];
-	[window fadeInTo:0.9];
-}
-
- - (void)_delayedHideWindow:(NSTimer*)timer
- {
-	 NSPanel* window = [timer userInfo];
-	 [self _hideWindow:window];
- }
-			 
-- (void)_hideWindow:(NSPanel*)window
-{
-	[window fadeOut];	
 }
 
 - (void)_newDocumentWithUrl:(NSURL*)url

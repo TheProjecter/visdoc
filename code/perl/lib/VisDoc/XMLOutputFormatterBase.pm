@@ -357,13 +357,6 @@ sub _writeFooter {
     my $footerText = $this->{preferences}->{footerText};
     $inWriter->cdataElement( 'footerText', $footerText ) if $footerText;
 
-    # credits
-    if ( $this->{preferences}->{giveCredits} ) {
-        my $genericCredits = $this->_docTerm('footer_createdwith');
-        $inWriter->cdataElement( 'createdWith', $genericCredits );
-        $this->_writeLinkXml( $inWriter, 'VisDoc', 'http://visdoc.org/' );
-    }
-
     # show/hide TOC (if frameset)
     if ( $this->{preferences}->{generateNavigation} ) {
         $inWriter->cdataElement( 'showTOC', $this->_docTerm('menu_showTOC') );

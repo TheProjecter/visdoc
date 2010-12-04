@@ -3,18 +3,9 @@
 #import <Cocoa/Cocoa.h>
 
 @interface AppDelegate : NSObject {
-	NSTimer* showWindowTimer;
-	IBOutlet NSPanel* oInstallToolsPanel;
-	IBOutlet NSPanel* oInstalledOkFeedbackPanel;
 	IBOutlet NSTextField* oStatusFeedbackField;
 }
 - (IBAction)orderFrontStandardAboutPanel:(id)sender;
-- (void)_killTimer;
-- (void)_showInstallToolsWindow:(NSTimer *)timer;
-- (IBAction)installToolsNow:(id)sender;
-- (void)_showWindow:(NSPanel*)window;
-- (void)_hideWindow:(NSPanel*)window;
-- (void)_delayedHideWindow:(NSTimer*)timer;
 - (void)_newDocumentWithUrl:(NSURL*)url;
 
 @end

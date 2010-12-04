@@ -11,7 +11,7 @@
 	NSNumber* usesDefaults;
 	MyPathCell* templateCssPathCell;
 	MyPathCell* templateJsDirectoryPathCell;
-	MyPathCell* templateXslPathCell;
+	MyPathCell* templateFmPathCell;
 }
 @property (readwrite, retain) NSNumber* usesDefaults;
 

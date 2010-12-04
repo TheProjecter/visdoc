@@ -7,7 +7,6 @@
 #import "interfacestrings.h"
 #import "SelectableTableView.h"
 #import "PathInfo.h"
-#import "State.h"
 #import "LogController.h"
 #import "LayoutSettingsController.h"
 
@@ -244,9 +243,7 @@ static NSMutableDictionary* sDefaultSettings;
 	[oProgressView hide];
 	[self showMainApplicationWindow];
 	
-	
 	//[oDockIndicator setHidden:YES];
-	//[State setAppStateReady];
 	//[[NSNotificationCenter defaultCenter] postNotificationName:@"onProcessingFinished" object:nil];
 }
 

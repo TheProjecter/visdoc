@@ -42,7 +42,6 @@
 		8EB078C110A8059200085D2E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB078C010A8059200085D2E /* AppDelegate.m */; };
 		8EB079AA10A8853B00085D2E /* NSPanel+Fade.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB079A910A8853B00085D2E /* NSPanel+Fade.m */; };
 		8EB07A1510A8968D00085D2E /* VisDoc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8EB07A1310A8968D00085D2E /* VisDoc.png */; };
-		8EB07A8110A8BE1000085D2E /* State.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB07A8010A8BE1000085D2E /* State.m */; };
 		8EBA161010551A4900E51387 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8EBA161110551A4900E51387 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8EBA161810551A4900E51387 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
@@ -93,7 +92,6 @@
 		8E2C5999124FC3A6004535FE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MyDocument.nib; sourceTree = "<group>"; };
 		8E2C59A0124FC418004535FE /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		8E92439910ED0788006492BC /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = /Library/Frameworks/Sparkle.framework; sourceTree = "<absolute>"; };
-		8E9243E010ED4B6B006492BC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		8EB0770A10A7487E00085D2E /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
 		8EB0770B10A7487E00085D2E /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		8EB0770F10A7487E00085D2E /* PathInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathInfo.h; sourceTree = "<group>"; };
@@ -121,8 +119,6 @@
 		8EB079A810A8853B00085D2E /* NSPanel+Fade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPanel+Fade.h"; sourceTree = "<group>"; };
 		8EB079A910A8853B00085D2E /* NSPanel+Fade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPanel+Fade.m"; sourceTree = "<group>"; };
 		8EB07A1310A8968D00085D2E /* VisDoc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VisDoc.png; sourceTree = "<group>"; };
-		8EB07A7F10A8BE1000085D2E /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
-		8EB07A8010A8BE1000085D2E /* State.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = State.m; sourceTree = "<group>"; };
 		8EBA161D10551A4900E51387 /* VisDoc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisDoc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBA161F10551A4900E51387 /* VisDoc-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisDoc-Info.plist"; sourceTree = "<group>"; };
 		8EF7375A11DFB07200BD122B /* perl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = perl; path = ../../perl; sourceTree = SOURCE_ROOT; };
@@ -173,7 +169,6 @@
 		2A37F4AAFDCFA73011CA2CEA /* VisDoc */ = {
 			isa = PBXGroup;
 			children = (
-				8E9243E010ED4B6B006492BC /* README.txt */,
 				8EB077B610A7679300085D2E /* main.m */,
 				8EB077B710A7679300085D2E /* VisDoc_Prefix.pch */,
 				8EB0770710A7487E00085D2E /* code */,
@@ -276,8 +271,6 @@
 			children = (
 				8EB0770F10A7487E00085D2E /* PathInfo.h */,
 				8EB0771010A7487E00085D2E /* PathInfo.m */,
-				8EB07A7F10A8BE1000085D2E /* State.h */,
-				8EB07A8010A8BE1000085D2E /* State.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -434,7 +427,6 @@
 				8EB077B810A7679300085D2E /* main.m in Sources */,
 				8EB078C110A8059200085D2E /* AppDelegate.m in Sources */,
 				8EB079AA10A8853B00085D2E /* NSPanel+Fade.m in Sources */,
-				8EB07A8110A8BE1000085D2E /* State.m in Sources */,
 				8E05A9A610B2B0F90035FCC1 /* LayoutSettingsController.m in Sources */,
 				8E05ABCF10B339930035FCC1 /* LogController.m in Sources */,
 				8E05ACB510B351E70035FCC1 /* LayoutSettingsDefaultsValueTransformer.m in Sources */,
