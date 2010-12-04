@@ -269,7 +269,7 @@ sub new {
 
 retrievePackageName($text) -> $name
 
-Reads the package name from the text. Text must be clean from comments.
+Reads the package name from the text. Assumes the text is clean from comments.
 
 ActionScript 2.0 does not have explicit packages; package names are written in the class name.
  
