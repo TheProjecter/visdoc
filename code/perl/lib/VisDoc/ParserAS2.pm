@@ -406,14 +406,12 @@ Moves property getters and setters from the methods list to the property list.
 =cut
 
 sub _swapPropertyGetSetters {
-    my ( $this, $inMethods, $inProperties, $inCount ) = @_;
+    my ( $this, $inMethods, $inProperties ) = @_;
 
     my $count = 0;
     foreach my $method ( @{$inMethods} ) {
-
-        if (
-            $method->{type}
-            && (   $method->{type} & $VisDoc::MemberData::TYPE->{'READ'}
+        if ( $method->{type} && (
+            $method->{type} & $VisDoc::MemberData::TYPE->{'READ'}
                 || $method->{type} & $VisDoc::MemberData::TYPE->{'WRITE'} )
           )
         {
@@ -424,7 +422,7 @@ sub _swapPropertyGetSetters {
             $propertyData->{memberOrder}    = $method->{memberOrder};
             $propertyData->{name}           = $method->{name};
             $propertyData->{qualifiedName}  = $method->{qualifiedName};
-            $propertyData->{access}         = $method->{access};
+            $propertyData->{access}         = $method->{access};            
             $propertyData->{isAccessPublic} = $method->{isAccessPublic};
             $propertyData->{javadoc}        = $method->{javadoc};
             $propertyData->{metadata}       = $method->{metadata};
@@ -437,11 +435,13 @@ sub _swapPropertyGetSetters {
             $propertyData->{dataType} ||= $method->{dataType};
 
             push @{$inProperties}, $propertyData;
-            my $deleted = splice( @{$inMethods}, $count, 1 );
-            $this->_swapPropertyGetSetters( $inMethods, $inProperties );
+            $method->{_delete} = 1;
         }
         $count++;
     }
+
+	# delete setter in original list
+    @{$inMethods} = grep { !$_->{_delete} } @{$inMethods};
 
     # sort properties
     if ( $inProperties && scalar @{$inProperties} ) {
