@@ -1146,9 +1146,9 @@ sub test_tag_inheritDoc {
 
     {
 
-        # class Rectangle, method retainCount: description
+        # class Rectangle, method retainCount: description        
         my $javadoc =
-          $fileData->[0]->{packages}->[0]->{classes}->[4]->{methods}->[0]
+          $fileData->[0]->{packages}->[0]->{classes}->[3]->{methods}->[0]
           ->{javadoc};
 
         my $result = $javadoc->getDescription();
@@ -1161,10 +1161,9 @@ sub test_tag_inheritDoc {
     }
 
     {
-
         # class Rectangle, method retainCount: param
         my $javadoc =
-          $fileData->[0]->{packages}->[0]->{classes}->[4]->{methods}->[0]
+          $fileData->[0]->{packages}->[0]->{classes}->[3]->{methods}->[0]
           ->{javadoc};
 
         my $paramField = $javadoc->{params}->[0];
@@ -1181,7 +1180,7 @@ sub test_tag_inheritDoc {
 
         # class Square, method retainCount: description
         my $javadoc =
-          $fileData->[0]->{packages}->[0]->{classes}->[3]->{methods}->[0]
+          $fileData->[0]->{packages}->[0]->{classes}->[2]->{methods}->[0]
           ->{javadoc};
 
         my $result = $javadoc->getDescription();
@@ -1197,7 +1196,7 @@ sub test_tag_inheritDoc {
 
         # class Circle, method retainCount: description (automatic)
         my $javadoc =
-          $fileData->[0]->{packages}->[0]->{classes}->[2]->{methods}->[0]
+          $fileData->[0]->{packages}->[0]->{classes}->[1]->{methods}->[0]
           ->{javadoc};
 
         my $result = $javadoc->getDescription();

@@ -358,7 +358,7 @@ sub test_parseFile_as2 {
 
         # test package name
         my $result   = $fileData->{packages}->[0]->{name};
-        my $expected = '';
+        my $expected = 'com.zuardi.flickr';
 
         print("RES=$result.\n")   if $debug;
         print("EXP=$expected.\n") if $debug;
