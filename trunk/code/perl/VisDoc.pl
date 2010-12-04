@@ -59,19 +59,17 @@ $preferences->{'output'}      = \$out;
 $preferences->{'doc-sources'} = \$process;
 
 &GetOptions(
-    $preferences,              'output=s',
-    'docencoding:s',
-    'doc-sources=s',
-    'footerText:s',
-    'extensions:s',            'eventHandlerPrefixes:s',
-    'eventHandlers:i',         'generateNavigation:i',
-    'ignoreClasses:i',         'includeSourceCode:i',
-    'projectTitle|main-title:s', 'listPrivate:i',
-    'preserveLinebreaks:i',    'saveXML:i',
-    'datapath:s',  'templateCssDirectory:s',
-    'templateJsDirectory:s',
-    'templateXsl:s',           'templateFreeMarker:s','feedback:i',
-    'openInBrowser:i',         'help'
+    $preferences,             'output=s',
+    'docencoding:s',          'doc-sources=s',
+    'footerText:s',           'extensions:s',
+    'eventHandlerPrefixes:s', 'eventHandlers:i',
+    'generateNavigation:i',   'ignoreClasses:i',
+    'includeSourceCode:i',    'projectTitle|main-title:s',
+    'listPrivate:i',          'preserveLinebreaks:i',
+    'saveXML:i',              'datapath:s',
+    'templateCssDirectory:s', 'templateJsDirectory:s',
+    'templateFreeMarker:s',   'feedback:i',
+    'openInBrowser:i',        'help'
 );
 
 usage() if $preferences->{help};
@@ -214,7 +212,7 @@ Shows this help text
 
 =item B<-docencoding>
 
-Sets the XSLT encoding. Writes charset as meta tag in HTML.
+Sets the file encoding. Writes charset as meta tag in HTML.
 Default: "utf-8"
 
 =item B<-doc-sources>
@@ -279,7 +277,7 @@ Default: 0
 
 =item B<-saveXML>
 
-Whether to save the XML files that are used by the XSLT processor. Useful for debugging.
+Whether to save the XML files that are used as intermediate processing step. Useful for debugging.
 Values: 1 or 0
 Default: 0
 

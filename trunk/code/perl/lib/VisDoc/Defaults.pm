@@ -21,7 +21,6 @@ our $SETTINGS = {
     eventHandlers        => 1,
     extensions           => 'as,java',
     generateNavigation   => 1,
-    giveCredits          => 1,
     ignoreClasses        => '',
     includeSourceCode    => 0,
     projectTitle         => 'Documentation',

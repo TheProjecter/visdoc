@@ -13,7 +13,7 @@
 {
 	templateCssPathCell = [[[MyPathCell alloc] init] retain];
 	templateJsDirectoryPathCell = [[[MyPathCell alloc] init] retain];
-	templateXslPathCell = [[[MyPathCell alloc] init] retain];
+	templateFmPathCell = [[[MyPathCell alloc] init] retain];
 	[self updateUsesDefaults];
 }
 
@@ -22,7 +22,7 @@
 	[usesDefaults release];
 	[templateCssPathCell release];
 	[templateJsDirectoryPathCell release];
-	[templateXslPathCell release];
+	[templateFmPathCell release];
 	[super dealloc];
 }
 
@@ -43,8 +43,8 @@
 {	
 	if ([[aTableColumn identifier] isEqualToString:@"key"]) {
 		if (rowIndex == 0) return @"CSS template directory";
-		if (rowIndex == 1) return @"JS template directory";
-		if (rowIndex == 2) return @"XSLT template file";
+		if (rowIndex == 1) return @"JavaScript template directory";
+		if (rowIndex == 2) return @"Freemarker template file";
 		if (rowIndex == 3) return @"Document encoding";
 
 	}
@@ -52,7 +52,7 @@
 		NSString* value;
 		if (rowIndex == 0) value = [[delegate settings] objectForKey:@"templateCssDirectory"];
 		if (rowIndex == 1) value = [[delegate settings] objectForKey:@"templateJsDirectory"];
-		if (rowIndex == 2) value = [[delegate settings] objectForKey:@"templateXsl"];
+		if (rowIndex == 2) value = [[delegate settings] objectForKey:@"templateFreeMarker"];
 		if (rowIndex == 3) value = [[delegate settings] objectForKey:@"docencoding"];
 		return [NSURL URLWithString:value];
 	}
@@ -67,7 +67,7 @@
 		NSString* key;
 		if (rowIndex == 0) key = @"templateCssDirectory";
 		if (rowIndex == 1) key = @"templateJsDirectory";
-		if (rowIndex == 2) key = @"templateXsl";
+		if (rowIndex == 2) key = @"templateFreeMarker";
 		if (rowIndex != 3) {
 			[[delegate settings] setObject:[self cleanupUrl:[anObject absoluteString]] forKey:key];
 			return;
@@ -98,7 +98,7 @@
 	if ([[tableColumn identifier] isEqualToString:@"value"]) {
 		if (rowIndex == 0) return templateCssPathCell;
 		if (rowIndex == 1) return templateJsDirectoryPathCell;
-		if (rowIndex == 2) return templateXslPathCell;
+		if (rowIndex == 2) return templateFmPathCell;
 	}
 	return cell;
 }
@@ -112,7 +112,7 @@
 {
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateCssDirectory"] forKey:@"templateCssDirectory"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"templateJsDirectory"] forKey:@"templateJsDirectory"];
-	[[delegate settings] setObject:[dictionary objectForKey:@"templateXsl"] forKey:@"templateXsl"];
+	[[delegate settings] setObject:[dictionary objectForKey:@"templateFreeMarker"] forKey:@"templateFreeMarker"];
 	[[delegate settings] setObject:[dictionary objectForKey:@"docencoding"] forKey:@"docencoding"];
 	[oSettingsTable reloadData];
 }
@@ -169,7 +169,7 @@
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 		[[delegate settings] objectForKey:@"templateCssDirectory"], @"templateCssDirectory",
 		[[delegate settings] objectForKey:@"templateJsDirectory"], @"templateJsDirectory",
-		[[delegate settings] objectForKey:@"templateXsl"], @"templateXsl",
+		[[delegate settings] objectForKey:@"templateFreeMarker"], @"templateFreeMarker",
 		[[delegate settings] objectForKey:@"docencoding"], @"docencoding",
 		nil];
 }
@@ -184,7 +184,7 @@
 {
 	if (![self compareCurrentWithDefaultUrl:@"templateCssDirectory"]) return NO;
 	if (![self compareCurrentWithDefaultUrl:@"templateJsDirectory"]) return NO;
-	if (![self compareCurrentWithDefaultUrl:@"templateXsl"]) return NO;
+	if (![self compareCurrentWithDefaultUrl:@"templateFreeMarker"]) return NO;
 	if (![self compareCurrentWithDefaultValue:@"docencoding"]) return NO;
 
 	return YES;
