@@ -592,56 +592,58 @@ _parseMethods($text, \@methods) -> ($text, \@memberData)
 sub _parseMethods {
     my ( $this, $inText, $inMethods ) = @_;
 
-    my $methods    = $inMethods;
     my $pattern    = $this->{PATTERN_METHOD_WITH_JAVADOC};
     my $patternMap = $this->{MAP_METHOD_WITH_JAVADOC};
 
     my $text = $inText;
-    local $_ = $text;
+
     use re 'eval';    # to be able to use Eval-group in pattern
 
-    my @matches = /$pattern/x;
+	while ($text =~ m/$pattern/sx) {
+		local $_ = $text;
 
-    if ( scalar @matches ) {
-        my $lastChar = '';
-        ( $methods, $lastChar ) =
-          $this->_handleMethodMatches( \@matches, $methods, $patternMap );
+		my @matches = $text =~ /$pattern/sx;
+		
+		if ( scalar @matches ) {
 
-        # prepare the fetching and removal of method string
-        my $startLoc = $-[0];
-        my $endLoc =
-             $+[0]
-          || $-[0]
-          || 0;    # default, in case the method string does not have braces
-        pos = $startLoc;    # start from beginning of match
-
-        # method declaration or definition?
-        # method declaration strings end on '{'
-        if ( $lastChar eq '{' ) {
-            use Regexp::Common qw( RE_balanced );
-            my $balanced = RE_balanced( -parens => '{}', -keep );
-            if (/$balanced/gcosx) {
-                $endLoc = pos();
-            }
-        }
-
-        # remove method declaration plus contents from text
-        # add semi-colon because this is eaten by regex
-        my $order    = scalar @{$methods} - 1;
-        my $stripped = substr(
-            $text, $startLoc,
-            $endLoc - $startLoc,
-            "; STRIPPED_METHOD_$order\n"
-        );
-
-        die(
-"Infinite recursion while parsing:$inText\nPlease check the syntax of this code."
-        ) if ( $text eq $inText );
-
-        # repeat parsing in case there is next class at the same level
-        ( $text, $methods ) = $this->_parseMethods( $text, $methods );
+			my $lastChar = '';
+			( $inMethods, $lastChar ) =
+			  $this->_handleMethodMatches( \@matches, $inMethods, $patternMap );
+	
+			# prepare the fetching and removal of method string
+			my $startLoc = $-[0];
+			my $endLoc =
+				 $+[0]
+			  || $-[0]
+			  || 0;    # default, in case the method string does not have braces
+			pos = $startLoc;    # start from beginning of match
+			
+			# method declaration or definition?
+			# method declaration strings end on '{'
+			if ( $lastChar eq '{' ) {
+				use Regexp::Common qw( RE_balanced );
+				my $balanced = RE_balanced( -parens => '{}', -keep );
+				if (/$balanced/gcosx) {
+					$endLoc = pos();
+				}
+			}
+	
+			# remove method declaration plus contents from text
+			# add semi-colon because this is eaten by regex
+			my $order    = scalar @{$inMethods} - 1;
+			my $stripped = substr(
+				$text, $startLoc,
+				$endLoc - $startLoc,
+				"; STRIPPED_METHOD_$order\n"
+			);
+	
+			die(
+	"Infinite recursion while parsing:$inText\nPlease check the syntax of this code."
+			) if ( $text eq $inText );
+	
+		}
     }
-    return ( $text, $methods );
+    return ( $text, $inMethods );
 }
 
 =pod
@@ -803,28 +805,31 @@ sub _parseProperties {
     my $patternMap = $this->{MAP_PROPERTY_WITH_JAVADOC};
 
     my $text = $inText;
-    local $_ = $text;
-    my @matches = m/$pattern/sx;
 
-    if ( scalar @matches ) {
-        $properties =
-          $this->_handlePropertyMatches( \@matches, $properties, $patternMap );
+	while ($text =~ m/$pattern/sx) {
+		local $_ = $text;
 
-        # prepare the fetching and removal of property string
-        my $startLoc = $-[0] || 0;
-        my $endLoc = $+[0] || $-[0] || 0;
-
-        # remove method declaration plus contents from text
-        # add semi-colon because this is eaten by regex
-        my $order    = scalar @{$properties} - 1;
-        my $stripped = substr(
-            $text, $startLoc,
-            $endLoc - $startLoc,
-            "; STRIPPED_PROPERTY_$order;\n"
-        );
-
-        ( $text, my $dummy ) = $this->_parseProperties( $text, $properties );
-    }
+		my @matches = $text =~ /$pattern/sx;
+		
+		if ( scalar @matches ) {
+		
+			$properties =
+			  $this->_handlePropertyMatches( \@matches, $properties, $patternMap );
+	
+			# prepare the fetching and removal of property string
+			my $startLoc = $-[0] || 0;
+			my $endLoc = $+[0] || $-[0] || 0;
+	
+			# remove method declaration plus contents from text
+			# add semi-colon because this is eaten by regex
+			my $order    = scalar @{$properties} - 1;
+			my $stripped = substr(
+				$text, $startLoc,
+				$endLoc - $startLoc,
+				"; STRIPPED_PROPERTY_$order;\n"
+			);
+		}
+	}
     return ( $text, $properties );
 }
 
